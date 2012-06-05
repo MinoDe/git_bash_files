@@ -211,6 +211,23 @@ function git-create-branch(){ # git-create-branch <branch_name>
 	fi
 }
 
+function git-delete-branch(){ # git-create-branch <branch_name>
+  #!/bin/sh
+	#modifed from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+	if [ $# -ne 1 ]; then
+		echo 1>&2 Usage: $0 branch_name
+	else
+		set branch_name = $1
+		\git checkout --track master
+		\git push origin :/heads/${branch_name}
+		\git branch -d ${branch_name}
+		\git fetch origin
+		\git pull
+		\git branch
+	fi
+}
+
+
 #-----------------------------------------------------------
 #  Open Atrium Platform Creation functions
 #-----------------------------------------------------------
