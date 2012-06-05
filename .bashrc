@@ -205,7 +205,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
 		set branch_name = $1
 		\git push origin master:refs/heads/${branch_name}
 		\git fetch origin
-		\git checkout --track -b ${branch_name} master/${branch_name}
+		\git checkout --track -b ${branch_name} origin/${branch_name}
 		\git pull
 		echo "#To delelte the branch use: git push origin :heads/${branch_name}"; echo -n;
 	fi
