@@ -13,7 +13,7 @@ alias drush="echo -n '#drush => adrush '; adrush " #run all drush calls through 
 #git related aliases
 alias agit="echo -n '#agit => suaegir git '; suaegir git " #git as the aegir user
 alias git="echo -n '#git => agit '; agit " #run all git calls through the aegir user
-alias noAegir="echo -n '#use alias git=\"git\"'"; alias git=\"git\" #restore normal git usage during a session
+alias noAegir="echo -n '#use alias git=\"git\"'; alias git=\"git\""; #restore normal git usage during a session
 alias gpushom="echo -n '#gpushom => git push origin master '; git push origin master;"
 alias gpullom="echo -n '#gpullom => git pull origin master '; git pull origin master;"
 alias gps="echo -n '#gps => gpushom '; gpushom"
