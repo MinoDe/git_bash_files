@@ -209,6 +209,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
 		\git checkout --track -b $1 origin/$1
 		\git pull
 		echo "#To delelte the branch use: git push origin :heads/$1"; echo -n;
+		\git branch
 	fi
 }
 
