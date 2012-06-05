@@ -208,7 +208,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
 		\git fetch origin
 		\git checkout --track -b $1 origin/$1
 		\git pull
-		echo "#To delelte the branch use: git-delete-branch $1"; echo -n;
+		echo "#To delete the branch use: git-delete-branch $1"; echo -n;
 		echo "local branches: "; 
 		\git branch
 		echo "Remote branches: "; 
@@ -218,7 +218,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
 
 function git-delete-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
-	#modifed from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+	#modified from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
   if [[ ! -n "$1" ]] ; then 
 		echo 1>&2 Usage: $0 branch_name
 	else
