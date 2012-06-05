@@ -222,7 +222,7 @@ function git-delete-branch(){ # git-create-branch <branch_name>
 		#$1 -> branch_name
 	  echo "Removing $1"
 		\git checkout master
-		\git push origin :/heads/$1
+		\git push origin :refs/heads/$1
 		\git branch -d $1
 		\git fetch origin
 		\git pull
