@@ -14,8 +14,8 @@ alias drush="echo -n '#drush => adrush '; adrush " #run all drush calls through 
 ##git aegir aliases
 alias agit="echo -n '#agit => suaegir git '; suaegir git " #git as the aegir user
 alias git="echo -n '#git => agit '; agit " #run all git calls through the aegir user
-alias noAegir="echo -n '#git => git #You can also prepend git cmds with \ #Use alias useAegir to reenable aegir alias'; alias git=\"git\""; #restore normal git usage during a session
-alias useAegir="echo -n '#git => agit #use alias noAegir to disable'; alias git=\"agit\""; #restore normal git usage during a session
+alias noAegir="echo '#git => git'; echo '#You can also prepend git cmds with \'; echo '#Use alias useAegir to re-enable aegir alias '; echo -n; alias git=\"git\""; #restore normal git usage during a session
+alias useAegir="echo '#git => agit'; echo '#use alias noAegir to disable '; echo -n; alias git=\"agit\""; #restore normal git usage during a session
 #other git aliases
 alias gpushom="echo -n '#gpushom => git push origin master '; git push origin master;"
 alias gpullom="echo -n '#gpullom => git pull origin master '; git pull origin master;"
