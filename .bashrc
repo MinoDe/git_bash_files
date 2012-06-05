@@ -209,7 +209,10 @@ function git-create-branch(){ # git-create-branch <branch_name>
 		\git checkout --track -b $1 origin/$1
 		\git pull
 		echo "#To delelte the branch use: git-delete-branch $1"; echo -n;
+		echo "local branches: \n"; 
 		\git branch
+		echo "Remote branches: \n"; 
+		\git branch -r
 	fi
 }
 
@@ -225,8 +228,12 @@ function git-delete-branch(){ # git-create-branch <branch_name>
 		\git push origin :refs/heads/$1
 		\git branch -d $1
 		\git fetch origin
-		\git pull
+		\git pull origin master
+		echo "local branches: \n"; 
 		\git branch
+		echo "Remote branches: \n"; 
+		\git branch -r
+
 	fi
 }
 
