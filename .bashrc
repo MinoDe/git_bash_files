@@ -220,8 +220,8 @@ function git-delete-branch(){ # git-create-branch <branch_name>
 		echo 1>&2 Usage: $0 branch_name
 	else
 		#$1 -> branch_name
-	  echo "Adding $1"
-		\git checkout --track master
+	  echo "Removing $1"
+		\git checkout master
 		\git push origin :/heads/$1
 		\git branch -d $1
 		\git fetch origin
