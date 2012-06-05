@@ -202,13 +202,13 @@ function git-create-branch(){ # git-create-branch <branch_name>
   if [[ ! -n "$1" ]] ; then 
 		echo 1>&2 Usage: $0 branch_name
 	else
-		set branch_name = $1
-	  echo "Adding ${branch_name}"		
-		\git push origin master:refs/heads/${branch_name}
+		#$1 -> branch_name
+	  echo "Adding $1"		
+		\git push origin master:refs/heads/$1
 		\git fetch origin
-		\git checkout --track -b ${branch_name} origin/${branch_name}
+		\git checkout --track -b $1 origin/$1
 		\git pull
-		echo "#To delelte the branch use: git push origin :heads/${branch_name}"; echo -n;
+		echo "#To delelte the branch use: git push origin :heads/$1"; echo -n;
 	fi
 }
 
@@ -218,11 +218,11 @@ function git-delete-branch(){ # git-create-branch <branch_name>
   if [[ ! -n "$1" ]] ; then 
 		echo 1>&2 Usage: $0 branch_name
 	else
-		set branch_name = $1
-	  echo "Adding ${branch_name}"
+		#$1 -> branch_name
+	  echo "Adding $1"
 		\git checkout --track master
-		\git push origin :/heads/${branch_name}
-		\git branch -d ${branch_name}
+		\git push origin :/heads/$1
+		\git branch -d $1
 		\git fetch origin
 		\git pull
 		\git branch
