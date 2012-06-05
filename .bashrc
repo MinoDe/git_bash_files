@@ -193,6 +193,26 @@ function ii()   # Get current host related info.
     echo
 }
 
+#-----------------------------------------------------------
+# Git functions
+#-----------------------------------------------------------
+function git-create-branch(){ # git-create-branch <branch_name>
+	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+	if [ $# -ne 1 ]; then
+		echo 1>&2 Usage: $0 branch_name
+		exit 127
+	fi
+
+	set branch_name = $1
+	git push origin origin:refs/heads/${branch_name}
+	git fetch origin
+	git checkout --track -b ${branch_name} origin/${branch_name}
+	git pull
+}
+
+#-----------------------------------------------------------
+#  Open Atrium Platform Creation functions
+#-----------------------------------------------------------
 ## function mkOAplatform ##
 ### Usage: mkOAplatform(http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz, fastage-openatrium-1.4-dl-drupal-6.26) ####
 function mkOAplatform(){ #dl and install openatrium in the directory specified (really it would work with any aegir:aegir owned tar.gz)
