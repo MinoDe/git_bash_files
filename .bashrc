@@ -44,14 +44,41 @@ fi
 function git-create-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
 	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
-	if [ $# -ne 1 ]; then
+  if [[ ! -n "$1" ]] ; then 
 		echo 1>&2 Usage: $0 branch_name
 	else
-		set branch_name = $1
-		git push origin origin:refs/heads/${branch_name}
-		git fetch origin
-		git checkout --track -b ${branch_name} origin/${branch_name}
-		git pull
+		#$1 -> branch_name
+	  echo "Adding $1"
+		\git push origin master:refs/heads/$1
+		\git fetch origin
+		\git checkout --track -b $1 origin/$1
+		\git pull
+		echo "#To delete the branch use: git-delete-branch $1"; echo -n;
+		echo "local branches: "; 
+		\git branch
+		echo "Remote branches: "; 
+		\git branch -r
+	fi
+}
+
+function git-delete-branch(){ # git-create-branch <branch_name>
+  #!/bin/sh
+	#modified from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+	#if [ $# -ne 1 ]; then
+  if [[ ! -n "$1" ]] ; then 
+		echo 1>&2 Usage: $0 branch_name
+	else
+		#$1 -> branch_name
+	  echo "Removing $1"		
+		\git checkout master
+		\git push origin :/heads/$1
+		\git branch -d $1
+		\git fetch origin
+		\git pull origin master
+		echo "local branches: "; 
+		\git branch
+		echo "Remote branches: "; 
+		\git branch -r
 	fi
 }
 

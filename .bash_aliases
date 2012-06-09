@@ -9,7 +9,7 @@ alias gpl="echo -n '#gpl => gpullom '; gpullom"
 alias gst="echo '#git status'; git st;"
 alias gci="echo '#git commit'; git ci"
 
-alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo -n; echo '### Alias (.bash_alias) ###'; alias"
+alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo '### Git alias (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
 
 #alias rm='rm -i'
 alias cp='cp -i'
