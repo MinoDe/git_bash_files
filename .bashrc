@@ -194,16 +194,6 @@ function ii()   # Get current host related info.
 }
 
 #----------------------------------------
-#Directory Functions
-#----------------------------------------
-function currentDir(){
-  SOURCE="$1"
-  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  echo $DIR
-}
-
-#----------------------------------------
 #openAtrium Functions
 #----------------------------------------## function mkOAplatform ##
 ### Usage: mkOAplatform(http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz, fastage-openatrium-1.4-dl-drupal-6.26) ####
@@ -248,6 +238,16 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
 }
 
 #----------------------------------------
+#Directory Functions
+#----------------------------------------
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
+
+#----------------------------------------
 #Drush Backup Functions
 #----------------------------------------
 function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
@@ -266,21 +266,19 @@ function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.ali
   if [[ ! -n "$1" ]] ; then 
     echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\"";
   else
-    local currentDir=`currentDir`;
-    local drush_alias="$1";
+		local drush_alias="$1";
     #if 2nd var is blank
     if [[ ! -n "$2" ]] ; then
-      local git_commit_msg="$2";
+      local git_commit_msg="auto-commit of DB Dump";
     else
-      local git_commit_msg="";
+      local git_commit_msg="$2";
     fi #end if [[ ! -n "$2" ]] 
       
     cd `drush dd @$drush_alias:%dumpdir`; 
     git add `drush dd @$drush_alias:%dump`; 
-    git commit -am"$git_commit_msg auto-commit of DB Dump - MAMP"; 
-    echo "##BackupedDB Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`"; 
-    #cd `drush dd @$drush_alias:%site`;
-    cd $currentDir;
+    git commit -am"$git_commit_msg"; 
+    echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
+#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push orign master; cd -"; 
   fi # end if [[ ! -n "$1" ]] 
 }
 
@@ -291,7 +289,16 @@ function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "
   else
     local drush_alias="$1";
     local git_commit_msg="$2";
+		#capture current dir so in order to return the user back to where they called the command
+		#Relies on currentDir function
+    local currentDir=`currentDir`;
+		
+		#backup db
     drushbackdb $drush_alias; 
+		#commit backup
     gitbackdb $drush_alias "$git_commit_msg";
+		
+    #cd `drush dd @$drush_alias:%site`;
+    cd $currentDir;	
   fi # end if [[ ! -n "$1" ]] 
 }
