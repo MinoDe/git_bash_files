@@ -193,7 +193,19 @@ function ii()   # Get current host related info.
     echo
 }
 
-## function mkOAplatform ##
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
+
+#----------------------------------------
+#openAtrium Functions
+#----------------------------------------## function mkOAplatform ##
 ### Usage: mkOAplatform(http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz, fastage-openatrium-1.4-dl-drupal-6.26) ####
 function mkOAplatform(){ #dl and install openatrium in the directory specified (really it would work with any aegir:aegir owned tar.gz)
   #if the first var is blank
@@ -232,5 +244,54 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
     sudo chmod -R g+w $newfilename;         #update perms
     sudo mv $newfilename* .;                #change dir name and move up a dir
     sudo rm -R $newfilename;                #remove old dir
+  fi # end if [[ ! -n "$1" ]] 
+}
+
+#----------------------------------------
+#Drush Backup Functions
+#----------------------------------------
+function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#drush db backup. Usage: drushbackdb drush.alias";
+  else
+    local drush_alias="$1"
+    cd `drush dd @$drush_alias:%site`; 
+    drush @$drush_alias sql-dump --ordered-dump --structure-tables-key=common --no-cache --result-file=`drush dd @$drush_alias:%dump`;
+  fi # end if [[ ! -n "$1" ]]     
+}
+
+function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\"";
+  else
+    local currentDir=`currentDir`;
+    local drush_alias="$1";
+    #if 2nd var is blank
+    if [[ ! -n "$2" ]] ; then
+      local git_commit_msg="$2";
+    else
+      local git_commit_msg="";
+    fi #end if [[ ! -n "$2" ]] 
+      
+    cd `drush dd @$drush_alias:%dumpdir`; 
+    git add `drush dd @$drush_alias:%dump`; 
+    git commit -am"$git_commit_msg auto-commit of DB Dump - MAMP"; 
+    echo "##BackupedDB Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`"; 
+    #cd `drush dd @$drush_alias:%site`;
+    cd $currentDir;
+  fi # end if [[ ! -n "$1" ]] 
+}
+
+function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "commit message"
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#drush git db backup. Usage: dg_db_backup drush.alias \"commit message\"";
+  else
+    local drush_alias="$1";
+    local git_commit_msg="$2";
+    drushbackdb $drush_alias; 
+    gitbackdb $drush_alias "$git_commit_msg";
   fi # end if [[ ! -n "$1" ]] 
 }
