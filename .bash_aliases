@@ -14,7 +14,7 @@ alias drush="echo '#drush => adrush ' > /dev/tty; adrush " #run all drush calls 
 ##git aegir aliases
 alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as the aegir user
 alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
-alias noAegir="echo '#git => git' > /dev/tty; echo '#You can also prepend git cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty echo -n > /dev/tty alias git=\"git\""; #restore normal git usage during a session
+alias noAegir="echo '#git => git' > /dev/tty; echo '#You can also prepend git cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; alias git=\"git\""; #restore normal git usage during a session
 alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\""; #restore normal git usage during a session
 #other git aliases
 alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; git push origin master;"
@@ -28,11 +28,11 @@ alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit"
 #ii = system information
 alias mkOAplatform="echo '#~/.bashrc >> mkOAplatform()' -n > /dev/tty; mkOAplatform"
 
-#alias rm="echo '#rm => rm -i ' > /dev/tty rm -i"
-#alias cp="echo '#cp => cp -i ' > /dev/tty cp -i"
-#alias mv="echo '#mv => mv -i ' > /dev/tty mv -i"
+#alias rm="echo '#rm => rm -i ' > /dev/tty; rm -i"
+#alias cp="echo '#cp => cp -i ' > /dev/tty; cp -i"
+#alias mv="echo '#mv => mv -i ' > /dev/tty; mv -i"
 # -> Prevents accidentally clobbering files.
-#alias mkdir="echo '#mkdir => mkdir -i ' > /dev/tty mkdir -i
+#alias mkdir="echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
 alias aliases="echo '### Available Functions (.bashrc) ###' > /dev/tty; echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; echo '### Alias (.bash_alias) ###' > /dev/tty; alias"
 alias h="echo '#h => history ' > /dev/tty; history"
@@ -47,12 +47,10 @@ alias pjet='enscript -h -G -fCourier9 -d $LPDEST'
 # Pretty-print using enscript
 
 alias du='du -kh'       # Makes a more readable output.
-alias df='df -kTh'
-
-#-------------------------------------------------------------
+alias df='df -kTh
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
-alias ll="echo '#ll => ls -al ' > /dev/tty ls -al"
+alias ll="echo '#ll => ls -al ' > /dev/tty; ls -al"
 # alias lg="ls -l --group-directories-first"
 # alias lsc='ls -ahF --color'  # add colors for filetype recognition
 alias la='ls -Al'          # show hidden files
