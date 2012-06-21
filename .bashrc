@@ -197,6 +197,16 @@ function extract()      # Handy Extract Program.
      fi
 }
 
+function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+  #!/bin/sh
+	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+  if [[ ! -n "$1" ]] ; then 
+		echo 1>&2 Usage: $0 user@server
+	else
+		cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+	fi
+}
+
 #-----------------------------------------------------------
 # Process/system related functions:
 #-----------------------------------------------------------
