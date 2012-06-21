@@ -47,7 +47,7 @@ alias pjet='enscript -h -G -fCourier9 -d $LPDEST'
 # Pretty-print using enscript
 
 alias du='du -kh'       # Makes a more readable output.
-alias df='df -kTh
+alias df='df -kTh'
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
 alias ll="echo '#ll => ls -al ' > /dev/tty; ls -al"
