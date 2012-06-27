@@ -196,24 +196,24 @@ function ii()   # Get current host related info.
 
 function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   #!/bin/sh
-	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+  #from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
   if [[ ! -n "$1" ]] ; then 
-		echo 1>&2 Usage: $0 user@server
-	else
-		cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
-	fi
+    echo 1>&2 Usage: $0 user@server
+  else
+    cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+  fi
 }
 
 #-----------------------------------------------------------
 # Drush functions
 #-----------------------------------------------------------
 function cdsite(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
-	#!/bin/sh
-	if [[ ! -n "$1" ]] ; then
-                echo 1>&2 "Usage: $0 drush site alias (with out the @). ex: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site`"
-        else
-        	cd `drush dd @$1:%site`
-	fi
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then
+    echo 1>&2 "Usage: cdsite drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
+  else
+    cd `drush dd @$1:%site`
+  fi
 }
 
 #-----------------------------------------------------------
@@ -221,77 +221,77 @@ function cdsite(){ #cd to a drush site alias. Don't include the @ symbol. Usage:
 #-----------------------------------------------------------
 function git-create-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
-	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+  #from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
   if [[ ! -n "$1" ]] ; then 
-		echo 1>&2 Usage: $0 branch_name
-	else
-		#$1 -> branch_name
-	  echo "Adding $1"		
-		\git push origin master:refs/heads/$1
-		\git fetch origin
-		\git checkout --track -b $1 origin/$1
-		\git pull
-		echo "#To delete the branch use: git-delete-branch $1"; echo -n;
-		echo "local branches: "; 
-		\git branch
-		echo "Remote branches: "; 
-		\git branch -r
-	fi
+    echo 1>&2 Usage: $0 branch_name
+  else
+    #$1 -> branch_name
+    echo "Adding $1"    
+    \git push origin master:refs/heads/$1
+    \git fetch origin
+    \git checkout --track -b $1 origin/$1
+    \git pull
+    echo "#To delete the branch use: git-delete-branch $1"; echo -n;
+    echo "local branches: "; 
+    \git branch
+    echo "Remote branches: "; 
+    \git branch -r
+  fi
 }
 
 function git-delete-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
-	#modified from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+  #modified from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
   if [[ ! -n "$1" ]] ; then 
-		echo 1>&2 Usage: $0 branch_name
-	else
-		#$1 -> branch_name
-	  echo "Removing $1"
-		\git checkout master
-		\git push origin :refs/heads/$1
-		\git branch -d $1
-		\git fetch origin
-		\git pull origin master
-		echo "local branches: "; 
-		\git branch
-		echo "Remote branches: "; 
-		\git branch -r
+    echo 1>&2 Usage: $0 branch_name
+  else
+    #$1 -> branch_name
+    echo "Removing $1"
+    \git checkout master
+    \git push origin :refs/heads/$1
+    \git branch -d $1
+    \git fetch origin
+    \git pull origin master
+    echo "local branches: "; 
+    \git branch
+    echo "Remote branches: "; 
+    \git branch -r
 
-	fi
+  fi
 }
 
 function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch 
   #!/bin/sh
-	#from http://drupal.org/node/1399218
-	if [[ ! -n "$1" ]] ; then 
-		echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
-	else
-		local URL=$2;
-		local patchFilename="$(basename $2)"
-		if [[ $1 == "apply" ]] ; then
-			if [[ $URL == http* ]] ; then
-				echo "# sudo wget $URL;" > /dev/tty;
-				sudo wget $URL; git $1 $patchFilename; 
-			fi
-			echo "#git $1 $patchFilename " > /dev/tty;
-			echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
-			echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
-		else
-			if [[ $URL == http* ]] ; then
-				echo "# sudo wget $URL;" > /dev/tty;
-				sudo wget $URL; 
-			fi
-			echo "#git apply --$1 $patchFilename" > /dev/tty;
-			git apply --$1 $patchFilename;
-			echo "#Patchname: $patchFilename" > /dev/tty;
-		fi
-		if [[ $1 == "stat" ]] ; then
-			echo "# To check the patch use: "; > /dev/tty; echo "  git-patch check $patchFilename" > /dev/tty;
-		fi
-		if [[ $1 == "check" ]] ; then
-			echo "# To apply the patch use: "; > /dev/tty; echo "  git-patch apply $patchFilename" > /dev/tty;
-		fi
-	fi
+  #from http://drupal.org/node/1399218
+  if [[ ! -n "$1" ]] ; then 
+    echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
+  else
+    local URL=$2;
+    local patchFilename="$(basename $2)"
+    if [[ $1 == "apply" ]] ; then
+      if [[ $URL == http* ]] ; then
+        echo "# sudo wget $URL;" > /dev/tty;
+        sudo wget $URL; git $1 $patchFilename; 
+      fi
+      echo "#git $1 $patchFilename " > /dev/tty;
+      echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
+      echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
+    else
+      if [[ $URL == http* ]] ; then
+        echo "# sudo wget $URL;" > /dev/tty;
+        sudo wget $URL; 
+      fi
+      echo "#git apply --$1 $patchFilename" > /dev/tty;
+      git apply --$1 $patchFilename;
+      echo "#Patchname: $patchFilename" > /dev/tty;
+    fi
+    if [[ $1 == "stat" ]] ; then
+      echo "# To check the patch use: "; > /dev/tty; echo "  git-patch check $patchFilename" > /dev/tty;
+    fi
+    if [[ $1 == "check" ]] ; then
+      echo "# To apply the patch use: "; > /dev/tty; echo "  git-patch apply $patchFilename" > /dev/tty;
+    fi
+  fi
 }
 
 #-----------------------------------------------------------
