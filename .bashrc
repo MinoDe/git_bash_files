@@ -204,6 +204,13 @@ function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub 
   fi
 }
 
+function currentDir(){
+	SOURCE="$1"
+	while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	echo $DIR
+}
+
 #-----------------------------------------------------------
 # Drush functions
 #-----------------------------------------------------------
