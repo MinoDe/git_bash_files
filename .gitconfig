@@ -1,3 +1,5 @@
+[core]
+	excludesfile = /Users/vid/.gitignore
 [user]
 	name = Vid
 	email = vid@uoregon.edu
@@ -40,5 +42,11 @@
   logv = log --graph --decorate --pretty=format:'%Cgreen%h%Creset %s %Cred%an%Creset %ar'
   ls = ls-files
 
-# Show files ignored by git:
+  # Show files ignored by git:
   ign = ls-files -o -i --exclude-standard
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
