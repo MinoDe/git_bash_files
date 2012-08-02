@@ -325,24 +325,39 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
       local tempdir=$2;
     fi #end if [[ ! -n "$2" ]] 
     
+    echo "#tempdir: $2" > /dev/tty;
+
     local releaseurl=$1; #ex: "http://openatrium.com/sites/openatrium.com/files/atrium_releases/atrium-1-1.tgz"
     local tgzfilename="$(basename $releaseurl)"   #possible option: filename="${fullfile##*/}" 
     local extension=${tgzfilename##*.}
     local filename=${tgzfilename%.*}
-    
+    echo "#filename: $filename" > /dev/tty;
+
+    echo "#mkdir $tempdir" > /dev/tty;
     sudo mkdir $tempdir;                    #make temp dir for new oa platform
+    echo "#chown -R aegir:aegir $tempdir" > /dev/tty;
     sudo chown -R aegir:aegir $tempdir;     #set ownership
+    echo "#chmod -R g+w $tempdir" > /dev/tty;
     sudo chmod -R g+w $tempdir;             #update perms
+    echo "#cd $tempdir" > /dev/tty;
     cd $tempdir;                            #cd to new dir
+    echo "#wget $releaseurl" > /dev/tty;
     sudo wget $releaseurl;                  #dl desired release
+    echo "#tar -xzf $tgzfilename" > /dev/tty;
     tar -xzf $tgzfilename;                  #untar + gzip
+    echo "#rm $tgzfilename" > /dev/tty;
     sudo rm $tgzfilename;                   #delete .tgz file
     
     local newfilename=$(ls -d */);
     #newfilename="$filename-dl";
-    sudo chown -R aegir:aegir $filename;    #set ownership
+    echo "#newfilename $newfilename" > /dev/tty;
+    echo "#chown -R aegir:aegir $newfilename" > /dev/tty;
+    sudo chown -R aegir:aegir $newfilename;    #set ownership
+    echo "#chmod -R g+w $newfilename" > /dev/tty;
     sudo chmod -R g+w $newfilename;         #update perms
+    echo "#mv $newfilename* ." > /dev/tty;
     sudo mv $newfilename* .;                #change dir name and move up a dir
+    echo "#rm -R $newfilename" > /dev/tty;
     sudo rm -R $newfilename;                #remove old dir
   fi # end if [[ ! -n "$1" ]] 
 }
