@@ -219,6 +219,7 @@ function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage
   if [[ ! -n "$1" ]] ; then
     echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
   else
+    echo "#drush dd @$1:%site" > /dev/tty;
     cd `drush dd @$1:%site`
   fi
 }
