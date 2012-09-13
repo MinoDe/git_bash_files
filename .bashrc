@@ -291,6 +291,7 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
         sudo wget $URL; git $1 $patchFilename; 
       fi
       echo "#git $1 $patchFilename " > /dev/tty;
+      git $1 $patchFilename;
       echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
       echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
     else
