@@ -290,8 +290,8 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
         echo "# sudo wget $URL;" > /dev/tty;
         sudo wget $URL; git $1 $patchFilename; 
       fi
-      echo "#git $1 $patchFilename " > /dev/tty;
-      git $1 $patchFilename;
+      echo "#git $1 -v $patchFilename " > /dev/tty;
+      git $1 -v $patchFilename;
       echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
       echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
     else
@@ -299,15 +299,15 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
         echo "# sudo wget $URL;" > /dev/tty;
         sudo wget $URL; 
       fi
-      echo "#git apply --$1 $patchFilename" > /dev/tty;
-      git apply --$1 $patchFilename;
+      echo "#git apply -v --$1 $patchFilename" > /dev/tty;
+      git apply -v --$1 $patchFilename;
       echo "#Patchname: $patchFilename" > /dev/tty;
     fi
     if [[ $1 == "stat" ]] ; then
-      echo "# To check the patch use: "; > /dev/tty; echo "  git-patch check $patchFilename" > /dev/tty;
+      echo "# To check the patch use: "; > /dev/tty; echo "git-patch check $patchFilename" > /dev/tty;
     fi
     if [[ $1 == "check" ]] ; then
-      echo "# To apply the patch use: "; > /dev/tty; echo "  git-patch apply $patchFilename" > /dev/tty;
+      echo "# To apply the patch use: "; > /dev/tty; echo "git-patch apply $patchFilename" > /dev/tty;
     fi
   fi
 }
