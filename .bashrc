@@ -10,8 +10,8 @@ fi
 # History mod from Jason H.
 #-------------------------------------------------------------
 
-# search history via up and down arrow keys 
-bind '"\e[A"':history-search-backward 
+# search history via up and down arrow keys
+bind '"\e[A"':history-search-backward
 bind '"\e[B"':history-search-forward
 
 # Avoid duplicates in the bash command history.
@@ -56,7 +56,7 @@ function openMamp() {
 #-----------------------------------------------------------
 # Drush functions
 #-----------------------------------------------------------
-function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
+function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site`
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then
     echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
@@ -71,49 +71,59 @@ function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage
 #-----------------------------------------------------------
 function git-create-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
-	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
-  if [[ ! -n "$1" ]] ; then 
+	#from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
+  if [[ ! -n "$1" ]] ; then
 		echo 1>&2 Usage: git-create-branch branch_name
 	else
-		#$1 -> branch_name
-	  echo "Adding $1"
-		\git push origin master:refs/heads/$1
-		\git fetch origin
-		\git checkout --track -b $1 origin/$1
-		\git pull
-		echo "#To delete the branch use: git-delete-branch $1"; echo -n;
-		echo "local branches: "; 
-		\git branch
-		echo "Remote branches: "; 
-		\git branch -r
+		#$1 => branch_name
+	  #vars:
+    GCO="git checkout -b $1";
+		GPO="git push origin $1";
+    GBRSUP="git branch --set-upstream $1 origin/$1";
+    GBR="git branch";
+    GBRR="git branch -r";
+		#actions:
+		echo "Adding $1"
+		echo "1 - Create the local branch from the current one: '$GCO'" > /dev/tty; $GCO
+		echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; $GPO
+		echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
+		echo "4 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
+		echo "### Local branches ($GBR) ### "; $GBR
+    echo "### Remote branches ($GBRR) ### "; $GBRR
 	fi
 }
 
-function git-delete-branch(){ # git-create-branch <branch_name>
+function git-delete-branch(){ # git-delete-branch <branch_name>
   #!/bin/sh
-	#modified from script at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/
+	#modified from script and comments at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
 	#if [ $# -ne 1 ]; then
-  if [[ ! -n "$1" ]] ; then 
+  if [[ ! -n "$1" ]] ; then
 		echo 1>&2 Usage: git-delete-branch branch_name
 	else
 		#$1 -> branch_name
-	  echo "Removing $1"		
-		\git checkout master
-		\git push origin :/heads/$1
-		\git branch -d $1
-		\git fetch origin
-		\git pull origin master
-		echo "local branches: "; 
-		\git branch
-		echo "Remote branches: "; 
-		\git branch -r
+		#vars:
+    GCO="git checkout master";
+		GPOD="git push origin :$1";
+    GBRD="git branch -d $1";
+    GFO="git fetch origin";
+    GPL="git pull origin master"
+    GBR="git branch";
+    GBRR="git branch -r";
+		#Verbose actions:
+	  echo "Removing $1"
+    echo "1 - Check out master branch: '$GCO'" > /dev/tty; $GCO
+		echo "2 - Delete remote branch: '$GPOD'" > /dev/tty; $GPOD
+		echo "3 - Delete local branch: '$GBRD'" > /dev/tty; $GBRD
+		echo "4 - fetch and pull origin: '$GFO; $GPL;'" > /dev/tty; $GFO; $GPL;
+		echo "### Local branches ($GBR) ### "; $GBR
+    echo "### Remote branches ($GBRR) ### "; $GBRR
 	fi
 }
 
-function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch 
+function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch
   #!/bin/sh
 	#from http://drupal.org/node/1399218
-	if [[ ! -n "$1" ]] ; then 
+	if [[ ! -n "$1" ]] ; then
 		echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
 	else
 		local URL=$2;
@@ -121,15 +131,16 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
 		if [[ $1 == "apply" ]] ; then
 			if [[ $URL == http* ]] ; then
 				echo "# sudo wget $URL;" > /dev/tty;
-				sudo wget $URL; git $1 $patchFilename; 
+				sudo wget $URL; git $1 $patchFilename;
 			fi
 			echo "#git $1 $patchFilename " > /dev/tty;
+			git $1 $patchFilename;
 			echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
 			echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
 		else
 			if [[ $URL == http* ]] ; then
 				echo "# sudo wget $URL;" > /dev/tty;
-				sudo wget $URL; 
+				sudo wget $URL;
 			fi
 			echo "#git apply --$1 $patchFilename" > /dev/tty;
 			git apply --$1 $patchFilename;
@@ -194,7 +205,7 @@ Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
         return;
     fi
     find . -type f -name "${2:-*}" -print0 | \
-    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more 
+    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
 
 }
 
@@ -226,13 +237,13 @@ function lowercase()  # move filenames to lowercase
 
 function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
-    local TMPFILE=tmp.$$ 
+    local TMPFILE=tmp.$$
 
     [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
     [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
     [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
 
-    mv "$1" $TMPFILE 
+    mv "$1" $TMPFILE
     mv "$2" "$1"
     mv $TMPFILE "$2"
 }
@@ -262,7 +273,7 @@ function extract()      # Handy Extract Program.
 function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   #!/bin/sh
 	#from https://discussions.apple.com/message/13166537#13166537
-  if [[ ! -n "$1" ]] ; then 
+  if [[ ! -n "$1" ]] ; then
 		echo 1>&2 Usage: $0 user@server
 	else
 		cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
