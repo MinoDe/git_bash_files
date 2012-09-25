@@ -1,7 +1,7 @@
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
-alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo '### Git alias (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
+alias aliases="echo '### Available Functions (.bashrc) ###' > /dev/tty; echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; echo '### Alias (.bash_alias) ###' > /dev/tty; alias"
 
 #alias rm='rm -i'
 alias cp='cp -i'

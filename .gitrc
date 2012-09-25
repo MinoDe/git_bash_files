@@ -16,7 +16,7 @@ alias gps="echo -n '#gps => gpushom ' > /dev/tty; gpushom"
 alias gpl="echo -n '#gpl => gpullom ' > /dev/tty; gpullom"
 alias gst="echo -n '#gst => git status ' > /dev/tty; git status"
 alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit"
-alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo '### Git aliases (.gitrc) ###:'; git config --list | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
+alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo -n; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo -n; echo '### Git aliases (.gitrc) ###:'; echo -n; cat ~/.gitrc | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
 
 #-----------------------------------------------------------
 # Git functions
@@ -45,7 +45,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
   fi
 }
 
-function git-delete-branch(){ # git-create-branch <branch_name>
+function git-delete-branch(){ # git-delete-branch <branch_name>
   #!/bin/sh
   #modified from script and comments at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
   #if [ $# -ne 1 ]; then
