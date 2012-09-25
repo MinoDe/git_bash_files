@@ -1,14 +1,6 @@
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
-#git related aliases
-alias gpushom="echo '#git push origin master'; git push origin master;"
-alias gpullom="echo '#git pull origin master'; git pull origin master;"
-alias gps="echo -n '#gps => gpushom '; gpushom"
-alias gpl="echo -n '#gpl => gpullom '; gpullom"
-alias gst="echo '#git status'; git st;"
-alias gci="echo '#git commit'; git ci"
-
 alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo '### Git alias (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
 
 #alias rm='rm -i'
