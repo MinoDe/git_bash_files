@@ -16,6 +16,7 @@ alias gps="echo -n '#gps => gpushom ' > /dev/tty; gpushom"
 alias gpl="echo -n '#gpl => gpullom ' > /dev/tty; gpullom"
 alias gst="echo -n '#gst => git status ' > /dev/tty; git status"
 alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit"
+alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo '### Git aliases (.gitrc) ###:'; git config --list | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
 
 #-----------------------------------------------------------
 # Git functions
