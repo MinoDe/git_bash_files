@@ -49,6 +49,13 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 #-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
+fi
+
+#-------------------------------------------------------------
 # File & string-related functions:
 #-------------------------------------------------------------
 
@@ -220,95 +227,6 @@ function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage
   else
     echo "#drush dd @$1:%site" > /dev/tty;
     cd `drush dd @$1:%site`
-  fi
-}
-
-#-----------------------------------------------------------
-# Git functions
-#-----------------------------------------------------------
-function git-create-branch(){ # git-create-branch <branch_name>
-  #!/bin/sh
-  #from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
-  if [[ ! -n "$1" ]] ; then
-    echo 1>&2 Usage: git-create-branch branch_name
-  else
-    #$1 => branch_name
-    #vars:
-    GCO="git checkout -b $1";
-    GPO="git push origin $1";
-    GBRSUP="git branch --set-upstream $1 origin/$1";
-    GBR="git branch";
-    GBRR="git branch -r";
-    #actions:
-    echo "Adding $1"
-    echo "1 - Create the local branch from the current one: '$GCO'" > /dev/tty; $GCO
-    echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; $GPO
-    echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
-    echo "4 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
-    echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR
-  fi
-}
-
-function git-delete-branch(){ # git-create-branch <branch_name>
-  #!/bin/sh
-  #modified from script and comments at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
-  #if [ $# -ne 1 ]; then
-  if [[ ! -n "$1" ]] ; then
-    echo 1>&2 Usage: git-delete-branch branch_name
-  else
-    #$1 -> branch_name
-    #vars:
-    GCO="git checkout master";
-    GPOD="git push origin :$1";
-    GBRD="git branch -d $1";
-    GFO="git fetch origin";
-    GPL="git pull origin master"
-    GBR="git branch";
-    GBRR="git branch -r";
-    #Verbose actions:
-    echo "Removing $1"
-    echo "1 - Check out master branch: '$GCO'" > /dev/tty; $GCO
-    echo "2 - Delete remote branch: '$GPOD'" > /dev/tty; $GPOD
-    echo "3 - Delete local branch: '$GBRD'" > /dev/tty; $GBRD
-    echo "4 - fetch and pull origin: '$GFO; $GPL;'" > /dev/tty; $GFO; $GPL;
-    echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR
-  fi
-}
-
-function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch 
-  #!/bin/sh
-  #from http://drupal.org/node/1399218
-  if [[ ! -n "$1" ]] ; then 
-    echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
-  else
-    local URL=$2;
-    local patchFilename="$(basename $2)"
-    if [[ $1 == "apply" ]] ; then
-      if [[ $URL == http* ]] ; then
-        echo "# sudo wget $URL;" > /dev/tty;
-        sudo wget $URL; git $1 $patchFilename; 
-      fi
-      echo "#git $1 -v $patchFilename " > /dev/tty;
-      git $1 -v $patchFilename;
-      echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
-      echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
-    else
-      if [[ $URL == http* ]] ; then
-        echo "# sudo wget $URL;" > /dev/tty;
-        sudo wget $URL; 
-      fi
-      echo "#git apply -v --$1 $patchFilename" > /dev/tty;
-      git apply -v --$1 $patchFilename;
-      echo "#Patchname: $patchFilename" > /dev/tty;
-    fi
-    if [[ $1 == "stat" ]] ; then
-      echo "# To check the patch use: "; > /dev/tty; echo "git-patch check $patchFilename" > /dev/tty;
-    fi
-    if [[ $1 == "check" ]] ; then
-      echo "# To apply the patch use: "; > /dev/tty; echo "git-patch apply $patchFilename" > /dev/tty;
-    fi
   fi
 }
 
