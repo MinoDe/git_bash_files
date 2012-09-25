@@ -16,13 +16,6 @@ alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as th
 alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
 alias noAegir="echo '#git => git' > /dev/tty; echo '#You can also prepend git cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; alias git=\"git\""; #restore normal git usage during a session
 alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\""; #restore normal git usage during a session
-#other git aliases
-alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; git push origin master;"
-alias gpullom="echo -n '#gpullom => git pull origin master ' > /dev/tty; git pull origin master;"
-alias gps="echo -n '#gps => gpushom ' > /dev/tty; gpushom"
-alias gpl="echo -n '#gpl => gpullom ' > /dev/tty; gpullom"
-alias gst="echo -n '#gst => git status ' > /dev/tty; git status"
-alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit"
 
 #available funcitons
 #ii = system information
