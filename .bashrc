@@ -49,6 +49,13 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 #-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
+fi
+
+#-------------------------------------------------------------
 # File & string-related functions:
 #-------------------------------------------------------------
 
@@ -193,9 +200,40 @@ function ii()   # Get current host related info.
     echo
 }
 
-#----------------------------------------
-#openAtrium Functions
-#----------------------------------------## function mkOAplatform ##
+
+function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then 
+    echo 1>&2 Usage: $0 user@server
+  else
+    cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
+  fi
+}
+
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
+
+#-----------------------------------------------------------
+# Drush functions
+#-----------------------------------------------------------
+function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then
+    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
+  else
+    echo "#drush dd @$1:%site" > /dev/tty;
+    cd `drush dd @$1:%site`
+  fi
+}
+
+#-----------------------------------------------------------
+#  Open Atrium Platform Creation functions
+#-----------------------------------------------------------
+## function mkOAplatform ##
 ### Usage: mkOAplatform(http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz, fastage-openatrium-1.4-dl-drupal-6.26) ####
 function mkOAplatform(){ #dl and install openatrium in the directory specified (really it would work with any aegir:aegir owned tar.gz)
   #if the first var is blank
@@ -215,24 +253,39 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
       local tempdir=$2;
     fi #end if [[ ! -n "$2" ]] 
     
+    echo "#tempdir: $2" > /dev/tty;
+
     local releaseurl=$1; #ex: "http://openatrium.com/sites/openatrium.com/files/atrium_releases/atrium-1-1.tgz"
     local tgzfilename="$(basename $releaseurl)"   #possible option: filename="${fullfile##*/}" 
     local extension=${tgzfilename##*.}
     local filename=${tgzfilename%.*}
-    
+    echo "#filename: $filename" > /dev/tty;
+
+    echo "#mkdir $tempdir" > /dev/tty;
     sudo mkdir $tempdir;                    #make temp dir for new oa platform
+    echo "#chown -R aegir:aegir $tempdir" > /dev/tty;
     sudo chown -R aegir:aegir $tempdir;     #set ownership
+    echo "#chmod -R g+w $tempdir" > /dev/tty;
     sudo chmod -R g+w $tempdir;             #update perms
+    echo "#cd $tempdir" > /dev/tty;
     cd $tempdir;                            #cd to new dir
+    echo "#wget $releaseurl" > /dev/tty;
     sudo wget $releaseurl;                  #dl desired release
+    echo "#tar -xzf $tgzfilename" > /dev/tty;
     tar -xzf $tgzfilename;                  #untar + gzip
+    echo "#rm $tgzfilename" > /dev/tty;
     sudo rm $tgzfilename;                   #delete .tgz file
     
     local newfilename=$(ls -d */);
     #newfilename="$filename-dl";
-    sudo chown -R aegir:aegir $filename;    #set ownership
+    echo "#newfilename $newfilename" > /dev/tty;
+    echo "#chown -R aegir:aegir $newfilename" > /dev/tty;
+    sudo chown -R aegir:aegir $newfilename;    #set ownership
+    echo "#chmod -R g+w $newfilename" > /dev/tty;
     sudo chmod -R g+w $newfilename;         #update perms
+    echo "#mv $newfilename* ." > /dev/tty;
     sudo mv $newfilename* .;                #change dir name and move up a dir
+    echo "#rm -R $newfilename" > /dev/tty;
     sudo rm -R $newfilename;                #remove old dir
   fi # end if [[ ! -n "$1" ]] 
 }
