@@ -12,8 +12,11 @@
 #-----------------------------------------------------------
 alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; git push origin master;"
 alias gpullom="echo -n '#gpullom => git pull origin master ' > /dev/tty; git pull origin master;"
-alias gps="echo -n '#gps => gpushom ' > /dev/tty; gpushom"
-alias gpl="echo -n '#gpl => gpullom ' > /dev/tty; gpullom"
+alias gpusho="echo -n '#gpusho => git push origin ' > /dev/tty; git push origin ;"
+alias gpullo="echo -n '#gpullo => git pull origin ' > /dev/tty; git pull origin ;"
+
+alias gps="echo -n '#gps => gpusho ' > /dev/tty; gpusho"
+alias gpl="echo -n '#gpl => gpullo ' > /dev/tty; gpullo"
 alias gst="echo -n '#gst => git status ' > /dev/tty; git status"
 alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit"
 alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo -n; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo -n; echo '### Git aliases (.gitrc) ###:'; echo -n; cat ~/.gitrc | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
