@@ -3,6 +3,9 @@
   # Don't trust file modes ## cmdline: $ git config core.filemode false
   filemode = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[branch "master"]
+  remote = origin
+  merge = refs/heads/master
 [user]
 	name = Vid
 	email = vid@uoregon.edu
@@ -47,3 +50,5 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+[branch]
+	autosetupmerge = true
