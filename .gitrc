@@ -21,6 +21,7 @@ alias gst="echo -n '#gst => git status ' > /dev/tty; git status "
 alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit "
 alias gco="echo -n '#gco => git checkout ' > /dev/tty; echo -n; echo ''; git checkout "
 alias gdf="echo -n '#gdf => git diff ' > /dev/tty; echo -n; echo ''; git diff "
+alias gbr="echo -n '#gbr => git br ' > /dev/tty; echo -n; echo ''; git br "
 alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo -n; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo -n; echo '### Git aliases (.gitrc) ###:'; echo -n; cat ~/.gitrc | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
 #-----------------------------------------------------------
 # Git functions
@@ -45,7 +46,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
     echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
     echo "4 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
     echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR
+    echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
   fi
 }
 
@@ -72,7 +73,7 @@ function git-delete-branch(){ # git-delete-branch <branch_name>
     echo "3 - Delete local branch: '$GBRD'" > /dev/tty; $GBRD
     echo "4 - fetch and pull origin: '$GFO; $GPL;'" > /dev/tty; $GFO; $GPL;
     echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR
+    echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
   fi
 }
 
