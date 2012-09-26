@@ -44,7 +44,8 @@ function git-create-branch(){ # git-create-branch <branch_name>
     echo "1 - Create the local branch from the current one: '$GCO'" > /dev/tty; $GCO
     echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; $GPO
     echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
-    echo "4 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
+    echo "5 - To checkout and track the remote branch from another location simply use: git checkout $1 or git checkout -t origin/$1" > /dev/tty; echo -n;
+    echo "4 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;		
     echo "### Local branches ($GBR) ### "; $GBR
     echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
   fi
