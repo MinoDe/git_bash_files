@@ -19,7 +19,7 @@ alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal 
 alias noAegir="echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; noAegirSilent"; #restore normal git/drush usage during a session
 alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
-#noAegirSilent; #for noAegir branch
+noAegirSilent; #for noAegir branch
 
 #available funcitons
 #ii = system information
