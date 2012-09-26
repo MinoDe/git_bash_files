@@ -12,10 +12,10 @@ alias drush="echo '#drush => adrush ' > /dev/tty; adrush " #run all drush calls 
 
 #git related aliases
 ##git aegir aliases
-alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as the aegir user
-alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
-alias noAegir="echo '#git => git' > /dev/tty; echo '#You can also prepend git cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; alias git=\"git\""; #restore normal git usage during a session
-alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\""; #restore normal git usage during a session
+#alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as the aegir user
+#alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
+#alias noAegir="echo '#git => git' > /dev/tty; echo '#You can also prepend git cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; alias git=\"git\""; #restore normal git usage during a session
+#alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\""; #restore normal git usage during a session
 
 #available funcitons
 #ii = system information
