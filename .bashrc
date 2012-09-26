@@ -200,7 +200,6 @@ function ii()   # Get current host related info.
     echo
 }
 
-
 function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then 
@@ -210,24 +209,14 @@ function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub 
   fi
 }
 
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
 function currentDir(){
   SOURCE="$1"
   while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   echo $DIR
-}
-
-#-----------------------------------------------------------
-# Drush functions
-#-----------------------------------------------------------
-function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
-  #!/bin/sh
-  if [[ ! -n "$1" ]] ; then
-    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
-  else
-    echo "#drush dd @$1:%site" > /dev/tty;
-    cd `drush dd @$1:%site`
-  fi
 }
 
 #-----------------------------------------------------------
@@ -287,5 +276,74 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
     sudo mv $newfilename* .;                #change dir name and move up a dir
     echo "#rm -R $newfilename" > /dev/tty;
     sudo rm -R $newfilename;                #remove old dir
+  fi # end if [[ ! -n "$1" ]] 
+}
+
+#-----------------------------------------------------------
+# Drush functions
+#-----------------------------------------------------------
+function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then
+    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"
+  else
+    echo "#drush dd @$1:%site" > /dev/tty;
+    cd `drush dd @$1:%site`
+  fi
+}
+
+#----------------------------------------
+#Drush Backup Functions
+#----------------------------------------
+function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#drush db backup. Usage: drushbackdb drush.alias";
+  else
+    local drush_alias="$1"
+    cd `drush dd @$drush_alias:%site`; 
+    drush @$drush_alias sql-dump --ordered-dump --structure-tables-key=common --no-cache --result-file=`drush dd @$drush_alias:%dump`;
+  fi # end if [[ ! -n "$1" ]]     
+}
+
+function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\"";
+  else
+		local drush_alias="$1";
+    #if 2nd var is blank
+    if [[ ! -n "$2" ]] ; then
+      local git_commit_msg="auto-commit of DB Dump";
+    else
+      local git_commit_msg="$2";
+    fi #end if [[ ! -n "$2" ]] 
+      
+    cd `drush dd @$drush_alias:%dumpdir`; 
+    git add `drush dd @$drush_alias:%dump`; 
+    git commit -am"$git_commit_msg"; 
+    echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
+#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -"; 
+  fi # end if [[ ! -n "$1" ]] 
+}
+
+function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "commit message"
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then 
+    echo -e "\n#drush git db backup. Usage: dg_db_backup drush.alias \"commit message\"";
+  else
+    local drush_alias="$1";
+    local git_commit_msg="$2";
+		#capture current dir so in order to return the user back to where they called the command
+		#Relies on currentDir function
+    local currentDir=`currentDir`;
+		
+		#backup db
+    drushbackdb $drush_alias; 
+		#commit backup
+    gitbackdb $drush_alias "$git_commit_msg";
+		
+    #cd `drush dd @$drush_alias:%site`;
+    cd $currentDir;	
   fi # end if [[ ! -n "$1" ]] 
 }
