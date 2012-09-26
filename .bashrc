@@ -7,7 +7,7 @@ PATH=$PATH:~/drush
 #-------------------------------------------------------------
 
 if [ -f /etc/bashrc ]; then
-        . /etc/bashrc   # --> Read /etc/bashrc, if present.
+  . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
 #-------------------------------------------------------------
@@ -200,7 +200,9 @@ function ii()   # Get current host related info.
     echo
 }
 
-
+#----------------------------------------
+#Mac Functions
+#----------------------------------------
 function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then 
@@ -210,24 +212,14 @@ function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub 
   fi
 }
 
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
 function currentDir(){
   SOURCE="$1"
   while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   echo $DIR
-}
-
-#-----------------------------------------------------------
-# Drush functions
-#-----------------------------------------------------------
-function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cdsite hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
-  #!/bin/sh
-  if [[ ! -n "$1" ]] ; then
-    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cdsite hr.uoregon.edu. That results in $ cd `drush dd @hr.uoregon.edu:%site`"
-  else
-    echo "#drush dd @$1:%site" > /dev/tty;
-    cd `drush dd @$1:%site`
-  fi
 }
 
 #-----------------------------------------------------------
@@ -290,14 +282,17 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
   fi # end if [[ ! -n "$1" ]] 
 }
 
-#----------------------------------------
-#Directory Functions
-#----------------------------------------
-function currentDir(){
-  SOURCE="$1"
-  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  echo $DIR
+#-----------------------------------------------------------
+# Drush functions
+#-----------------------------------------------------------
+function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then
+    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"
+  else
+    echo "#drush dd @$1:%site" > /dev/tty;
+    cd `drush dd @$1:%site`
+  fi
 }
 
 #----------------------------------------
@@ -331,7 +326,7 @@ function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.ali
     git add `drush dd @$drush_alias:%dump`; 
     git commit -am"$git_commit_msg"; 
     echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
-#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push orign master; cd -"; 
+#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -"; 
   fi # end if [[ ! -n "$1" ]] 
 }
 
