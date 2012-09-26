@@ -12,8 +12,8 @@
 #-----------------------------------------------------------
 alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; echo -n; echo ''; git push origin master;"
 alias gpullom="echo -n '#gpullom => git pull origin master ' > /dev/tty; echo -n; echo ''; git pull origin master;"
-alias gpusho="echo -n '#gpusho => git push origin ' > /dev/tty; echo -n; echo ''; git push origin;"
-alias gpullo="echo -n '#gpullo => git pull origin ' > /dev/tty; echo -n; echo ''; git pull origin;"
+alias gpusho="echo -n '#gpusho => git push origin ' > /dev/tty; echo -n; echo ''; git push origin "
+alias gpullo="echo -n '#gpullo => git pull origin ' > /dev/tty; echo -n; echo ''; git pull origin "
 
 alias gps="echo -n '#gps => gpusho ' > /dev/tty; gpusho "
 alias gpl="echo -n '#gpl => gpullo ' > /dev/tty; gpullo "
