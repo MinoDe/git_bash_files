@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /Users/vid/.gitignore
+  excludesfile = /Users/vid/.gitignore
   # Don't trust file modes ## cmdline: $ git config core.filemode false
   filemode = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
@@ -7,8 +7,8 @@
   remote = origin
   merge = refs/heads/master
 [user]
-	name = Vid
-	email = vid@uoregon.edu
+  name = Vid
+  email = vid@uoregon.edu
 #Add colors to your ~/.gitconfig file:
 [color]
   ui = auto
@@ -44,16 +44,17 @@
 
   # Show files ignored by git:
   ign = ls-files -o -i --exclude-standard
-[difftool "sourcetree"]		#Usage: git difftool -t sourcetree
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[difftool "diffmerge"] 		#Usage: git difftool -t diffmerge
-	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
-[mergetool "sourcetree"]	#Usage: git mergetool -t sourcetree
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[mergetool "diffmerge"]	#Usage: git mergetool -t diffmerge
-	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
-	trustExitCode = false
+[difftool "sourcetree"]    #Usage: git difftool -t sourcetree
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[difftool "diffmerge"]     #Usage: git difftool -t diffmerge
+  #reversed remote and local for diff as it seems to take the diff request as local...
+  cmd = diffmerge --merge --result=$MERGED $REMOTE $BASE $LOCAL
+[mergetool "sourcetree"]  #Usage: git mergetool -t sourcetree
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[mergetool "diffmerge"]  #Usage: git mergetool -t diffmerge
+  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  trustExitCode = false
 [branch]
-	autosetupmerge = true
+  autosetupmerge = true
