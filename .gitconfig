@@ -48,8 +48,7 @@
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path =
 [difftool "diffmerge"]     #Usage: git difftool -t diffmerge
-  #reversed remote and local for diff as it seems to take the diff request as local...
-  cmd = diffmerge --merge --result=$MERGED $REMOTE $BASE $LOCAL
+  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
 [mergetool "sourcetree"]  #Usage: git mergetool -t sourcetree
   cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
