@@ -46,6 +46,9 @@ alias pjet='enscript -h -G -fCourier9 -d $LPDEST'
 alias du='du -kh'       # Makes a more readable output.
 alias df='df -kTh'
 
+#-------------------------------------------------------------
+# Mac specific aliases
+#-------------------------------------------------------------
 alias openFW='open -a "Adobe Fireworks CS4.app" '
 alias openDW='open -a "Adobe Dreamweaver CS4.app" '
  
@@ -72,12 +75,9 @@ function lgr() { ls -al "$@"| egrep "^d" | egrep ".|.."; ls -alSr "$@"| egrep "^
 #-------------------------------------------------------------
 # spelling typos - highly personnal and keyboard-dependent :-)
 #-------------------------------------------------------------
-
 alias lll='ll'
 
 #-------------------------------------------------------------
 # tailoring 'less'
 #-------------------------------------------------------------
-
 alias more='less'
-
