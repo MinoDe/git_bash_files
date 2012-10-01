@@ -44,15 +44,15 @@
 
   # Show files ignored by git:
   ign = ls-files -o -i --exclude-standard
-[difftool "sourcetree"]
+[difftool "sourcetree"]		#Usage: git difftool -t sourcetree
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
-[difftool "diffmerge"]
+[difftool "diffmerge"] 		#Usage: git difftool -t diffmerge
 	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
-[mergetool "sourcetree"]
+[mergetool "sourcetree"]	#Usage: git mergetool -t sourcetree
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[mergetool "diffmerge"]
+[mergetool "diffmerge"]	#Usage: git mergetool -t diffmerge
 	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
 	trustExitCode = false
 [branch]
