@@ -4,35 +4,35 @@
 #Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 
 #Aegir user related 
-alias suaegir="echo '#suaegir => sudo -u aegir ' > /dev/tty; sudo -u aegir "
+alias suaegir="CMDINFO echo 'sudo -u aegir ' > /dev/tty; NORMAL sudo -u aegir "
 
 #drush related aliases
-alias adrush="echo '#adrush => suaegir drush ' > /dev/tty; suaegir drush "
-alias drush="echo '#drush => adrush ' > /dev/tty; adrush " #run all drush calls through aegir user
+alias adrush="CMDINFO echo 'suaegir drush ' > /dev/tty; NORMAL suaegir drush "
+alias drush="CMDINFO echo 'adrush ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
 
 #git aegir aliases
-alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as the aegir user
-alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
+alias agit="CMDINFO echo -n 'suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
+alias git="CMDINFO echo -n 'agit ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
 #Aegir usage aliases
 alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal git/drush usage during a session (w/o tty feedback)
-alias noAegir="echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; noAegirSilent"; #restore normal git/drush usage during a session
-alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
+alias noAegir="INFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; NORMAL noAegirSilent"; #restore normal git/drush usage during a session
+alias useAegir="INFO echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
-#noAegirSilent; #for noAegir branch
+noAegirSilent; #for noAegir branch
 
 #available funcitons
 #ii = system information
-alias mkOAplatform="echo '#~/.bashrc >> mkOAplatform()' -n > /dev/tty; mkOAplatform"
+alias mkOAplatform="CMDINFO echo '~/.bashrc >> mkOAplatform()' -n > /dev/tty; NORMAL mkOAplatform"
 
-#alias rm="echo '#rm => rm -i ' > /dev/tty; rm -i"
-#alias cp="echo '#cp => cp -i ' > /dev/tty; cp -i"
-#alias mv="echo '#mv => mv -i ' > /dev/tty; mv -i"
+#alias rm="CMDINFO echo 'rm -i ' > /dev/tty; rm -i"
+#alias cp="CMDINFO echo 'cp -i ' > /dev/tty; cp -i"
+#alias mv="CMDINFO echo 'mv -i ' > /dev/tty; mv -i"
 # -> Prevents accidentally clobbering files.
-#alias mkdir="echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
+#alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
-alias aliases="echo '### Available Functions (.bashrc) ###' > /dev/tty; echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; echo '### Alias (.bash_alias) ###' > /dev/tty; alias"
-alias h="echo '#h => history ' > /dev/tty; history"
+alias aliases="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Alias (.bash_alias) ###' > /dev/tty; CMDINFO alias"
+alias h="CMDINFO echo 'history ' > /dev/tty; NORMAL history"
 alias j='jobs -l'
 alias which='type -a'
 alias ..='cd ..'
@@ -55,7 +55,7 @@ alias openDW='open -a "Adobe Dreamweaver CS4.app" '
 #-------------------------------------------------------------
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
-alias ll="echo '#ll => ls -al ' > /dev/tty; ls -al"
+alias ll="CMDINFO echo 'ls -al ' > /dev/tty; NORMAL ls -al"
 # alias lg="ls -l --group-directories-first"
 # alias lsc='ls -ahF --color'  # add colors for filetype recognition
 alias la='ls -Al'          # show hidden files
