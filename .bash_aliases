@@ -77,7 +77,7 @@ alias mkOAplatform="CMDINFO echo '~/.bashrc >> mkOAplatform()' -n > /dev/tty; NO
 #alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
 alias aliases="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Alias (.bash_alias) ###' > /dev/tty; CMDINFO alias"
-alias h="CMDINFO echo 'history ' > /dev/tty; history"
+alias h="CMDINFO echo 'history ' > /dev/tty; NORMAL history"
 alias j='jobs -l'
 alias which='type -a'
 alias ..='cd ..'
