@@ -189,7 +189,7 @@ function extract()      # Handy Extract Program.
              *.zip)       unzip $1        ;;
              *.Z)         uncompress $1   ;;
              *.7z)        7z x $1         ;;
-             *)           WARNING echo "'$1' cannot be extracted via >extract<" ; NORMAL;
+             *)           WARNING echo "'$1' cannot be extracted via >extract<" NORMAL;;
          esac
      else
         WARNING echo "'$1' is not a valid file" NORMAL
