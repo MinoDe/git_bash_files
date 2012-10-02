@@ -1,38 +1,83 @@
+#Set colors: 
+## Thanks: https://wiki.archlinux.org/index.php/Color_Bash_Prompt
+txtblk='\\033[0\;30m' # Black - Regular
+txtred='\\033[0\;31m' # Red
+txtgrn='\\033[0\;32m' # Green
+txtylw='\\033[0\;33m' # Yellow
+txtblu='\\033[0\;34m' # Blue
+txtpur='\\033[0\;35m' # Purple
+txtcyn='\\033[0\;36m' # Cyan
+txtwht='\\033[0\;37m' # White
+txtoffwht='\\033[0\;39m' # Off White
+
+bldblk='\\033[1\;30m' # Black - Bold
+bldred='\\033[1\;31m' # Red
+bldgrn='\\033[1\;32m' # Green
+bldylw='\\033[1\;33m' # Yellow
+bldblu='\\033[1\;34m' # Blue
+bldpur='\\033[1\;35m' # Purple
+bldcyn='\\033[1\;36m' # Cyan
+bldwht='\\033[1\;37m' # White
+unkblk='\\033[4\;30m' # Black - Underline
+undred='\\033[4\;31m' # Red
+undgrn='\\033[4\;32m' # Green
+undylw='\\033[4\;33m' # Yellow
+undblu='\\033[4\;34m' # Blue
+undpur='\\033[4\;35m' # Purple
+undcyn='\\033[4\;36m' # Cyan
+undwht='\\033[4\;37m' # White
+bakblk='\\033[40m'   # Black - Background
+bakred='\\033[41m'   # Red
+bakgrn='\\033[42m'   # Green
+bakylw='\\033[43m'   # Yellow
+bakblu='\\033[44m'   # Blue
+bakpur='\\033[45m'   # Purple
+bakcyn='\\033[46m'   # Cyan
+bakwht='\\033[47m'   # White
+txtrst='\\033[0m'    # Text Reset
+
+alias NORMAL="echo -e ${txtrst};"
+alias SUCCESS="echo -e ${bldgrn};"
+alias CMDINFO="echo -en ${bldcyn};"
+alias INFO="echo -en ${txtylw};"
+alias WARNING="echo -en ${bldylw};"
+alias FAILURE="echo -en ${bldred};"
+
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
 #Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 
 #Aegir user related 
-alias suaegir="echo '#suaegir => sudo -u aegir ' > /dev/tty; sudo -u aegir "
+alias suaegir="CMDINFO echo '#suaegir => sudo -u aegir ' > /dev/tty; NORMAL sudo -u aegir "
 
 #drush related aliases
-alias adrush="echo '#adrush => suaegir drush ' > /dev/tty; suaegir drush "
-alias drush="echo '#drush => adrush ' > /dev/tty; adrush " #run all drush calls through aegir user
+alias adrush="CMDINFO echo '#adrush => suaegir drush ' > /dev/tty; NORMAL suaegir drush "
+alias drush="CMDINFO echo '#drush => adrush ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
 
 #git aegir aliases
-alias agit="echo -n '#agit => suaegir git ' > /dev/tty; suaegir git " #git as the aegir user
-alias git="echo -n '#git => agit ' > /dev/tty; agit " #run all git calls through the aegir user
+alias agit="CMDINFO echo -n '#agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
+alias git="CMDINFO echo -n '#git => agit ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
 #Aegir usage aliases
 alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal git/drush usage during a session (w/o tty feedback)
-alias noAegir="echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; noAegirSilent"; #restore normal git/drush usage during a session
-alias useAegir="echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
+alias noAegir="CMDINFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; INFO echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; NORMAL noAegirSilent"; #restore normal git/drush usage during a session
+alias useAegir="CMDINFO echo '#git => agit' > /dev/tty; INFO echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; alias git=\"agit\"; NORMAL alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
 noAegirSilent; #for noAegir branch
 
 #available funcitons
 #ii = system information
-alias mkOAplatform="echo '#~/.bashrc >> mkOAplatform()' -n > /dev/tty; mkOAplatform"
+alias mkOAplatform="CMDINFO echo '#~/.bashrc >> mkOAplatform()' -n > /dev/tty; mkOAplatform"
 
-#alias rm="echo '#rm => rm -i ' > /dev/tty; rm -i"
-#alias cp="echo '#cp => cp -i ' > /dev/tty; cp -i"
-#alias mv="echo '#mv => mv -i ' > /dev/tty; mv -i"
+#alias rm="CMDINFO echo '#rm => rm -i ' > /dev/tty; rm -i"
+#alias cp="CMDINFO echo '#cp => cp -i ' > /dev/tty; cp -i"
+#alias mv="CMDINFO echo '#mv => mv -i ' > /dev/tty; mv -i"
 # -> Prevents accidentally clobbering files.
-#alias mkdir="echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
+#alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
-alias aliases="echo '### Available Functions (.bashrc) ###' > /dev/tty; echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; echo '### Alias (.bash_alias) ###' > /dev/tty; alias"
-alias h="echo '#h => history ' > /dev/tty; history"
+alias aliases="CMDINFO echo '### Available Functions (.bashrc) ###' > /dev/tty; echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; echo '### Alias (.bash_alias) ###' > /dev/tty; alias"
+alias h="CMDINFO echo '#h => history ' > /dev/tty; history"
 alias j='jobs -l'
 alias which='type -a'
 alias ..='cd ..'
@@ -55,7 +100,7 @@ alias openDW='open -a "Adobe Dreamweaver CS4.app" '
 #-------------------------------------------------------------
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
-alias ll="echo '#ll => ls -al ' > /dev/tty; ls -al"
+alias ll="CMDINFO echo '#ll => ls -al ' > /dev/tty; NORMAL ls -al"
 # alias lg="ls -l --group-directories-first"
 # alias lsc='ls -ahF --color'  # add colors for filetype recognition
 alias la='ls -Al'          # show hidden files
