@@ -122,12 +122,12 @@ Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
     do
         case "$opt" in
         i) case="-i " ;;
-        *) echo "$usage"; return;;
+        *) INFO echo "$usage"; NORMAL return;;
         esac
     done
     shift $(( $OPTIND - 1 ))
     if [ "$#" -lt 1 ]; then
-        echo "$usage"
+        INFO echo "$usage" NORMAL
         return;
     fi
     find . -type f -name "${2:-*}" -print0 | \
@@ -153,9 +153,9 @@ function lowercase()  # move filenames to lowercase
         newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
             mv "$file" "$newname"
-            echo "lowercase: $file --> $newname"
+            INFO echo "lowercase: $file --> $newname" NORMAL
         else
-            echo "lowercase: $file not changed."
+            NORMAL echo "lowercase: $file not changed." NORMAL
         fi
     done
 }
@@ -165,9 +165,9 @@ function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
     local TMPFILE=tmp.$$ 
 
-    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
-    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
-    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+    [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
+    [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
+    [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
 
     mv "$1" $TMPFILE 
     mv "$2" "$1"
@@ -189,10 +189,10 @@ function extract()      # Handy Extract Program.
              *.zip)       unzip $1        ;;
              *.Z)         uncompress $1   ;;
              *.7z)        7z x $1         ;;
-             *)           echo "'$1' cannot be extracted via >extract<" ;;
+             *)           WARNING echo "'$1' cannot be extracted via >extract<" ; NORMAL;
          esac
      else
-         echo "'$1' is not a valid file"
+        WARNING echo "'$1' is not a valid file" NORMAL
      fi
 }
 
@@ -209,7 +209,7 @@ function killps()                 # Kill by process name.
 {
     local pid pname sig="-TERM"   # Default signal.
     if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        echo "Usage: killps [-SIGNAL] pattern"
+        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL 
         return;
     fi
     if [ $# = 2 ]; then sig=$1 ; fi
@@ -231,7 +231,8 @@ sed -e s/P-t-P://)
 
 function ii()   # Get current host related info.
 {
-    echo -e "\nYou are logged on ${RED}$HOST"
+    INFO
+		echo -e "\nYou are logged on ${RED}$HOST"
     echo -e "\nAdditionnal information:$NC " ; uname -a
     echo -e "\n${RED}Users logged on:$NC " ; w -h
     echo -e "\n${RED}Current date :$NC " ; date
@@ -242,6 +243,7 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
+		NORMAL 
 }
 
 #----------------------------------------
@@ -250,7 +252,7 @@ function ii()   # Get current host related info.
 function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then 
-    echo 1>&2 Usage: $0 user@server
+    INFO echo 1>&2 Usage: $0 user@server; NORMAL 
   else
     cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
   fi
@@ -263,7 +265,7 @@ function currentDir(){
   SOURCE="$1"
   while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  echo $DIR
+  INFO echo $DIR; NORMAL 
 }
 
 #-----------------------------------------------------------
@@ -274,12 +276,13 @@ function currentDir(){
 function mkOAplatform(){ #dl and install openatrium in the directory specified (really it would work with any aegir:aegir owned tar.gz)
   #if the first var is blank
   if [[ ! -n "$1" ]] ; then 
-    echo "#mkOAplatform is a function that lets you dl and set up a dir for an OA install. 
+    INFO echo "#mkOAplatform is a function that lets you dl and set up a dir for an OA install. 
  ##usage 
  #$ cd /var/aegir/platforms/;
  #$ mkOAplatform url newDirName '; 
  #ie: $ cd /var/aegir/platforms/; mkOAplatform http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz fastage-openatrium-1.4-dl-drupal-6.26'; 
     ";
+		NORMAL 
   else
     ## set vars ##
     #if 2nd var is blank
@@ -289,40 +292,62 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
       local tempdir=$2;
     fi #end if [[ ! -n "$2" ]] 
     
-    echo "#tempdir: $2" > /dev/tty;
+    INFO echo "#tempdir: $2" > /dev/tty; NORMAL
 
     local releaseurl=$1; #ex: "http://openatrium.com/sites/openatrium.com/files/atrium_releases/atrium-1-1.tgz"
     local tgzfilename="$(basename $releaseurl)"   #possible option: filename="${fullfile##*/}" 
     local extension=${tgzfilename##*.}
     local filename=${tgzfilename%.*}
-    echo "#filename: $filename" > /dev/tty;
+    INFO 
+		echo "#filename: $filename" > /dev/tty;
 
     echo "#mkdir $tempdir" > /dev/tty;
-    sudo mkdir $tempdir;                    #make temp dir for new oa platform
-    echo "#chown -R aegir:aegir $tempdir" > /dev/tty;
-    sudo chown -R aegir:aegir $tempdir;     #set ownership
-    echo "#chmod -R g+w $tempdir" > /dev/tty;
-    sudo chmod -R g+w $tempdir;             #update perms
-    echo "#cd $tempdir" > /dev/tty;
-    cd $tempdir;                            #cd to new dir
-    echo "#wget $releaseurl" > /dev/tty;
-    sudo wget $releaseurl;                  #dl desired release
-    echo "#tar -xzf $tgzfilename" > /dev/tty;
-    tar -xzf $tgzfilename;                  #untar + gzip
-    echo "#rm $tgzfilename" > /dev/tty;
-    sudo rm $tgzfilename;                   #delete .tgz file
+    NORMAL
+		sudo mkdir $tempdir;                    #make temp dir for new oa platform
+    INFO
+		echo "#chown -R aegir:aegir $tempdir" > /dev/tty;
+    NORMAL
+		sudo chown -R aegir:aegir $tempdir;     #set ownership
+    INFO
+		echo "#chmod -R g+w $tempdir" > /dev/tty;
+    NORMAL
+		sudo chmod -R g+w $tempdir;             #update perms
+    INFO
+		echo "#cd $tempdir" > /dev/tty;
+    NORMAL
+		cd $tempdir;                            #cd to new dir
+    INFO
+		echo "#wget $releaseurl" > /dev/tty;
+    NORMAL
+		sudo wget $releaseurl;                  #dl desired release
+    INFO
+		echo "#tar -xzf $tgzfilename" > /dev/tty;
+    NORMAL
+		tar -xzf $tgzfilename;                  #untar + gzip
+    INFO
+		echo "#rm $tgzfilename" > /dev/tty;
+    NORMAL
+		sudo rm $tgzfilename;                   #delete .tgz file
     
     local newfilename=$(ls -d */);
     #newfilename="$filename-dl";
-    echo "#newfilename $newfilename" > /dev/tty;
+    INFO
+		echo "#newfilename $newfilename" > /dev/tty;
     echo "#chown -R aegir:aegir $newfilename" > /dev/tty;
-    sudo chown -R aegir:aegir $newfilename;    #set ownership
-    echo "#chmod -R g+w $newfilename" > /dev/tty;
-    sudo chmod -R g+w $newfilename;         #update perms
-    echo "#mv $newfilename* ." > /dev/tty;
-    sudo mv $newfilename* .;                #change dir name and move up a dir
-    echo "#rm -R $newfilename" > /dev/tty;
-    sudo rm -R $newfilename;                #remove old dir
+    NORMAL
+		sudo chown -R aegir:aegir $newfilename;    #set ownership
+    INFO
+		echo "#chmod -R g+w $newfilename" > /dev/tty;
+    NORMAL
+		sudo chmod -R g+w $newfilename;         #update perms
+    INFO
+		echo "#mv $newfilename* ." > /dev/tty;
+    NORMAL
+		sudo mv $newfilename* .;                #change dir name and move up a dir
+    INFO
+		echo "#rm -R $newfilename" > /dev/tty;
+    NORMAL
+		sudo rm -R $newfilename;                #remove old dir
   fi # end if [[ ! -n "$1" ]] 
 }
 
@@ -332,9 +357,9 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
 function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then
-    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"
+    INFO echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"; NORMAL
   else
-    echo "#drush dd @$1:%site" > /dev/tty;
+    INFO echo "#drush dd @$1:%site" > /dev/tty; NORMAL
     cd `drush dd @$1:%site`
   fi
 }
@@ -345,7 +370,7 @@ function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage
 function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
   #if the first var is blank
   if [[ ! -n "$1" ]] ; then 
-    echo -e "\n#drush db backup. Usage: drushbackdb drush.alias";
+    INFO echo -e "\n#drush db backup. Usage: drushbackdb drush.alias"; NORMAL
   else
     local drush_alias="$1"
     cd `drush dd @$drush_alias:%site`; 
@@ -356,7 +381,7 @@ function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
 function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
   #if the first var is blank
   if [[ ! -n "$1" ]] ; then 
-    echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\"";
+    INFO echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\""; NORMAL
   else
 		local drush_alias="$1";
     #if 2nd var is blank
@@ -369,15 +394,17 @@ function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.ali
     cd `drush dd @$drush_alias:%dumpdir`; 
     git add `drush dd @$drush_alias:%dump`; 
     git commit -am"$git_commit_msg"; 
-    echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
-#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -"; 
+    INFO 
+		echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
+#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";  
+		NORMAL
   fi # end if [[ ! -n "$1" ]] 
 }
 
 function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "commit message"
   #if the first var is blank
   if [[ ! -n "$1" ]] ; then 
-    echo -e "\n#drush git db backup. Usage: dg_db_backup drush.alias \"commit message\"";
+    INFO echo -e "\n#drush git db backup. Usage: dg_db_backup drush.alias \"commit message\""; NORMAL
   else
     local drush_alias="$1";
     local git_commit_msg="$2";
