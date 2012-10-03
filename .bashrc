@@ -329,10 +329,10 @@ function mkOAplatform(){ #dl and install openatrium in the directory specified (
 #-----------------------------------------------------------
 # Drush functions
 #-----------------------------------------------------------
-function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
+function cddrush(){ #cd to a drush site alias, w/o '@'. Usage: cddrush hr.uoregon.edu = cd `drush dd @hr.uoregon.edu:%site` 
   #!/bin/sh
   if [[ ! -n "$1" ]] ; then
-    echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"
+    echo 1>&2 "Usage: cddrush drush_site_alias (no '@'). ex: cddrush hr.uoregon.edu | $ cd `drush dd @hr.uoregon.edu:%site`"
   else
     echo "#drush dd @$1:%site" > /dev/tty;
     cd `drush dd @$1:%site`
