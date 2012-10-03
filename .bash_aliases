@@ -1,3 +1,19 @@
+# .bash_aliases
+# To include this in your .bash environment add this to your .bashrc file (removing ##):
+###-------------------------------------------------------------
+### User specific aliases and functions
+###-------------------------------------------------------------
+##if [ -f ~/.bash_aliases ]; then
+##  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+##fi
+
+#-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
+
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
