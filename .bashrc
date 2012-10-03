@@ -10,6 +10,51 @@ if [ -f /etc/bashrc ]; then
 fi
 
 #-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
+
+#-------------------------------------------------------------
+# User specific aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+fi
+
+#-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
+fi
+
+#--------------------------------
+# Aegir specific
+#--------------------------------
+if [ -f ~/.bash_aegir ]; then
+  . ~/.bash_aegir # --> Read ~/.bash_aegir if present
+fi
+
+#-------------------------------------------------------------
+# Drush specific
+#-------------------------------------------------------------
+if [ -f ~/.bash_drush ]; then
+  . ~/.bash_drush # --> Read ~/.bash_drush if present
+fi
+
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
+
+#-------------------------------------------------------------
 # History mod from Jason H.
 #-------------------------------------------------------------
 # search history via up and down arrow keys 
@@ -39,30 +84,8 @@ export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 
 #-------------------------------------------------------------
-# User specific colors
-#-------------------------------------------------------------
-if [ -f ~/.bash_colors ]; then
-  . ~/.bash_colors # --> Read ~/.bash_colors if present
-fi
-
-#-------------------------------------------------------------
-# User specific aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
-fi
-
-#-------------------------------------------------------------
-# User specific git aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.gitrc ]; then
-  . ~/.gitrc # --> Read ~/.gitrc if present
-fi
-
-#-------------------------------------------------------------
 # File & string-related functions:
 #-------------------------------------------------------------
-
 # Find a file with a pattern in name:
 function ff() { find . -type f -iname '*'$*'*' -ls ; }
 
@@ -204,180 +227,4 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
 		NORMAL 
-}
-
-#----------------------------------------
-#Mac Functions
-#----------------------------------------
-function ssh-copy-id-mac() { #mac version of ssh-copy-id: cat ~/.ssh/id_rsa.pub | ssh admin@mydomain.net "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
-  #!/bin/sh
-  if [[ ! -n "$1" ]] ; then 
-    INFO echo 1>&2 Usage: $0 user@server; NORMAL 
-  else
-    cat ~/.ssh/id_rsa.pub | ssh $1 "umask 077; mkdir -p .ssh ; cat >> .ssh/authorized_keys"
-  fi
-}
-
-#----------------------------------------
-#Directory Functions
-#----------------------------------------
-function currentDir(){
-  SOURCE="$1"
-  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  INFO echo $DIR; NORMAL 
-}
-
-#-----------------------------------------------------------
-#  Open Atrium Platform Creation functions
-#-----------------------------------------------------------
-## function mkOAplatform ##
-### Usage: mkOAplatform(http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz, fastage-openatrium-1.4-dl-drupal-6.26) ####
-function mkOAplatform(){ #dl and install openatrium in the directory specified (really it would work with any aegir:aegir owned tar.gz)
-  #if the first var is blank
-  if [[ ! -n "$1" ]] ; then 
-    INFO echo "#mkOAplatform is a function that lets you dl and set up a dir for an OA install. 
- ##usage 
- #$ cd /var/aegir/platforms/;
- #$ mkOAplatform url newDirName '; 
- #ie: $ cd /var/aegir/platforms/; mkOAplatform http://ftp.drupal.org/files/projects/openatrium-6.x-1.4-core.tar.gz fastage-openatrium-1.4-dl-drupal-6.26'; 
-    ";
-		NORMAL 
-  else
-    ## set vars ##
-    #if 2nd var is blank
-    if [[ ! -n "$2" ]] ; then
-      local tempdir="temp-openatrium"
-    else
-      local tempdir=$2;
-    fi #end if [[ ! -n "$2" ]] 
-    
-    INFO echo "#tempdir: $2" > /dev/tty; NORMAL
-
-    local releaseurl=$1; #ex: "http://openatrium.com/sites/openatrium.com/files/atrium_releases/atrium-1-1.tgz"
-    local tgzfilename="$(basename $releaseurl)"   #possible option: filename="${fullfile##*/}" 
-    local extension=${tgzfilename##*.}
-    local filename=${tgzfilename%.*}
-    INFO 
-		echo "#filename: $filename" > /dev/tty;
-
-    echo "#mkdir $tempdir" > /dev/tty;
-    NORMAL
-		sudo mkdir $tempdir;                    #make temp dir for new oa platform
-    INFO
-		echo "#chown -R aegir:aegir $tempdir" > /dev/tty;
-    NORMAL
-		sudo chown -R aegir:aegir $tempdir;     #set ownership
-    INFO
-		echo "#chmod -R g+w $tempdir" > /dev/tty;
-    NORMAL
-		sudo chmod -R g+w $tempdir;             #update perms
-    INFO
-		echo "#cd $tempdir" > /dev/tty;
-    NORMAL
-		cd $tempdir;                            #cd to new dir
-    INFO
-		echo "#wget $releaseurl" > /dev/tty;
-    NORMAL
-		sudo wget $releaseurl;                  #dl desired release
-    INFO
-		echo "#tar -xzf $tgzfilename" > /dev/tty;
-    NORMAL
-		tar -xzf $tgzfilename;                  #untar + gzip
-    INFO
-		echo "#rm $tgzfilename" > /dev/tty;
-    NORMAL
-		sudo rm $tgzfilename;                   #delete .tgz file
-    
-    local newfilename=$(ls -d */);
-    #newfilename="$filename-dl";
-    INFO
-		echo "#newfilename $newfilename" > /dev/tty;
-    echo "#chown -R aegir:aegir $newfilename" > /dev/tty;
-    NORMAL
-		sudo chown -R aegir:aegir $newfilename;    #set ownership
-    INFO
-		echo "#chmod -R g+w $newfilename" > /dev/tty;
-    NORMAL
-		sudo chmod -R g+w $newfilename;         #update perms
-    INFO
-		echo "#mv $newfilename* ." > /dev/tty;
-    NORMAL
-		sudo mv $newfilename* .;                #change dir name and move up a dir
-    INFO
-		echo "#rm -R $newfilename" > /dev/tty;
-    NORMAL
-		sudo rm -R $newfilename;                #remove old dir
-  fi # end if [[ ! -n "$1" ]] 
-}
-
-#-----------------------------------------------------------
-# Drush functions
-#-----------------------------------------------------------
-function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
-  #!/bin/sh
-  if [[ ! -n "$1" ]] ; then
-    INFO echo 1>&2 "Usage: cddrush drush_site_alias (with out the @ symbol). ex: cddrush hr.uoregon.edu which executes: $ cd `drush dd @hr.uoregon.edu:%site`"; NORMAL
-  else
-    INFO echo "#drush dd @$1:%site" > /dev/tty; NORMAL
-    cd `drush dd @$1:%site`
-  fi
-}
-
-#----------------------------------------
-#Drush Backup Functions
-#----------------------------------------
-function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
-  #if the first var is blank
-  if [[ ! -n "$1" ]] ; then 
-    INFO echo -e "\n#drush db backup. Usage: drushbackdb drush.alias"; NORMAL
-  else
-    local drush_alias="$1"
-    cd `drush dd @$drush_alias:%site`; 
-    drush @$drush_alias sql-dump --ordered-dump --structure-tables-key=common --no-cache --result-file=`drush dd @$drush_alias:%dump`;
-  fi # end if [[ ! -n "$1" ]]     
-}
-
-function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
-  #if the first var is blank
-  if [[ ! -n "$1" ]] ; then 
-    INFO echo -e "\n#git add and commit db backup. Usage: gitbackdb drush.alias \"commit message\""; NORMAL
-  else
-		local drush_alias="$1";
-    #if 2nd var is blank
-    if [[ ! -n "$2" ]] ; then
-      local git_commit_msg="auto-commit of DB Dump";
-    else
-      local git_commit_msg="$2";
-    fi #end if [[ ! -n "$2" ]] 
-      
-    cd `drush dd @$drush_alias:%dumpdir`; 
-    git add `drush dd @$drush_alias:%dump`; 
-    git commit -am"$git_commit_msg"; 
-    INFO 
-		echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
-#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";  
-		NORMAL
-  fi # end if [[ ! -n "$1" ]] 
-}
-
-function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "commit message"
-  #if the first var is blank
-  if [[ ! -n "$1" ]] ; then 
-    INFO echo -e "\n#drush git db backup. Usage: dg_db_backup drush.alias \"commit message\""; NORMAL
-  else
-    local drush_alias="$1";
-    local git_commit_msg="$2";
-		#capture current dir so in order to return the user back to where they called the command
-		#Relies on currentDir function
-    local currentDir=`currentDir`;
-		
-		#backup db
-    drushbackdb $drush_alias; 
-		#commit backup
-    gitbackdb $drush_alias "$git_commit_msg";
-		
-    #cd `drush dd @$drush_alias:%site`;
-    cd $currentDir;	
-  fi # end if [[ ! -n "$1" ]] 
 }

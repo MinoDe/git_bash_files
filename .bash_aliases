@@ -13,29 +13,17 @@
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
 fi
-
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
-#Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 
-#Aegir user related 
-alias suaegir="CMDINFO echo 'sudo -u aegir ' > /dev/tty; NORMAL sudo -u aegir "
-
-#drush related aliases
-alias adrush="CMDINFO echo 'suaegir drush ' > /dev/tty; NORMAL suaegir drush "
-alias drush="CMDINFO echo 'adrush ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
-
-#git aegir aliases
-alias agit="CMDINFO echo -n 'suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
-alias git="CMDINFO echo -n 'agit ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
-
-#Aegir usage aliases
-alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal git/drush usage during a session (w/o tty feedback)
-alias noAegir="INFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; NORMAL noAegirSilent"; #restore normal git/drush usage during a session
-alias useAegir="INFO echo '#git => agit' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
-
-noAegirSilent; #for noAegir branch
+#--------------------------------
+#site specific aliases
+#--------------------------------
+#-----------------
+#drush git back up db
+#-----------------
+alias d7backdb='dg_db_backup d7.lsta.local '
 
 #available funcitons
 #ii = system information
@@ -62,12 +50,6 @@ alias pjet='enscript -h -G -fCourier9 -d $LPDEST'
 alias du='du -kh'       # Makes a more readable output.
 alias df='df -kTh'
 
-#-------------------------------------------------------------
-# Mac specific aliases
-#-------------------------------------------------------------
-alias openFW='open -a "Adobe Fireworks CS4.app" '
-alias openDW='open -a "Adobe Dreamweaver CS4.app" '
- 
 #-------------------------------------------------------------
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
