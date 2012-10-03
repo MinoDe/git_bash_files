@@ -5,15 +5,58 @@ PATH=$PATH:~/drush
 #-------------------------------------------------------------
 # Source global definitions (if any)
 #-------------------------------------------------------------
-
 if [ -f /etc/bashrc ]; then
-        . /etc/bashrc   # --> Read /etc/bashrc, if present.
+  . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
+
+#-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
+
+#-------------------------------------------------------------
+# User specific aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+fi
+
+#-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
+fi
+
+#--------------------------------
+# Aegir specific
+#--------------------------------
+if [ -f ~/.bash_aegir ]; then
+  . ~/.bash_aegir # --> Read ~/.bash_aegir if present
+fi
+
+#-------------------------------------------------------------
+# Drush specific
+#-------------------------------------------------------------
+if [ -f ~/.bash_drush ]; then
+  . ~/.bash_drush # --> Read ~/.bash_drush if present
+fi
+
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
 
 #-------------------------------------------------------------
 # History mod from Jason H.
 #-------------------------------------------------------------
-
 # search history via up and down arrow keys 
 bind '"\e[A"':history-search-backward 
 bind '"\e[B"':history-search-forward
@@ -33,7 +76,6 @@ PROMPT_COMMAND='history -a'
 #-------------------------------------------------------------
 # tailoring 'less'
 #-------------------------------------------------------------
-
 export PAGER=less
 export LESSCHARSET='latin1'
 export LESSOPEN='|/usr/bin/lesspipe.sh %s 2>&-'
@@ -42,16 +84,8 @@ export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 
 #-------------------------------------------------------------
-# User specific aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
-fi
-
-#-------------------------------------------------------------
 # File & string-related functions:
 #-------------------------------------------------------------
-
 # Find a file with a pattern in name:
 function ff() { find . -type f -iname '*'$*'*' -ls ; }
 
@@ -71,12 +105,12 @@ Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
     do
         case "$opt" in
         i) case="-i " ;;
-        *) echo "$usage"; return;;
+        *) INFO echo "$usage"; NORMAL return;;
         esac
     done
     shift $(( $OPTIND - 1 ))
     if [ "$#" -lt 1 ]; then
-        echo "$usage"
+        INFO echo "$usage" NORMAL
         return;
     fi
     find . -type f -name "${2:-*}" -print0 | \
@@ -102,9 +136,9 @@ function lowercase()  # move filenames to lowercase
         newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
             mv "$file" "$newname"
-            echo "lowercase: $file --> $newname"
+            INFO echo "lowercase: $file --> $newname" NORMAL
         else
-            echo "lowercase: $file not changed."
+            NORMAL echo "lowercase: $file not changed." NORMAL
         fi
     done
 }
@@ -114,9 +148,9 @@ function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
     local TMPFILE=tmp.$$ 
 
-    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
-    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
-    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+    [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
+    [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
+    [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
 
     mv "$1" $TMPFILE 
     mv "$2" "$1"
@@ -138,10 +172,10 @@ function extract()      # Handy Extract Program.
              *.zip)       unzip $1        ;;
              *.Z)         uncompress $1   ;;
              *.7z)        7z x $1         ;;
-             *)           echo "'$1' cannot be extracted via >extract<" ;;
+             *)           WARNING echo "'$1' cannot be extracted via >extract<" NORMAL;;
          esac
      else
-         echo "'$1' is not a valid file"
+        WARNING echo "'$1' is not a valid file" NORMAL
      fi
 }
 
@@ -158,7 +192,7 @@ function killps()                 # Kill by process name.
 {
     local pid pname sig="-TERM"   # Default signal.
     if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        echo "Usage: killps [-SIGNAL] pattern"
+        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL 
         return;
     fi
     if [ $# = 2 ]; then sig=$1 ; fi
@@ -180,7 +214,8 @@ sed -e s/P-t-P://)
 
 function ii()   # Get current host related info.
 {
-    echo -e "\nYou are logged on ${RED}$HOST"
+    INFO
+		echo -e "\nYou are logged on ${RED}$HOST"
     echo -e "\nAdditionnal information:$NC " ; uname -a
     echo -e "\n${RED}Users logged on:$NC " ; w -h
     echo -e "\n${RED}Current date :$NC " ; date
@@ -191,38 +226,5 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
-}
-
-function mkOAplatform(){ 
-  #set vars
-  local tempdir="temp-openatrium"
-  local releaseurl=$1; #ex: "http://openatrium.com/sites/openatrium.com/files/atrium_releases/atrium-1-1.tgz"
-  local tgzfilename="$(basename $releaseurl)"   #possible option: filename="${fullfile##*/}" 
-  local extension=${tgzfilename##*.}
-  filename=${tgzfilename%.*}
-  #local newfilename=$filename | sed -r 's/(.*)-(.*)/\1.\2/'; #add -dl to the dir name to show that it's from the downloaded version
-  newfilename="$filename-dl";
-  #old:
-  #local tgzfilename = "atrium-1-0.tgz";
-  #local filename = "atrium-1-0";
-  #local newfilename =  "openatrium-1.0-dl";
-  
-  sudo mkdir $tempdir;                    #make temp dir for new oa platform
-  sudo chown -R  aegir:aegir $tempdir;    #set ownership
-  sudo chmod -R g+w $tempdir;             #update perms
-  cd $tempdir;                            #cd to new dir
-  sudo wget $releaseurl;                  #dl desired release
-  tar -xzf $tgzfilename;                  #untar + gzip
-  rm $tgzfilename;                        #delete .tgz file
-  echo "Now you'll want to #sudo chown -R aegir:aegir #filename;    #set ownership
-  #sudo chmod -R g+w #filename;            #update perms
-  #sudo mv #filename ../#newfilename;      #change dir name and move up a dir
-";
-  ###
-  ## NOw we have a prob. How do I get tne new filename? it's not atrium1-1 it's atrium1.1.. Maybe I can pass it to a pipe or replace the last dash
-  #sudo chown -R aegir:aegir $filename;    #set ownership
-  #sudo chmod -R g+w $filename;            #update perms
-  #sudo mv $filename ../$newfilename;      #change dir name and move up a dir
-  #cd ../;                                 #move up a dir
-  #sudo rm -R $tempdir;                       #delete temp dir.
+		NORMAL 
 }

@@ -1,36 +1,42 @@
+# .bash_aliases
+# To include this in your .bash environment add this to your .bashrc file (removing ##):
+###-------------------------------------------------------------
+### User specific aliases and functions
+###-------------------------------------------------------------
+##if [ -f ~/.bash_aliases ]; then
+##  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+##fi
+
+#-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
-#Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 
-#Aegir user related 
-#alias suaegir="echo '#suaegir => sudo -u aegir '; sudo -u aegir "
+#--------------------------------
+#site specific aliases
+#--------------------------------
+#-----------------
+#drush git back up db
+#-----------------
+alias d7backdb='dg_db_backup d7.lsta.local '
 
-#drush related aliases
-#alias adrush="echo -n '#adrush => suaegir drush '; suaegir drush "
-#alias drush="echo -n '#drush => adrush '; adrush " #run all drush calls through aegir user
+#available funcitons
+#ii = system information
+alias mkOAplatform="CMDINFO echo '~/.bashrc >> mkOAplatform()' -n > /dev/tty; NORMAL mkOAplatform"
 
-#alias d7cmtbackdbgit='cd /Applications/MAMP/htdocs/stirstick/backups/d7.lovesmalltownamerica.com_backup/; git add d7.lovesmalltownamerica.com_lsta_drpl7.sql; git commit -am"auto-commit of DB Dump - MAMP"; ##BackupedDB Use to restore: mysql --user=lsta_drupal -p -h mysql.lovesmalltownamerica.com lsta_drpl7 < /Applications/MAMP/htdocs/stirstick/backups/d7.lovesmalltownamerica.com_backup/d7.lovesmalltownamerica.com_lsta_drpl7.sql;'
-
-alias d7backdb='drush -r /Applications/MAMP/htdocs/stirstick/d7.lovesmalltownamerica.com sql-dump --ordered-dump --structure-tables-key=common --result-file=/Applications/MAMP/htdocs/stirstick/backups/d7.lovesmalltownamerica.com_backup/d7.lovesmalltownamerica.com_lsta_drpl7.sql; cd /Applications/MAMP/htdocs/stirstick/backups/d7.lovesmalltownamerica.com_backup/; git add d7.lovesmalltownamerica.com_lsta_drpl7.sql; git commit -am"auto-commit of DB Dump - MAMP"; ##BackupedDB Use to restore: mysql --user=root -p -h localhost lsta_drpl7 < /Applications/MAMP/htdocs/stirstick/backups/d7.lovesmalltownamerica.com_backup/d7.lovesmalltownamerica.com_lsta_drpl7.sql; cd /Applications/MAMP/htdocs/stirstick/d7.lovesmalltownamerica.com;'
-
-#git related aliases
-#alias agit="echo -n '#agit => suaegir git '; suaegir git " #git as the aegir user
-#alias git="echo -n '#git => agit '; agit " #run all git calls through the aegir user
-alias gpushom="echo -n '#gpushom => git push origin master '; git push origin master;"
-alias gpullom="echo -n '#gpullom => git pull origin master '; git pull origin master;"
-alias gps="echo -n '#gps => gpushom '; gpushom"
-alias gpl="echo -n '#gpl => gpullom '; gpullom"
-alias gst="echo -n '#gst => git status '; git status"
-alias gci="echo -n '#gci => git commit '; git commit"
-
-#alias rm="echo '#rm => rm -i '; rm -i"
-#alias cp="echo '#cp => cp -i '; cp -i"
-#alias mv="echo '#mv => mv -i '; mv -i"
+#alias rm="CMDINFO echo 'rm -i ' > /dev/tty; rm -i"
+#alias cp="CMDINFO echo 'cp -i ' > /dev/tty; cp -i"
+#alias mv="CMDINFO echo 'mv -i ' > /dev/tty; mv -i"
 # -> Prevents accidentally clobbering files.
-#alias mkdir="echo '#mkdir => mkdir -i '; mkdir -i"
+#alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
-alias h="echo '#h => history '; history"
+alias aliases="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Alias (.bash_alias) ###' > /dev/tty; CMDINFO alias"
+alias h="CMDINFO echo 'history ' > /dev/tty; NORMAL history"
 alias j='jobs -l'
 alias which='type -a'
 alias ..='cd ..'
@@ -47,7 +53,7 @@ alias df='df -kTh'
 #-------------------------------------------------------------
 # The 'ls' family (this assumes you use a recent GNU ls)
 #-------------------------------------------------------------
-alias ll="echo '#ll => ls -al '; ls -al"
+alias ll="CMDINFO echo 'ls -al ' > /dev/tty; NORMAL ls -al"
 # alias lg="ls -l --group-directories-first"
 # alias lsc='ls -ahF --color'  # add colors for filetype recognition
 alias la='ls -Al'          # show hidden files
@@ -67,19 +73,9 @@ function lgr() { ls -al "$@"| egrep "^d" | egrep ".|.."; ls -alSr "$@"| egrep "^
 #-------------------------------------------------------------
 # spelling typos - highly personnal and keyboard-dependent :-)
 #-------------------------------------------------------------
-
 alias lll='ll'
 
 #-------------------------------------------------------------
 # tailoring 'less'
 #-------------------------------------------------------------
-
 alias more='less'
-
-#-------------------------------------------------------------
-# Open
-#-------------------------------------------------------------
-alias openDW='open -a /Applications/Adobe\ Dreamweaver\ CS4/Adobe\ Dreamweaver\ CS4.app '
-alias openFF='open -a /Applications/Firefox.app '
-alias openDiff='open -a /Developer/Applications/Utilities/FileMerge.app '
-
