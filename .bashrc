@@ -10,6 +10,51 @@ if [ -f /etc/bashrc ]; then
 fi
 
 #-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
+
+#-------------------------------------------------------------
+# User specific aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+fi
+
+#-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
+fi
+
+#--------------------------------
+# Aegir specific
+#--------------------------------
+if [ -f ~/.bash_aegir ]; then
+  . ~/.bash_aegir # --> Read ~/.bash_aegir if present
+fi
+
+#-------------------------------------------------------------
+# Drush specific
+#-------------------------------------------------------------
+if [ -f ~/.bash_drush ]; then
+  . ~/.bash_drush # --> Read ~/.bash_drush if present
+fi
+
+#----------------------------------------
+#Directory Functions
+#----------------------------------------
+function currentDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  echo $DIR
+}
+
+#-------------------------------------------------------------
 # History mod from Jason H.
 #-------------------------------------------------------------
 # search history via up and down arrow keys 
@@ -39,70 +84,8 @@ export LESS='-i -N -w  -z-4 -g -e -M -X -F -R -P%t?f%f \
 :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
 
 #-------------------------------------------------------------
-# Set Colors
-# Thanks: https://wiki.archlinux.org/index.php/Color_Bash_Prompt
-#-------------------------------------------------------------
-txtblk='\\033[0\;30m' # Black - Regular
-txtred='\\033[0\;31m' # Red
-txtgrn='\\033[0\;32m' # Green
-txtylw='\\033[0\;33m' # Yellow
-txtblu='\\033[0\;34m' # Blue
-txtpur='\\033[0\;35m' # Purple
-txtcyn='\\033[0\;36m' # Cyan
-txtwht='\\033[0\;37m' # White
-txtoffwht='\\033[0\;39m' # Off White
-
-bldblk='\\033[1\;30m' # Black - Bold
-bldred='\\033[1\;31m' # Red
-bldgrn='\\033[1\;32m' # Green
-bldylw='\\033[1\;33m' # Yellow
-bldblu='\\033[1\;34m' # Blue
-bldpur='\\033[1\;35m' # Purple
-bldcyn='\\033[1\;36m' # Cyan
-bldwht='\\033[1\;37m' # White
-unkblk='\\033[4\;30m' # Black - Underline
-undred='\\033[4\;31m' # Red
-undgrn='\\033[4\;32m' # Green
-undylw='\\033[4\;33m' # Yellow
-undblu='\\033[4\;34m' # Blue
-undpur='\\033[4\;35m' # Purple
-undcyn='\\033[4\;36m' # Cyan
-undwht='\\033[4\;37m' # White
-bakblk='\\033[40m'   # Black - Background
-bakred='\\033[41m'   # Red
-bakgrn='\\033[42m'   # Green
-bakylw='\\033[43m'   # Yellow
-bakblu='\\033[44m'   # Blue
-bakpur='\\033[45m'   # Purple
-bakcyn='\\033[46m'   # Cyan
-bakwht='\\033[47m'   # White
-txtrst='\\033[0m'    # Text Reset
-
-alias NORMAL="echo -e ${txtrst};"
-alias SUCCESS="echo -e ${bldgrn};"
-alias CMDINFO="echo -en ${bldcyn};"
-alias INFO="echo -en ${txtylw};"
-alias WARNING="echo -en ${bldylw};"
-alias FAILURE="echo -en ${bldred};"
-
-#-------------------------------------------------------------
-# User specific aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
-fi
-
-#-------------------------------------------------------------
-# User specific git aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.gitrc ]; then
-  . ~/.gitrc # --> Read ~/.gitrc if present
-fi
-
-#-------------------------------------------------------------
 # File & string-related functions:
 #-------------------------------------------------------------
-
 # Find a file with a pattern in name:
 function ff() { find . -type f -iname '*'$*'*' -ls ; }
 
@@ -122,12 +105,12 @@ Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
     do
         case "$opt" in
         i) case="-i " ;;
-        *) echo "$usage"; return;;
+        *) INFO echo "$usage"; NORMAL return;;
         esac
     done
     shift $(( $OPTIND - 1 ))
     if [ "$#" -lt 1 ]; then
-        echo "$usage"
+        INFO echo "$usage" NORMAL
         return;
     fi
     find . -type f -name "${2:-*}" -print0 | \
@@ -153,9 +136,9 @@ function lowercase()  # move filenames to lowercase
         newname="${dirname}/${nf}"
         if [ "$nf" != "$filename" ]; then
             mv "$file" "$newname"
-            echo "lowercase: $file --> $newname"
+            INFO echo "lowercase: $file --> $newname" NORMAL
         else
-            echo "lowercase: $file not changed."
+            NORMAL echo "lowercase: $file not changed." NORMAL
         fi
     done
 }
@@ -165,9 +148,9 @@ function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
     local TMPFILE=tmp.$$ 
 
-    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
-    [ ! -e $1 ] && echo "swap: $1 does not exist" && return 1
-    [ ! -e $2 ] && echo "swap: $2 does not exist" && return 1
+    [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
+    [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
+    [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
 
     mv "$1" $TMPFILE 
     mv "$2" "$1"
@@ -189,10 +172,10 @@ function extract()      # Handy Extract Program.
              *.zip)       unzip $1        ;;
              *.Z)         uncompress $1   ;;
              *.7z)        7z x $1         ;;
-             *)           echo "'$1' cannot be extracted via >extract<" ;;
+             *)           WARNING echo "'$1' cannot be extracted via >extract<" NORMAL;;
          esac
      else
-         echo "'$1' is not a valid file"
+        WARNING echo "'$1' is not a valid file" NORMAL
      fi
 }
 
@@ -209,7 +192,7 @@ function killps()                 # Kill by process name.
 {
     local pid pname sig="-TERM"   # Default signal.
     if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        echo "Usage: killps [-SIGNAL] pattern"
+        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL 
         return;
     fi
     if [ $# = 2 ]; then sig=$1 ; fi
@@ -231,7 +214,8 @@ sed -e s/P-t-P://)
 
 function ii()   # Get current host related info.
 {
-    echo -e "\nYou are logged on ${RED}$HOST"
+    INFO
+		echo -e "\nYou are logged on ${RED}$HOST"
     echo -e "\nAdditionnal information:$NC " ; uname -a
     echo -e "\n${RED}Users logged on:$NC " ; w -h
     echo -e "\n${RED}Current date :$NC " ; date
@@ -242,6 +226,7 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
+<<<<<<< HEAD
 }
 
 #----------------------------------------
@@ -393,4 +378,7 @@ function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "
     #cd `drush dd @$drush_alias:%site`;
     cd $currentDir;	
   fi # end if [[ ! -n "$1" ]] 
+=======
+		NORMAL 
+>>>>>>> 65f85a9e4177407a354c146fd851de0b7d3995fc
 }

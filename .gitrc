@@ -1,11 +1,18 @@
 # .gitrc
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
-#-------------------------------------------------------------
-# User specific git aliases and functions
-#-------------------------------------------------------------
+###-------------------------------------------------------------
+### User specific git aliases and functions
+###-------------------------------------------------------------
 ##if [ -f ~/.gitrc ]; then
 ##  . ~/.gitrc # --> Read ~/.gitrc if present
 ##fi
+
+#-------------------------------------------------------------
+# User specific colors
+#-------------------------------------------------------------
+if [ -f ~/.bash_colors ]; then
+  . ~/.bash_colors # --> Read ~/.bash_colors if present
+fi
 
 #-----------------------------------------------------------
 # Git aliases
