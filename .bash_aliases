@@ -29,9 +29,9 @@ alias d7backdb='dg_db_backup d7.lsta.local '
 #ii = system information
 alias mkOAplatform="CMDINFO echo '~/.bashrc >> mkOAplatform()' -n > /dev/tty; NORMAL mkOAplatform"
 
-#alias rm="CMDINFO echo 'rm -i ' > /dev/tty; rm -i"
-#alias cp="CMDINFO echo 'cp -i ' > /dev/tty; cp -i"
-#alias mv="CMDINFO echo 'mv -i ' > /dev/tty; mv -i"
+#alias rm="CMDINFO echo 'rm -i ' > /dev/tty; NORMAL rm -i"
+#alias cp="CMDINFO echo 'cp -i ' > /dev/tty; NORMAL cp -i"
+#alias mv="CMDINFO echo 'mv -i ' > /dev/tty; NORMAL mv -i"
 # -> Prevents accidentally clobbering files.
 #alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
