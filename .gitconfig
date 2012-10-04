@@ -1,16 +1,18 @@
 [core]
-  excludesfile = /.gitignore
+  excludesfile = ~/.gitignore_global
   # Don't trust file modes ## cmdline: $ git config core.filemode false
   filemode = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[branch]
+  autosetupmerge = true
 [branch "master"]
   remote = origin
   merge = refs/heads/master
 [user]
   name = Vid
   email = vid@uoregon.edu
-#Add colors to your ~/.gitconfig file:
 [color]
+	#Add colors to your ~/.gitconfig file:
   ui = auto
   ui = true
 [color "branch"]
@@ -28,8 +30,8 @@
   added = yellow
   changed = green
   untracked = cyan
-#Add aliases to your ~/.gitconfig file:
 [alias]
+	#Add aliases to your ~/.gitconfig file:
   st = status
   ci = commit
   br = branch
@@ -55,5 +57,3 @@
 [mergetool "diffmerge"]  #Usage: git mergetool -t diffmerge
   cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
   trustExitCode = false
-[branch]
-  autosetupmerge = true
