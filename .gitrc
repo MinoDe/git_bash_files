@@ -52,7 +52,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
     echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; $GPO
     echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
     echo "4 - To checkout and track the remote branch from another location simply use: git checkout $1 or git checkout -t origin/$1" > /dev/tty; echo -n;
-    echo "5 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;		
+    echo "5 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
     echo "### Local branches ($GBR) ### "; $GBR
     echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
   fi
@@ -85,10 +85,10 @@ function git-delete-branch(){ # git-delete-branch <branch_name>
   fi
 }
 
-function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch 
+function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch
   #!/bin/sh
   #from http://drupal.org/node/1399218
-  if [[ ! -n "$1" ]] ; then 
+  if [[ ! -n "$1" ]] ; then
     echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
   else
     local URL=$2;
@@ -96,7 +96,7 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
     if [[ $1 == "apply" ]] ; then
       if [[ $URL == http* ]] ; then
         echo "# sudo wget $URL;" > /dev/tty;
-        sudo wget $URL; git $1 $patchFilename; 
+        sudo wget $URL; git $1 $patchFilename;
       fi
       echo "#git $1 -v $patchFilename " > /dev/tty;
       git $1 -v $patchFilename;
@@ -105,7 +105,7 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
     else
       if [[ $URL == http* ]] ; then
         echo "# sudo wget $URL;" > /dev/tty;
-        sudo wget $URL; 
+        sudo wget $URL;
       fi
       echo "#git apply -v --$1 $patchFilename" > /dev/tty;
       git apply -v --$1 $patchFilename;

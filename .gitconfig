@@ -1,7 +1,7 @@
 [core]
   excludesfile = ~/.gitignore_global
   # Don't trust file modes ## cmdline: $ git config core.filemode false
-  filemode = false
+  filemode = true
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [branch]
   autosetupmerge = true
