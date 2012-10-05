@@ -23,13 +23,6 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
 fi
 
-#-------------------------------------------------------------
-# User specific git aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.gitrc ]; then
-  . ~/.gitrc # --> Read ~/.gitrc if present
-fi
-
 #--------------------------------
 # Aegir specific
 #--------------------------------
@@ -42,6 +35,13 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
+fi
+
+#-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
 fi
 
 #----------------------------------------

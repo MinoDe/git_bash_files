@@ -15,6 +15,20 @@ if [ -f ~/.bash_colors ]; then
 fi
 
 #-----------------------------------------------------------
+# Git prompt
+#-----------------------------------------------------------
+# Git Bash shell command completion
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+}
+#PS1="\h:\W \uCMDINFO\$(parse_git_branch) NORMAL\$"
+
+if [ -f ~/.git-prompt.sh ]; then
+    . ~/.git-prompt.sh
+    PS1='\h:\W$(__git_ps1 "(%s)") \u\$ '
+fi
+
+#-----------------------------------------------------------
 # Git aliases
 #-----------------------------------------------------------
 alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; echo -n; echo ''; git push origin master;"
