@@ -23,13 +23,6 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
 fi
 
-#-------------------------------------------------------------
-# User specific git aliases and functions
-#-------------------------------------------------------------
-if [ -f ~/.gitrc ]; then
-  . ~/.gitrc # --> Read ~/.gitrc if present
-fi
-
 #--------------------------------
 # Aegir specific
 #--------------------------------
@@ -42,6 +35,13 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
+fi
+
+#-------------------------------------------------------------
+# User specific git aliases and functions
+#-------------------------------------------------------------
+if [ -f ~/.gitrc ]; then
+  . ~/.gitrc # --> Read ~/.gitrc if present
 fi
 
 #----------------------------------------
@@ -57,8 +57,8 @@ function currentDir(){
 #-------------------------------------------------------------
 # History mod from Jason H.
 #-------------------------------------------------------------
-# search history via up and down arrow keys 
-bind '"\e[A"':history-search-backward 
+# search history via up and down arrow keys
+bind '"\e[A"':history-search-backward
 bind '"\e[B"':history-search-forward
 
 # Avoid duplicates in the bash command history.
@@ -114,7 +114,7 @@ Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
         return;
     fi
     find . -type f -name "${2:-*}" -print0 | \
-    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more 
+    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
 
 }
 
@@ -146,13 +146,13 @@ function lowercase()  # move filenames to lowercase
 
 function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
-    local TMPFILE=tmp.$$ 
+    local TMPFILE=tmp.$$
 
     [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
     [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
     [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
 
-    mv "$1" $TMPFILE 
+    mv "$1" $TMPFILE
     mv "$2" "$1"
     mv $TMPFILE "$2"
 }
@@ -192,7 +192,7 @@ function killps()                 # Kill by process name.
 {
     local pid pname sig="-TERM"   # Default signal.
     if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL 
+        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL
         return;
     fi
     if [ $# = 2 ]; then sig=$1 ; fi
@@ -226,5 +226,5 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
-		NORMAL 
+		NORMAL
 }
