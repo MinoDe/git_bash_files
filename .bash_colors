@@ -47,9 +47,9 @@ bakcyn='\\033[46m'   # Cyan
 bakwht='\\033[47m'   # White
 txtrst='\\033[0m'    # Text Reset
 
-alias NORMAL="echo -e ${txtrst};"
-alias SUCCESS="echo -e ${bldgrn};"
-alias CMDINFO="echo -en ${bldcyn};"
-alias INFO="echo -en ${txtylw};"
-alias WARNING="echo -en ${bldylw};"
-alias FAILURE="echo -en ${bldred};"
+alias NORMAL="echo -e ${txtrst} > /dev/tty;"
+alias SUCCESS="echo -e ${bldgrn} > /dev/tty;"
+alias CMDINFO="echo -e ${bldcyn} > /dev/tty;"
+alias INFO="echo -e ${txtylw} > /dev/tty;"
+alias WARNING="echo -e ${bldylw} > /dev/tty;"
+alias FAILURE="echo -e ${bldred} > /dev/tty;"
