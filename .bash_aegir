@@ -22,7 +22,7 @@ alias drush="CMDINFO echo 'drush => ' > /dev/tty; NORMAL adrush " #run all drush
 #--------------------------------
 #git aegir aliases
 #--------------------------------
-alias agit="CMDINFO echo -n 'agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
+alias agit="CMDINFO echo 'agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
 alias git="CMDINFO echo -n 'git => ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
 #Aegir usage aliases
