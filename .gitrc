@@ -31,19 +31,19 @@ fi
 #-----------------------------------------------------------
 # Git aliases
 #-----------------------------------------------------------
-alias gpushom="echo -n '#gpushom => git push origin master ' > /dev/tty; echo -n; echo ''; git push origin master;"
-alias gpullom="echo -n '#gpullom => git pull origin master ' > /dev/tty; echo -n; echo ''; git pull origin master;"
-alias gpusho="echo -n '#gpusho => git push origin ' > /dev/tty; echo -n; echo ''; git push origin "
-alias gpullo="echo -n '#gpullo => git pull origin ' > /dev/tty; echo -n; echo ''; git pull origin "
+alias gpushom="CMDINFO echo -n 'gpushom => git push origin master ' > /dev/tty; echo -n; echo ''; NORMAL git push origin master;"
+alias gpullom="CMDINFO echo -n 'gpullom => git pull origin master ' > /dev/tty; echo -n; echo ''; NORMAL git pull origin master;"
+alias gpusho="CMDINFO echo -n 'gpusho => git push origin ' > /dev/tty; echo -n; echo ''; NORMAL git push origin "
+alias gpullo="CMDINFO echo -n 'gpullo => git pull origin ' > /dev/tty; echo -n; echo ''; NORMAL git pull origin "
 
-alias gps="echo -n '#gps => gpusho ' > /dev/tty; gpusho "
-alias gpl="echo -n '#gpl => gpullo ' > /dev/tty; gpullo "
-alias gst="echo -n '#gst => git status ' > /dev/tty; git status "
-alias gci="echo -n '#gci => git commit ' > /dev/tty; git commit "
-alias gco="echo -n '#gco => git checkout ' > /dev/tty; echo -n; echo ''; git checkout "
-alias gdf="echo -n '#gdf => git diff ' > /dev/tty; echo -n; echo ''; git diff "
-alias gbr="echo -n '#gbr => git br ' > /dev/tty; echo -n; echo ''; git br "
-alias aliases="echo '### Available Functions (.bashrc) ###'; echo -n; cat ~/.bashrc | grep function; echo -n; echo '### Available Git Functions (.gitrc) ###'; echo -n; cat ~/.gitrc | grep function; echo -n; echo '### Git aliases (.gitrc) ###:'; echo -n; cat ~/.gitrc | grep alias; echo -n; echo '### Git config aliases (.gitconfig) ###:'; git config --list | grep alias; echo -n; echo '### Alias (.bash_alias) ###'; alias"
+alias gps="CMDINFO echo -n 'gps => gpusho ' > /dev/tty; NORMAL gpusho "
+alias gpl="CMDINFO echo -n 'gpl => gpullo ' > /dev/tty; NORMAL gpullo "
+alias gst="CMDINFO echo -n 'gst => git status ' > /dev/tty; NORMAL git status "
+alias gci="CMDINFO echo -n 'gci => git commit ' > /dev/tty; NORMAL git commit "
+alias gco="CMDINFO echo -n 'gco => git checkout ' > /dev/tty; echo -n; echo ''; NORMAL git checkout "
+alias gdf="CMDINFO echo -n 'gdf => git diff ' > /dev/tty; echo -n; echo ''; NORMAL git diff "
+alias gbr="CMDINFO echo -n 'gbr => git br ' > /dev/tty; echo -n; echo ''; NORMAL git br "
+alias aliases="INFO echo '### Available Functions (.bashrc) ###'; NORMAL echo -n; cat ~/.bashrc | grep function; echo -n; INFO echo '### Available Git Functions (.gitrc) ###'; NORMAL echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; NORMAL echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; NORMAL git config --list | grep alias; echo -n; INFO echo '### Alias (.bash_alias) ###'; NORMAL alias"
 #-----------------------------------------------------------
 # Git functions
 #-----------------------------------------------------------
@@ -51,7 +51,8 @@ function git-create-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
   #from http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
   if [[ ! -n "$1" ]] ; then
-    echo 1>&2 Usage: git-create-branch branch_name
+    INFO echo 1>&2 Usage: git-create-branch branch_name
+		NORMAL 
   else
     #$1 => branch_name
     #vars:
@@ -61,14 +62,14 @@ function git-create-branch(){ # git-create-branch <branch_name>
     GBR="git branch";
     GBRR="git branch -r";
     #actions:
-    echo "Adding $1"
-    echo "1 - Create the local branch from the current one: '$GCO'" > /dev/tty; $GCO
-    echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; $GPO
-    echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; $GBRSUP
-    echo "4 - To checkout and track the remote branch from another location simply use: git checkout $1 or git checkout -t origin/$1" > /dev/tty; echo -n;
-    echo "5 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n;
-    echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
+    INFO echo "Adding $1" NORMAL
+    INFO echo "1 - Create the local branch from the current one: '$GCO'" > /dev/tty; NORMAL $GCO
+    INFO echo "2 - Push that branch to the remote: '$GPO'" > /dev/tty; NORMAL $GPO
+    INFO echo "3 - Set the upstream branch to track: '$GBRSUP'" > /dev/tty; NORMAL $GBRSUP
+    INFO echo "4 - To checkout and track the remote branch from another location simply use: git checkout $1 or git checkout -t origin/$1" > /dev/tty; echo -n; NORMAL
+    INFO echo "5 - If you need to delete the remote branch use: git-delete-branch $1 or git push origin :$1" > /dev/tty; echo -n; NORMAL
+    INFO echo "### Local branches ($GBR) ### "; NORMAL $GBR
+    INFO echo "### Remote branches ($GBRR) ### "; NORMAL $GBRR; INFO echo "#Use 'git branch -a' to list all"; NORMAL
   fi
 }
 
@@ -77,7 +78,8 @@ function git-delete-branch(){ # git-delete-branch <branch_name>
   #modified from script and comments at http://www.zorched.net/2008/04/14/start-a-new-branch-on-your-remote-git-repository/comment-page-2/#comment-18065
   #if [ $# -ne 1 ]; then
   if [[ ! -n "$1" ]] ; then
-    echo 1>&2 Usage: git-delete-branch branch_name
+    INFO echo 1>&2 Usage: git-delete-branch branch_name
+		NORMAL
   else
     #$1 -> branch_name
     #vars:
@@ -89,13 +91,13 @@ function git-delete-branch(){ # git-delete-branch <branch_name>
     GBR="git branch";
     GBRR="git branch -r";
     #Verbose actions:
-    echo "Removing $1"
-    echo "1 - Check out master branch: '$GCO'" > /dev/tty; $GCO
-    echo "2 - Delete remote branch: '$GPOD'" > /dev/tty; $GPOD
-    echo "3 - Delete local branch: '$GBRD'" > /dev/tty; $GBRD
-    echo "4 - fetch and pull origin: '$GFO; $GPL;'" > /dev/tty; $GFO; $GPL;
-    echo "### Local branches ($GBR) ### "; $GBR
-    echo "### Remote branches ($GBRR) ### "; $GBRR; echo "#Use 'git branch -a' to list all";
+    INFO echo "Removing $1" NORMAL
+    INFO echo "1 - Check out master branch: '$GCO'" > /dev/tty; NORMAL $GCO
+    INFO echo "2 - Delete remote branch: '$GPOD'" > /dev/tty; NORMAL $GPOD
+    INFO echo "3 - Delete local branch: '$GBRD'" > /dev/tty; NORMAL $GBRD
+    INFO echo "4 - fetch and pull origin: '$GFO; $GPL;'" > /dev/tty; NORMAL $GFO; $GPL;
+    INFO echo "### Local branches ($GBR) ### "; NORMAL $GBR
+    INFO echo "### Remote branches ($GBRR) ### "; NORMAL $GBRR; INFO echo "#Use 'git branch -a' to list all"; NORMAL
   fi
 }
 
@@ -103,33 +105,33 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
   #!/bin/sh
   #from http://drupal.org/node/1399218
   if [[ ! -n "$1" ]] ; then
-    echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty
+    INFO echo 'Usage: git-patch stat|check|apply URL.patch' > /dev/tty; NORMAL
   else
     local URL=$2;
     local patchFilename="$(basename $2)"
     if [[ $1 == "apply" ]] ; then
       if [[ $URL == http* ]] ; then
-        echo "# sudo wget $URL;" > /dev/tty;
+        CMDINFO echo "sudo wget $URL;" > /dev/tty; NORMAL
         sudo wget $URL; git $1 $patchFilename;
       fi
-      echo "#git $1 -v $patchFilename " > /dev/tty;
+      CMDINFO echo "git $1 -v $patchFilename " > /dev/tty; NORMAL
       git $1 -v $patchFilename;
-      echo "# If the patch applied with no errors then use: "; > /dev/tty; echo "git am --signoff < $patchFilename" > /dev/tty;
-      echo "# To delete the patch use: "; > /dev/tty; echo " rm $patchFilename" > /dev/tty;
+      INFO echo "# If the patch applied with no errors then use: "; > /dev/tty; CMDINFO echo "git am --signoff < $patchFilename" > /dev/tty; NORMAL
+      INFO echo "# To delete the patch use: "; > /dev/tty; CMDINFO echo " rm $patchFilename" > /dev/tty; NORMAL
     else
       if [[ $URL == http* ]] ; then
-        echo "# sudo wget $URL;" > /dev/tty;
+        CMDINFO echo "sudo wget $URL;" > /dev/tty; NORMAL
         sudo wget $URL;
       fi
-      echo "#git apply -v --$1 $patchFilename" > /dev/tty;
+      CMDINFO echo "git apply -v --$1 $patchFilename" > /dev/tty; NORMAL
       git apply -v --$1 $patchFilename;
-      echo "#Patchname: $patchFilename" > /dev/tty;
+      INFO echo "Patchname: $patchFilename" > /dev/tty; NORMAL
     fi
     if [[ $1 == "stat" ]] ; then
-      echo "# To check the patch use: "; > /dev/tty; echo "git-patch check $patchFilename" > /dev/tty;
+      INFO echo "# To check the patch use: "; > /dev/tty; CMDINFO echo "git-patch check $patchFilename" > /dev/tty; NORMAL
     fi
     if [[ $1 == "check" ]] ; then
-      echo "# To apply the patch use: "; > /dev/tty; echo "git-patch apply $patchFilename" > /dev/tty;
+      INFO echo "# To apply the patch use: "; > /dev/tty; CMDINFO echo "git-patch apply $patchFilename" > /dev/tty; NORMAL
     fi
   fi
 }
