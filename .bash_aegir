@@ -17,13 +17,13 @@ alias suaegir="CMDINFO echo 'suaegir => sudo -u aegir ' > /dev/tty; NORMAL sudo 
 #drush related aliases
 #--------------------------------
 alias adrush="CMDINFO echo 'adrush => suaegir drush ' > /dev/tty; NORMAL suaegir drush "
-alias drush="CMDINFO echo 'drush => adrush ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
+alias drush="CMDINFO echo 'drush => ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
 
 #--------------------------------
 #git aegir aliases
 #--------------------------------
 alias agit="CMDINFO echo -n 'agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
-alias git="CMDINFO echo -n 'git => agit ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
+alias git="CMDINFO echo -n 'git => ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
 #Aegir usage aliases
 alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal git/drush usage during a session (w/o tty feedback)
