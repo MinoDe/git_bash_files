@@ -31,17 +31,17 @@ fi
 #-----------------------------------------------------------
 # Git aliases
 #-----------------------------------------------------------
-alias gpushom="CMDINFO echo -n 'gpushom => git push origin master ' > /dev/tty; echo -n; echo ''; NORMAL git push origin master;"
-alias gpullom="CMDINFO echo -n 'gpullom => git pull origin master ' > /dev/tty; echo -n; echo ''; NORMAL git pull origin master;"
-alias gpusho="CMDINFO echo -n 'gpusho => git push origin ' > /dev/tty; echo -n; echo ''; NORMAL git push origin "
-alias gpullo="CMDINFO echo -n 'gpullo => git pull origin ' > /dev/tty; echo -n; echo ''; NORMAL git pull origin "
+alias gpushom="CMDINFO echo 'gpushom => git push origin master ' > /dev/tty; NORMAL git push origin master;"
+alias gpullom="CMDINFO echo 'gpullom => git pull origin master ' > /dev/tty; NORMAL git pull origin master;"
+alias gpusho="CMDINFO echo 'gpusho => git push origin ' > /dev/tty; NORMAL git push origin "
+alias gpullo="CMDINFO echo 'gpullo => git pull origin ' > /dev/tty; NORMAL git pull origin "
 alias gps="CMDINFO echo -n 'gps => ' > /dev/tty; NORMAL gpusho "
 alias gpl="CMDINFO echo -n 'gpl => ' > /dev/tty; NORMAL gpullo "
 alias gst="CMDINFO echo 'gst => git status ' > /dev/tty; NORMAL git status "
 alias gci="CMDINFO echo 'gci => git commit ' > /dev/tty; NORMAL git commit "
-alias gco="CMDINFO echo 'gco => git checkout ' > /dev/tty; echo -n; echo ''; NORMAL git checkout "
-alias gdf="CMDINFO echo 'gdf => git diff ' > /dev/tty; echo -n; echo ''; NORMAL git diff "
-alias gbr="CMDINFO echo 'gbr => git br ' > /dev/tty; echo -n; echo ''; NORMAL git br "
+alias gco="CMDINFO echo 'gco => git checkout ' > /dev/tty; NORMAL git checkout "
+alias gdf="CMDINFO echo 'gdf => git diff ' > /dev/tty; NORMAL git diff "
+alias gbr="CMDINFO echo 'gbr => git br ' > /dev/tty; NORMAL git br "
 alias aliases="INFO echo '### Available Functions (.bashrc) ###'; NORMAL echo -n; cat ~/.bashrc | grep function; echo -n; INFO echo '### Available Git Functions (.gitrc) ###'; NORMAL echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; NORMAL echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; NORMAL git config --list | grep alias; echo -n; INFO echo '### Alias (.bash_alias) ###'; NORMAL alias"
 
 #-----------------------------------------------------------
