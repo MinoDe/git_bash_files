@@ -28,6 +28,6 @@ alias git="CMDINFO echo -n 'git => ' > /dev/tty; NORMAL agit " #run all git call
 #Aegir usage aliases
 alias noAegirSilent="alias git=\"git\"; alias drush=\"drush\""; #restore normal git/drush usage during a session (w/o tty feedback)
 alias noAegir="INFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev/tty; echo '#You can also prepend git/drush cmds with \' > /dev/tty; echo '#Use alias useAegir to re-enable aegir alias ' > /dev/tty; echo -n > /dev/tty; NORMAL noAegirSilent"; #restore normal git/drush usage during a session
-alias useAegir="INFO echo 'useAegir => alias git=\'agit\'; alias drush=\'adrush\'; ' > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
+alias useAegir="INFO echo 'useAegir => alias git=\'agit\'; alias drush=\'adrush\'; > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
 #noAegirSilent; #for noAegir branch
