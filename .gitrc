@@ -84,12 +84,19 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand - Ex: git
 			INFO echo "2 - Execute CMD on branch: " > /dev/tty; CMDINFO echo "$GCMD" > /dev/tty; NORMAL $GCMD
 		done
 		INFO echo "Complete" > /dev/tty; NORMAL
+		INFO echo "Returning to your original branch: " > /dev/tty; CMDINFO echo "git checkout $originalBranch" > /dev/tty; NORMAL git checkout $originalBranch; echo -n; 
 		INFO echo "### All branches '$GBRA' ### "; NORMAL $GBRA;
-		INFO echo "Next steps - To checkout your original branch use: " > /dev/tty; echo "git checkout $originalBranch" > /dev/tty; echo -n; NORMAL
+	  if [[ $1 == "st" || $1 == "status" ]] ; then
+			INFO echo "Possible next steps? - If there is nothing to commit; fetch your branches: " > /dev/tty; echo "git-each fetch" > /dev/tty; echo -n; NORMAL
+		fi
+		if [[ $1 == "fetch" ]] ; then
+			INFO echo "Possible next steps? - Pull your branches: " > /dev/tty; echo "git-each pull" > /dev/tty; echo -n; NORMAL
+		fi
+		if [[ $1 == "pull" ]] ; then
+			INFO echo "Possible next steps? - Push your branches: " > /dev/tty; echo "git-each push" > /dev/tty; echo -n; NORMAL
+		fi
 	fi
 }
-
-
 
 function git-create-branch(){ # git-create-branch <branch_name>
   #!/bin/sh
