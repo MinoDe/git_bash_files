@@ -47,7 +47,7 @@ alias aliases="INFO echo '### Available Functions (.bashrc) ###'; NORMAL echo -n
 #-----------------------------------------------------------
 # Git functions
 #-----------------------------------------------------------
-function git-each(){ # git-each gitCommand #Usage: git-each gitCommand - Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch origin ${branch};
+function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:include 'origin branchName' - default false]- Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch origin ${branch};
   #!/bin/sh
 	#Thanks to: 
 	## http://stackoverflow.com/questions/3846380/how-to-iterate-through-all-git-branches-using-bash-script, 
@@ -56,13 +56,20 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand - Ex: git
 	## https://wiki.archlinux.org/index.php/Color_Bash_Prompt
 	
 	#loop through each local branch and act on it. #could be adapted to use remote branches or create an array combining both.
-	#todo: add color to feedback stmts
 
 	if [[ ! -n "$1" ]] ; then
     INFO echo 1>&2 #Usage: git-each gitCommand - Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch origin ${branch};
 		NORMAL 
   else
     #$1 => gitCommand
+	  #$2 => includeOriginBranch:bool (default false)	
+		if [[ ! -n "$2" ]] ; then
+    	includeOriginBranch=false
+		else
+			if [ $2 == 1 -o $2 == "true" -o  $2 == "TRUE" ] ; then
+  	  	includeOriginBranch=true
+			fi
+		fi
 		
 		#vars:
     originalBranch="$(git rev-parse --abbrev-ref HEAD)"
@@ -78,7 +85,11 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand - Ex: git
 		for branch in "${branches[@]}"; 
 		do
 			branchName="$(basename ${branch})"
+			#Updated CMD Vars
 	    GCO="git checkout ${branchName}"
+			if $includeOriginBranch; then
+	 			GCMD="git $1 origin ${branchName}"
+			fi
 			INFO echo "1 - Checkout branch: ${branchName}" > /dev/tty; CMDINFO echo "$GCO" > /dev/tty; NORMAL $GCO;
 			#SUCCESS echo "branch name: ${branchName}" > /dev/tty; NORMAL
 			INFO echo "2 - Execute CMD on branch: " > /dev/tty; CMDINFO echo "$GCMD" > /dev/tty; NORMAL $GCMD
