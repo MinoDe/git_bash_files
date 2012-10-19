@@ -55,14 +55,39 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
   ## http://archive.linuxfromscratch.org/lfs-museum/3.1/LFS-BOOK-3.1-HTML/chapter07/functions.html,  
   ## https://wiki.archlinux.org/index.php/Color_Bash_Prompt
   
-  #loop through each local branch and act on it. #could be adapted to use remote branches or create an array combining both.
+  #loop through each local or remote branch and act on it. Could be adapted to create an array combining both.
+  
+  showHelp=false
+  if [[ ! -n "$1" ]] ; then 
+  showHelp=true;
+  fi
+  if [[ $1 == "--help" ]] ; then
+  showHelp=true;
+  fi
+  if $showHelp; then
+    echo 1>&2 "  Usage: git-each <command> [<includeOriginBranch:bool (default false)> <loopRemoteBranches:bool (default false)>]
 
-  if [[ ! -n "$1" ]] ; then
-    INFO echo 1>&2 "Usage: git-each gitCommand - Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch origin ${branch};"
-    NORMAL 
+  Example: git-each fetch; 
+  This function loops through each branch, checking it out and running the requested command; e.g. git fetch origin ${branch};
+  Only single word commands are supported at this time (status, fetch, push, pull, etc...)
+  See 'git --help' for more information on git usage.
+  
+  Optional args:
+  <includeOriginBranch:bool (default false)> 
+  if <includeOriginBranch> is TRUE|true|1 then each <command> is appended with 'origin $branchName'. 
+  Useful when pushing branches to a new repo or pulling down branches for the first time. 
+  Example following $ git remote set-url origin git@new.url:for/your_repo.git: 
+  $ git-each push 1
+  
+  <loopRemoteBranches:bool (default false)>
+  if <loopRemoteBranches> is TRUE|true|1 then the remote branches are used as the basis for the array loop. Running $ git branch -a; will display all local and remote branches. It's useful to use the remote branches when pulling down all the remote branches for the first time. 
+  Example:
+  $ git-each pull 1 1
+    "
   else
     #$1 => gitCommand
-    #$2 => includeOriginBranch:bool (default false)  
+    #$2 => includeOriginBranch:bool (default false) 
+    #$3 => loopRemoteBranches:bool (default false)
     if [[ ! -n "$2" ]] ; then
       includeOriginBranch=false
     else
@@ -70,12 +95,22 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
         includeOriginBranch=true
       fi
     fi
-    
+    if [[ ! -n "$3" ]] ; then
+      loopRemoteBranches=false
+    else
+      if [ $3 == 1 -o $3 == "true" -o  $3 == "TRUE" ] ; then
+        loopRemoteBranches=true
+      fi
+    fi
+           
     #vars:
     originalBranch="$(git rev-parse --abbrev-ref HEAD)"
     branches=()
-    eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/remotes/)" #remote branches.
-    #eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/heads/)" #local branches. W/O refs/heads/ you get both local and remote listings.
+    if loopRemoteBranches; then
+      eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/remotes/)" #remote branches.
+    else
+      eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/heads/)" #local branches. W/O refs/heads/ you get both local and remote listings.
+    fi
       
     #command vars:
     GCMD="git $1"
@@ -86,7 +121,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
-      if [ $branchName !== "HEAD"] ; #skip refs/remotes/HEAD as it's a symlink
+      if [ $branchName !== "HEAD" ] ; then #skip refs/remotes/HEAD as it's a symlink
         #Updated CMD Vars
         GCO="git checkout ${branchName}"
         if $includeOriginBranch; then
