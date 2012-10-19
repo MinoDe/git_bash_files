@@ -74,26 +74,29 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     #vars:
     originalBranch="$(git rev-parse --abbrev-ref HEAD)"
     branches=()
-    eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/heads/)" #w/o refs/heads/ you get the local and remote listings.
-  
+    eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/remotes/)" #remote branches.
+    #eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/heads/)" #local branches. W/O refs/heads/ you get both local and remote listings.
+      
     #command vars:
     GCMD="git $1"
     GBRA="git branch -a"
     
     #actions:
-    INFO echo "Initiating 'git-each $1'. Local and remote branches: " > /dev/tty;  $GBRA; NORMAL
+    INFO echo "Initiating 'git-each $1'. List of local and remote branches: " > /dev/tty;  $GBRA; NORMAL
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
-      #Updated CMD Vars
-      GCO="git checkout ${branchName}"
-      if $includeOriginBranch; then
-         GCMD="git $1 origin ${branchName}"
+      if [ $branchName !== "HEAD"] ; #skip refs/remotes/HEAD as it's a symlink
+        #Updated CMD Vars
+        GCO="git checkout ${branchName}"
+        if $includeOriginBranch; then
+           GCMD="git $1 origin ${branchName}"
+        fi
+        INFO echo "1 - Checkout branch: ${branchName}" > /dev/tty; CMDINFO echo "$GCO" > /dev/tty; NORMAL $GCO; ##highlight checkout message
+        #SUCCESS echo "branch name: ${branchName}" > /dev/tty; NORMAL
+        INFO echo "2 - Execute CMD on branch: " > /dev/tty; CMDINFO echo "$GCMD" > /dev/tty; NORMAL $GCMD
+        WARNING echo "##################" > /dev/tty; NORMAL 
       fi
-      INFO echo "1 - Checkout branch: ${branchName}" > /dev/tty; CMDINFO echo "$GCO" > /dev/tty; NORMAL $GCO; ##highlight checkout message
-      #SUCCESS echo "branch name: ${branchName}" > /dev/tty; NORMAL
-      INFO echo "2 - Execute CMD on branch: " > /dev/tty; CMDINFO echo "$GCMD" > /dev/tty; NORMAL $GCMD
-      WARNING echo "##################" > /dev/tty; NORMAL 
     done
     INFO echo "Complete" > /dev/tty; NORMAL
     INFO echo "Returning to your original branch: " > /dev/tty; CMDINFO echo "git checkout $originalBranch" > /dev/tty; NORMAL git checkout $originalBranch; echo -n; 
