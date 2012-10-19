@@ -215,7 +215,7 @@ sed -e s/P-t-P://)
 function ii()   # Get current host related info.
 {
     INFO
-		echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nYou are logged on ${RED}$HOST"
     echo -e "\nAdditionnal information:$NC " ; uname -a
     echo -e "\n${RED}Users logged on:$NC " ; w -h
     echo -e "\n${RED}Current date :$NC " ; date
@@ -226,5 +226,5 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
-		NORMAL
+    NORMAL
 }
