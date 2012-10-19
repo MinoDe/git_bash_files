@@ -105,10 +105,11 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
            
     #vars:
     originalBranch="$(git rev-parse --abbrev-ref HEAD)"
-    branches=()
-    if loopRemoteBranches; then
+    if $loopRemoteBranches; then
+      branches=()
       eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/remotes/)" #remote branches.
     else
+      branches=()
       eval "$(git for-each-ref --shell --format='branches+=(%(refname))' refs/heads/)" #local branches. W/O refs/heads/ you get both local and remote listings.
     fi
       
@@ -121,7 +122,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
-      if [ $branchName !== "HEAD" ] ; then #skip refs/remotes/HEAD as it's a symlink
+      if [ $branchName != "HEAD" ] ; then #skip refs/remotes/HEAD as it's a symlink
         #Updated CMD Vars
         GCO="git checkout ${branchName}"
         if $includeOriginBranch; then
