@@ -85,6 +85,8 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
   $ git-each pull 1 1
     "
   else
+    INFO echo "Initiating 'git-each $1'. List of local and remote branches: " > /dev/tty;  $GBRA; NORMAL
+
     #$1 => gitCommand
     #$2 => includeOriginBranch:bool (default false) 
     #$3 => loopRemoteBranches:bool (default false)
@@ -93,6 +95,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     else
       if [ $2 == 1 -o $2 == "true" -o  $2 == "TRUE" ] ; then
         includeOriginBranch=true
+        INFO echo "<includeOriginBranch> = true; Specifying 'origin $branchName'" > /dev/tty; NORMAL
       fi
     fi
     if [[ ! -n "$3" ]] ; then
@@ -100,6 +103,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     else
       if [ $3 == 1 -o $3 == "true" -o  $3 == "TRUE" ] ; then
         loopRemoteBranches=true
+        INFO echo "<loopRemoteBranches> = true; Looping over remote branches" > /dev/tty; NORMAL
       fi
     fi
            
@@ -118,7 +122,6 @@ function git-each(){ # git-each gitCommand #Usage: git-each gitCommand [bool:inc
     GBRA="git branch -a"
     
     #actions:
-    INFO echo "Initiating 'git-each $1'. List of local and remote branches: " > /dev/tty;  $GBRA; NORMAL
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
