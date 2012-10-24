@@ -31,3 +31,8 @@ alias noAegir="INFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev
 alias useAegir="INFO echo 'useAegir => alias git=\'agit\'; alias drush=\'adrush\'; > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
 #noAegirSilent; #for noAegir branch
+
+#--------------------------------
+#aegir aliases
+#--------------------------------
+alias aliases_aegir="INFO echo '### Available Aegir Functions (.bash_aegir) ###'; NORMAL echo -n; cat ~/.bash_aegir | grep function; echo -n; INFO echo '### Aegir aliases (.bash_aegir) ###:'; NORMAL echo -n; cat ~/.bash_aegir | grep alias; echo -n; "
