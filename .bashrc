@@ -9,11 +9,14 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
+aliases_arr=("INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL")
+
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
+	#aliases[]="aliases_colors"
 fi
 
 #-------------------------------------------------------------
@@ -21,6 +24,15 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+	#aliases[]="aliases_bash"
+fi
+
+#--------------------------------
+# Mac specific
+#--------------------------------
+if [ -f ~/.bash_mac ]; then
+  . ~/.bash_mac # --> Read ~/.bash_mac if present
+	#aliases[]="aliases_mac "
 fi
 
 #--------------------------------
@@ -28,6 +40,7 @@ fi
 #--------------------------------
 if [ -f ~/.bash_aegir ]; then
   . ~/.bash_aegir # --> Read ~/.bash_aegir if present
+	#alias aliases="aliases; aliases_aegir "
 fi
 
 #-------------------------------------------------------------
@@ -35,6 +48,7 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
+	#alias aliases="aliases; aliases_drush "
 fi
 
 #-------------------------------------------------------------
@@ -42,7 +56,15 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.gitrc ]; then
   . ~/.gitrc # --> Read ~/.gitrc if present
+	#alias aliases="aliases; aliases_git "
 fi
+
+function aliases() {
+	for alias_i in "${aliases_arr[@]}"; 
+	do
+		echo ${alias_i}
+	done
+}
 
 #----------------------------------------
 #Directory Functions
