@@ -42,7 +42,7 @@ alias gci="CMDINFO echo 'gci => git commit ' > /dev/tty; NORMAL git commit "
 alias gco="CMDINFO echo 'gco => git checkout ' > /dev/tty; NORMAL git checkout "
 alias gdf="CMDINFO echo 'gdf => git diff ' > /dev/tty; NORMAL git diff "
 alias gbr="CMDINFO echo 'gbr => git br ' > /dev/tty; NORMAL git br "
-alias aliases="INFO echo '### Available Functions (.bashrc) ###'; NORMAL echo -n; cat ~/.bashrc | grep function; echo -n; INFO echo '### Available Git Functions (.gitrc) ###'; NORMAL echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; NORMAL echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; NORMAL git config --list | grep alias; echo -n; INFO echo '### Alias (.bash_alias) ###'; NORMAL alias"
+alias aliases_git="INFO echo '### Available Git Functions (.gitrc) ###'; CMDINFO echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; CMDINFO echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; CMDINFO git config --list | grep alias; echo -n; NORMAL"
 
 #-----------------------------------------------------------
 # Git functions

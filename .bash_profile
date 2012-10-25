@@ -10,10 +10,3 @@ fi
 PATH=$PATH:$HOME/bin
 
 export PATH
-
-#-------------------------------------------------------------
-# Mac specific
-#-------------------------------------------------------------
-if [ -f ~/.bash_mac ]; then
-  . ~/.bash_mac # --> Read ~/.bash_mac if present
-fi

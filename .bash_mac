@@ -7,6 +7,11 @@
 ##  . ~/.bash_mac # --> Read ~/.bash_mac if present
 ##fi
 
+#--------------------------------
+#mac aliases
+#--------------------------------
+alias aliases_mac="INFO echo '### Available Mac Functions (.bash_mac) ###'; CMDINFO echo -n; cat ~/.bash_mac | grep function; echo -n; INFO echo '### Mac aliases (.bash_mac) ###:'; CMDINFO echo -n; cat ~/.bash_mac | grep alias; echo -n; NORMAL"
+
 #alias drush='~/drush/drush'
 #### Mamp aliases ####
 alias drush='/Applications/MAMP/bin/php/php5.3.6/bin/php ~/drush/drush.php'

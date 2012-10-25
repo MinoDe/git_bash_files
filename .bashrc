@@ -1,7 +1,5 @@
 # .bashrc
 
-PATH=$PATH:~/drush
-
 #-------------------------------------------------------------
 # Source global definitions (if any)
 #-------------------------------------------------------------
@@ -9,14 +7,21 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
-aliases_arr=("INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL")
+aliasArr=(); #Initiate aliases array
+
+#-------------------------------------------------------------
+# List aliases and funcitons in bashrc file
+#-------------------------------------------------------------
+alias aliases_bashrc="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL"
+aliasArr=("${aliasArr[@]}" "aliases_bashrc") #Add aliases to array 
 
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
-	#aliases[]="aliases_colors"
+	#alias aliases="aliases_colors"
+	aliasArr=("${aliasArr[@]}" "aliases_colors") #Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -24,7 +29,8 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
-	#aliases[]="aliases_bash"
+	#alias aliases="aliases; aliases_bash "
+	aliasArr=("${aliasArr[@]}" "aliases_bash") #Add aliases to array 
 fi
 
 #--------------------------------
@@ -32,7 +38,8 @@ fi
 #--------------------------------
 if [ -f ~/.bash_mac ]; then
   . ~/.bash_mac # --> Read ~/.bash_mac if present
-	#aliases[]="aliases_mac "
+	#alias aliases="aliases; aliases_mac "
+	aliasArr=("${aliasArr[@]}" "aliases_mac") #Add aliases to array 
 fi
 
 #--------------------------------
@@ -41,6 +48,7 @@ fi
 if [ -f ~/.bash_aegir ]; then
   . ~/.bash_aegir # --> Read ~/.bash_aegir if present
 	#alias aliases="aliases; aliases_aegir "
+	aliasArr=("${aliasArr[@]}" "aliases_aegir")	#Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -49,6 +57,7 @@ fi
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
 	#alias aliases="aliases; aliases_drush "
+	aliasArr=("${aliasArr[@]}" "aliases_drush") #Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -57,14 +66,14 @@ fi
 if [ -f ~/.gitrc ]; then
   . ~/.gitrc # --> Read ~/.gitrc if present
 	#alias aliases="aliases; aliases_git "
+	aliasArr=("${aliasArr[@]}" "aliases_git") #Add aliases to array 
 fi
 
-function aliases() {
-	for alias_i in "${aliases_arr[@]}"; 
-	do
-		echo ${alias_i}
-	done
-}
+#----------------------------------------
+#Aliases Functions
+#----------------------------------------
+#Gatheres and displays aliases and functions from known .bash files (concatenated in an array)
+alias aliases=${aliasArr[@]};
 
 #----------------------------------------
 #Directory Functions
