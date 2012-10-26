@@ -7,6 +7,13 @@
 ##  . ~/.bash_drush # --> Read ~/.bash_drush if present
 ##fi
 
+PATH=$PATH:~/drush
+
+#--------------------------------
+#drush aliases
+#--------------------------------
+alias aliases_drush="INFO echo '### Available Drush Functions (.bash_drush) ###'; CMDINFO echo -n; cat ~/.bash_drush | grep function; echo -n; INFO echo '### Drush aliases (.bash_drush) ###:'; CMDINFO echo -n; cat ~/.bash_drush | grep alias; echo -n; NORMAL"
+
 #-----------------------------------------------------------
 # Drush prompt
 #-----------------------------------------------------------
