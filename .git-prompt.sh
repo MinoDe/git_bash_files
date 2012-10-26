@@ -175,7 +175,7 @@ p="=" ;;
 p=">" ;;
 *" 0") # behind upstream
 p="<" ;;
-*)	# diverged from upstream
+*)  # diverged from upstream
 p="<>" ;;
 esac
 else
@@ -188,7 +188,7 @@ p=" u=" ;;
 p=" u+${count#0 }" ;;
 *" 0") # behind upstream
 p=" u-${count% 0}" ;;
-*)	# diverged from upstream
+*)  # diverged from upstream
 p=" u+${count#* }-${count% *}" ;;
 esac
 fi

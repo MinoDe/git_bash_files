@@ -9,7 +9,7 @@
   remote = origin
   merge = refs/heads/master
 [color]
-	#Add colors to your ~/.gitconfig file:
+  #Add colors to your ~/.gitconfig file:
   ui = auto
   ui = true
 [color "branch"]
@@ -28,7 +28,7 @@
   changed = green
   untracked = cyan
 [alias]
-	#Add aliases to your ~/.gitconfig file:
+  #Add aliases to your ~/.gitconfig file:
   st = status
   ci = commit
   br = branch
@@ -44,13 +44,13 @@
   # Show files ignored by git:
   ign = ls-files -o -i --exclude-standard
 [difftool "sourcetree"]    #Usage: git difftool -t sourcetree
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path = 
 [difftool "diffmerge"]     #Usage: git difftool -t diffmerge
   cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
 [mergetool "sourcetree"]  #Usage: git mergetool -t sourcetree
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
 [mergetool "diffmerge"]  #Usage: git mergetool -t diffmerge
   cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
   trustExitCode = false
