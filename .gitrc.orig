@@ -65,16 +65,28 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
   showHelp=true;
   fi
   if $showHelp; then
+<<<<<<< HEAD
+    echo 1>&2 "  Usage: git-each <command> [<includeOriginBranch:bool (default false)> <loopRemoteBranches:bool (default false)>]
+
+  Example: git-each fetch; 
+  This function loops through each branch, checking it out and running the requested command; e.g. git fetch origin ${branch};
+=======
     echo 1>&2 "  Usage: git-each <command> [<includeRemoteBranch:bool (default false)> <loopRemoteBranches:bool (default false)>]
 
   Example: git-each fetch; 
   This function loops through each branch, checking it out and running the requested command; e.g. git fetch ${branch};
+>>>>>>> remotes/_vid/vid_bash_files/master
   Only single word commands are supported at this time (status, fetch, push, pull, etc...)
   See 'git --help' for more information on git usage.
   
   Optional args:
+<<<<<<< HEAD
+  <includeOriginBranch:bool (default false)> 
+  if <includeOriginBranch> is TRUE|true|1 then each <command> is appended with 'origin $branchName'. 
+=======
   <includeRemoteBranch:bool (default false)> 
   if <includeRemoteBranch> is TRUE|true|1 then each <command> is appended with the remote branch '$remoteName $branchName'. 
+>>>>>>> remotes/_vid/vid_bash_files/master
   Useful when pushing branches to a new repo or pulling down branches for the first time. 
   Example following $ git remote set-url origin git@new.url:for/your_repo.git: 
   $ git-each push 1
@@ -88,6 +100,16 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
     INFO echo "Initiating 'git-each $1'. List of local and remote branches: " > /dev/tty;  $GBRA; NORMAL
 
     #$1 => gitCommand
+<<<<<<< HEAD
+    #$2 => includeOriginBranch:bool (default false) 
+    #$3 => loopRemoteBranches:bool (default false)
+    if [[ ! -n "$2" ]] ; then
+      includeOriginBranch=false
+    else
+      if [ $2 == 1 -o $2 == "true" -o  $2 == "TRUE" ] ; then
+        includeOriginBranch=true
+        INFO echo "<includeOriginBranch> = true; Specifying 'origin $branchName'" > /dev/tty; NORMAL
+=======
     #$2 => includeRemoteBranch:bool (default false) 
     #$3 => loopRemoteBranches:bool (default false)
     if [[ ! -n "$2" ]] ; then
@@ -96,6 +118,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
       if [ $2 == 1 -o $2 == "true" -o  $2 == "TRUE" ] ; then
         includeRemoteBranch=true
         INFO echo "<includeRemoteBranch> = true; Specifying remote branch for each command 'git $1 <remoteName> $branchName'" > /dev/tty; NORMAL
+>>>>>>> remotes/_vid/vid_bash_files/master
       fi
     fi
     if [[ ! -n "$3" ]] ; then
@@ -125,6 +148,13 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
+<<<<<<< HEAD
+      if [ $branchName != "HEAD" ] ; then #skip refs/remotes/HEAD as it's a symlink
+        #Updated CMD Vars
+        GCO="git checkout ${branchName}"
+        if $includeOriginBranch; then
+           GCMD="git $1 origin ${branchName}"
+=======
 		  #set remoteName
       IFS='/' read -ra remoteArr <<< "$branch"	
       #FAILURE echo "remoteName: ${remoteArr[2]}"; NORMAL
@@ -135,6 +165,7 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
         GCO="git checkout ${branchName}"
         if $includeRemoteBranch; then
            GCMD="git $1 $remoteName ${branchName}"
+>>>>>>> remotes/_vid/vid_bash_files/master
         fi
         INFO echo "1 - Checkout branch: ${branchName}" > /dev/tty; CMDINFO echo "$GCO" > /dev/tty; NORMAL $GCO; ##highlight checkout message
         #SUCCESS echo "branch name: ${branchName}" > /dev/tty; NORMAL

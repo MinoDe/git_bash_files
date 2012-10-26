@@ -7,6 +7,11 @@
 ##  . ~/.bash_colors # --> Read ~/.bash_colors if present
 ##fi
 
+#--------------------------------
+#colors aliases
+#--------------------------------
+alias aliases_colors="INFO echo '### Available Colors Functions (.bash_colors) ###'; CMDINFO echo -n; cat ~/.bash_colors | grep function; echo -n; INFO echo '### Colors aliases (.bash_colors) ###:'; CMDINFO echo -n; cat ~/.bash_colors | grep alias; echo -n; NORMAL"
+
 #-------------------------------------------------------------
 # Set Colors
 # Thanks: https://wiki.archlinux.org/index.php/Color_Bash_Prompt
@@ -50,6 +55,8 @@ txtrst='\\033[0m'    # Text Reset
 alias NORMAL="echo -en ${txtrst} > /dev/tty;"
 alias SUCCESS="echo -en ${bldgrn} > /dev/tty;"
 alias CMDINFO="echo -en ${bldcyn} > /dev/tty;"
-alias INFO="echo -en ${txtylw} > /dev/tty;"
+alias INFO="echo -en ${bldwht} > /dev/tty;"
 alias WARNING="echo -en ${bldylw} > /dev/tty;"
 alias FAILURE="echo -en ${bldred} > /dev/tty;"
+
+
