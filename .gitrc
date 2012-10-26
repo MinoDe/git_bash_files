@@ -56,8 +56,6 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
   ## https://wiki.archlinux.org/index.php/Color_Bash_Prompt
   
   #loop through each local or remote branch and act on it. Could be adapted to create an array combining both.
-	#todo
-	## Add an option for specifying the remote branch name; i.e. '8.x', 'testFiles', etc...
   
   showHelp=false
   if [[ ! -n "$1" ]] ; then 
