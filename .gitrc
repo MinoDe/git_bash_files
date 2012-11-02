@@ -7,25 +7,42 @@
 ##  . ~/.gitrc # --> Read ~/.gitrc if present
 ##fi
 
+#-----------------------------------------------------------
+# Git prompt
+#-----------------------------------------------------------
+# Git Bash shell command completion simple:
+function parse_git_branch {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+	#git describe --contains --all HEAD
+}
+#PS1="\u@\h:\W \$(parse_git_branch)\$ "
+
+#Complex with .git-prompt.sh
+if [ -f ~/.git-prompt.sh ]; then
+  . ~/.git-prompt.sh
+  
+  #get current repo:
+  function git_repo_name() {
+    g="$(__gitdir)" 
+    if [ -n "$g" ]; then 
+      #echo '.git Dir!' 
+      #display repository aliases
+      remoteArr=(`git remote`); 
+      #display array replacing spaces with pipe
+      echo ${remoteArr[*]} | sed 's/ / | /';
+    fi
+  }
+  #$(git_repo_name)
+
+  #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
+  PS1='\u@\h \W$(__git_ps1 " ($(git_repo_name) [%s])")\$ '
+fi
+
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
-fi
-
-#-----------------------------------------------------------
-# Git prompt
-#-----------------------------------------------------------
-# Git Bash shell command completion
-function parse_git_branch {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
-}
-#PS1="\u@\h:\W \$(parse_git_branch)\$ "
-
-if [ -f ~/.git-prompt.sh ]; then
-  . ~/.git-prompt.sh
-  PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
 fi
 
 #-----------------------------------------------------------
@@ -125,8 +142,8 @@ function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includ
     for branch in "${branches[@]}"; 
     do
       branchName="$(basename ${branch})"
-		  #set remoteName
-      IFS='/' read -ra remoteArr <<< "$branch"	
+      #set remoteName
+      IFS='/' read -ra remoteArr <<< "$branch"  
       #FAILURE echo "remoteName: ${remoteArr[2]}"; NORMAL
       remoteName="${remoteArr[2]}"
 
