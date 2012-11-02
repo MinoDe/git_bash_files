@@ -85,6 +85,13 @@ function currentDir(){
   echo $DIR
 }
 
+function baseDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
+	echo $(basename $DIR)
+}
+
 #-------------------------------------------------------------
 # History mod from Jason H.
 #-------------------------------------------------------------
