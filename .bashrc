@@ -1,7 +1,5 @@
 # .bashrc
 
-PATH=$PATH:~/drush
-
 #-------------------------------------------------------------
 # Source global definitions (if any)
 #-------------------------------------------------------------
@@ -9,11 +7,21 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
+aliasArr=(); #Initiate aliases array
+
+#-------------------------------------------------------------
+# List aliases and funcitons in bashrc file
+#-------------------------------------------------------------
+alias aliases_bashrc="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL"
+aliasArr=("${aliasArr[@]}" "aliases_bashrc") #Add aliases to array 
+
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
+	#alias aliases="aliases_colors"
+	aliasArr=("${aliasArr[@]}" "aliases_colors") #Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -21,6 +29,17 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+	#alias aliases="aliases; aliases_bash "
+	aliasArr=("${aliasArr[@]}" "aliases_bash") #Add aliases to array 
+fi
+
+#--------------------------------
+# Mac specific
+#--------------------------------
+if [ -f ~/.bash_mac ]; then
+  . ~/.bash_mac # --> Read ~/.bash_mac if present
+	#alias aliases="aliases; aliases_mac "
+	aliasArr=("${aliasArr[@]}" "aliases_mac") #Add aliases to array 
 fi
 
 #--------------------------------
@@ -28,6 +47,8 @@ fi
 #--------------------------------
 if [ -f ~/.bash_aegir ]; then
   . ~/.bash_aegir # --> Read ~/.bash_aegir if present
+	#alias aliases="aliases; aliases_aegir "
+	aliasArr=("${aliasArr[@]}" "aliases_aegir")	#Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -35,6 +56,8 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
+	#alias aliases="aliases; aliases_drush "
+	aliasArr=("${aliasArr[@]}" "aliases_drush") #Add aliases to array 
 fi
 
 #-------------------------------------------------------------
@@ -42,7 +65,15 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.gitrc ]; then
   . ~/.gitrc # --> Read ~/.gitrc if present
+	#alias aliases="aliases; aliases_git "
+	aliasArr=("${aliasArr[@]}" "aliases_git") #Add aliases to array 
 fi
+
+#----------------------------------------
+#Aliases Functions
+#----------------------------------------
+#Gatheres and displays aliases and functions from known .bash files (concatenated in an array)
+alias aliases=${aliasArr[@]};
 
 #----------------------------------------
 #Directory Functions
@@ -52,6 +83,13 @@ function currentDir(){
   while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   echo $DIR
+}
+
+function baseDir(){
+  SOURCE="$1"
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
+	echo $(basename $DIR)
 }
 
 #-------------------------------------------------------------
@@ -215,7 +253,7 @@ sed -e s/P-t-P://)
 function ii()   # Get current host related info.
 {
     INFO
-		echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nYou are logged on ${RED}$HOST"
     echo -e "\nAdditionnal information:$NC " ; uname -a
     echo -e "\n${RED}Users logged on:$NC " ; w -h
     echo -e "\n${RED}Current date :$NC " ; date
@@ -226,5 +264,5 @@ function ii()   # Get current host related info.
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
     echo
-		NORMAL
+    NORMAL
 }
