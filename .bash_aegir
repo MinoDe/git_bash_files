@@ -87,7 +87,7 @@ EOF
   CMDINFO echo "Number of args: $#" > /dev/tty; NORMAL
 
   #if there are no options then arg1 = $1 if it doesn't start with '-'
-  if [[ ! -n "$ARG1" -a $# -eq 1 -a $1 != \-* ]] ; then 
+  if [ $[ ! -n "$ARG1" ] && $[ $# == 1 ] && $[ $1 != \-* ] ] ; then 
     ARG1=$1
     CMDINFO echo "No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
   fi
@@ -99,7 +99,7 @@ EOF
   fi
 
   #If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
-  if [[ ! -n "$ARG1" -o $ARG1 == \-*]] ; then 
+  if [ $[ ! -n "$ARG1" ] || $[ -o $ARG1 == \-* ] ] ; then 
     usage
     return
   else
