@@ -84,10 +84,14 @@ EOF
   CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
   CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
   
+  if [[ $1 == "--help" ]] ; then
+    usage
+    return
+  fi
+
   if [[ ! -n "$ARG1" ]] ; then 
     usage
-    #exit 1
-    #INFO echo 1>&2 "Verify the local file system and initate the remote site verification for a site. Note do not include @ symbol. Usage: drushverify hr.uoregon.edu => drush provision-verify -v @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify"; NORMAL
+    return
   else
     # check for options. (currently in a while loop and case statement for potential expansion)
     while getopts “hv” OPTION
@@ -95,14 +99,12 @@ EOF
       case $OPTION in
          h) # Help
           usage
-          #exit 1
           return
           ;;
         v) # Verbose
           VERBOSE=" -v"
           ;;
         ?) #if no option is given continue on
-        #  exit
           ;;
       esac
     done
