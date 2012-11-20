@@ -77,18 +77,26 @@ EOF
 
   #### Args ####
   #Credit; tip on combining options with args: Thanks to http://stackoverflow.com/questions/11742996/shell-script-is-mixing-getopts-with-positional-parameters-possible
+  # If there are options (-h v) then set arg 1 to the first var after those options
   ARG1=${@:$OPTIND:1}
   #ARG2=${@:$OPTIND+1:1}
 
   # testing show args
   CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
   CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
-  
+
+  #if there are no options then arg1 = $1
+  if [[ ! -n "$ARG1" ]] && [[ -n "$1" ]] ; then 
+    ARG1=$1
+  fi
+
+  #check for --help
   if [[ $1 == "--help" ]] ; then
     usage
     return
   fi
 
+  #If no Arg1 then show usage, else execute script
   if [[ ! -n "$ARG1" ]] ; then 
     usage
     return
