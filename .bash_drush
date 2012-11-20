@@ -35,7 +35,7 @@ function currentDir(){
 }
 
 #-----------------------------------------------------------
-# Drush functions
+# Drush cddrush function
 #-----------------------------------------------------------
 function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
   #!/bin/sh
