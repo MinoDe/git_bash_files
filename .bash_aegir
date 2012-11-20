@@ -54,7 +54,7 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
   usage()
   {
   cat << EOF
-  usage: $0 options
+  function: drushverify
 
   This script triggers a provision verify on the local file system and initates a remote site verification for a specified site. Useful for running Aegir verify from the terminal
   Note: do not include @ symbol. 
@@ -68,6 +68,7 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
 
   OPTIONS:
      -v               -   Verbose
+     -h               -   Help
 
   ARGUMENTS:
     drushSiteAlias    -   The drush site alias (with out '@') 
@@ -80,12 +81,12 @@ EOF
   #ARG2=${@:$OPTIND+1:1}
 
   # testing show args
-  #CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
-  #CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+  CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
+  CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
   
   if [[ ! -n "$ARG1" ]] ; then 
     usage
-    exit 1
+    #exit 1
     #INFO echo 1>&2 "Verify the local file system and initate the remote site verification for a site. Note do not include @ symbol. Usage: drushverify hr.uoregon.edu => drush provision-verify -v @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify"; NORMAL
   else
     # check for options. (currently in a while loop and case statement for potential expansion)
@@ -94,15 +95,15 @@ EOF
       case $OPTION in
          h) # Help
           usage
-          exit 1
+          #exit 1
+          return
           ;;
         v) # Verbose
           VERBOSE=" -v"
           ;;
-        #?) #if no option is given, return usage()
-        #  usage
+        ?) #if no option is given continue on
         #  exit
-        #  ;;
+          ;;
       esac
     done
 
