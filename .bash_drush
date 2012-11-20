@@ -35,7 +35,7 @@ function currentDir(){
 }
 
 #-----------------------------------------------------------
-# Drush functions
+# Drush cddrush function
 #-----------------------------------------------------------
 function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
   #!/bin/sh
@@ -45,6 +45,21 @@ cd \`drush dd @hr.uoregon.edu:%site\`"; NORMAL
   else
     CMDINFO echo "cd \`drush dd @$1:%site\`" > /dev/tty; NORMAL
     cd `drush dd @$1:%site`
+  fi
+}
+
+#-----------------------------------------------------------
+# Drush drushverify function
+#-----------------------------------------------------------
+function drushverify(){ #verify the local file system and initate the remote site verification for a site. Note do not include @ symbol. Usage: drushverify hr.uoregon.edu => drush provision-verify -v @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify
+  #!/bin/sh
+  if [[ ! -n "$1" ]] ; then
+    INFO echo 1>&2 "Verify the local file system and initate the remote site verification for a site. Note do not include @ symbol. Usage: drushverify hr.uoregon.edu => drush provision-verify -v @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify"; NORMAL
+  else
+    CMDINFO echo "drush -d provision-verify -v @$1" > /dev/tty; NORMAL
+    drush -d provision-verify -v @$1
+    CMDINFO echo "drush -d @hostmaster hosting-task @$1 verify" > /dev/tty; NORMAL
+    drush -d @hostmaster hosting-task @$1 verify
   fi
 }
 
