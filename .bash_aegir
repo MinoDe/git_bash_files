@@ -102,11 +102,11 @@ EOF
       esac
     done
 
-    CMD1="drush -d provision-verify$VERBOSE @$1"
+    CMD1="drush$VERBOSE @$ARG1 provision-verify"
     CMDINFO echo "$CMD1" > /dev/tty; NORMAL
     `$CMD1`
 
-    CMD2="drush -d @hostmaster hosting-task @$1 verify"
+    CMD2="drush$VERBOSE @hostmaster hosting-task @$ARG1 verify"
     CMDINFO echo "$CMD2" > /dev/tty; NORMAL
     `$CMD2`
   fi
