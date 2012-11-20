@@ -71,7 +71,7 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
 
   ARGUMENTS:
     drushSiteAlias    -   The drush site alias (with out '@') 
-  EOF
+EOF
   }
 
   #### Args ####
