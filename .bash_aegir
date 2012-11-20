@@ -105,6 +105,8 @@ EOF
     return
   else
     # check for options. (currently in a while loop and case statement for potential expansion)
+    # Set empty VERBOSE
+    VERBOSE=
     while getopts “hv” OPTION
     do
       case $OPTION in
