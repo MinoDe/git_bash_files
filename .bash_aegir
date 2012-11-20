@@ -1,3 +1,4 @@
+#!/bin/sh
 # .bash_aegir
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
