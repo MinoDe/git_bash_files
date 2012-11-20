@@ -87,7 +87,8 @@ EOF
   CMDINFO echo "Number of args: $#" > /dev/tty; NORMAL
 
   #if there are no options then arg1 = $1 if it doesn't start with '-'
-  if [ [ ! -n "$ARG1" ] -a [[ "$1" != "-*" ]] ] ; then
+
+  if [ [ ! -n "$ARG1" ] ] &&  [[ "$1" -ne "-*" ] ] ; then
     ARG1=$1
     CMDINFO echo "No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
   fi
