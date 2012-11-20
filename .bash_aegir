@@ -84,10 +84,12 @@ EOF
   # testing show args
   CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
   CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+  CMDINFO echo "Number of args: $#" > /dev/tty; NORMAL
 
   #if there are no options then arg1 = $1
-  if [[ ! -n "$ARG1" ]] && [[ -n "$1" ]] ; then 
+  if [[ ! -n "$ARG1" -a $# == 0 ]] ; then 
     ARG1=$1
+    CMDINFO echo "No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
   fi
 
   #check for --help
@@ -96,8 +98,8 @@ EOF
     return
   fi
 
-  #If no Arg1 then show usage, else execute script
-  if [[ ! -n "$ARG1" ]] ; then 
+  #If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [[ ! -n "$ARG1" -o $ARG1 == \-*]] ; then 
     usage
     return
   else
