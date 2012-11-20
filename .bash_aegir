@@ -79,11 +79,10 @@ EOF
   ARG1=${@:$OPTIND:1}
   #ARG2=${@:$OPTIND+1:1}
 
-  CMDINFO echo "args: (\$@) -\"$@\"" > /dev/tty; NORMAL
-  CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
-  CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
-  CMDINFO echo "OPTIONS: getopts" > /dev/tty; NORMAL
-
+  # testing show args
+  #CMDINFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
+  #CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+  
   if [[ ! -n "$ARG1" ]] ; then 
     usage
     exit 1
@@ -109,10 +108,10 @@ EOF
 
     CMD1="drush @$ARG1 provision-verify$VERBOSE"
     CMDINFO echo "$CMD1" > /dev/tty; NORMAL
-    $CMD1
+    {$CMD1}
 
     CMD2="drush @hostmaster hosting-task$VERBOSE @$ARG1 verify"
     CMDINFO echo "$CMD2" > /dev/tty; NORMAL
-    $CMD2
+    {$CMD2}
   fi
 } #end function drushverify
