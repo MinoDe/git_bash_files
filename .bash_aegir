@@ -99,7 +99,7 @@ EOF
   fi
 
   #If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
-  if [ $[ ! -n "$ARG1" ] || $[ -o $ARG1 == \-* ] ] ; then 
+  if [ $[ ! -n "$ARG1" ] -o $[ -o $ARG1 == \-* ] ] ; then 
     usage
     return
   else
