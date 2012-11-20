@@ -8,21 +8,21 @@
 ##  . ~/.bash_aegir # --> Read ~/.bash_aegir if present
 ##fi
 
-#--------------------------------
-#Aegir user related 
-#--------------------------------
+#-----------------------------------------------------------
+#Aegir user related aliases
+#-----------------------------------------------------------
 #Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 alias suaegir="CMDINFO echo 'suaegir => sudo -u aegir ' > /dev/tty; NORMAL sudo -u aegir "
 
-#--------------------------------
+#-----------------------------------------------------------
 #drush related aliases
-#--------------------------------
+#-----------------------------------------------------------
 alias adrush="CMDINFO echo 'adrush => suaegir drush ' > /dev/tty; NORMAL suaegir drush "
 alias drush="CMDINFO echo 'drush => ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
 
-#--------------------------------
+#-----------------------------------------------------------
 #git aegir aliases
-#--------------------------------
+#-----------------------------------------------------------
 alias agit="CMDINFO echo 'agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
 alias git="CMDINFO echo -n 'git => ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
@@ -33,7 +33,81 @@ alias useAegir="INFO echo 'useAegir => alias git=\'agit\'; alias drush=\'adrush\
 
 #noAegirSilent; #for noAegir branch
 
-#--------------------------------
+#-----------------------------------------------------------
 #aegir aliases
-#--------------------------------
+#-----------------------------------------------------------
 alias aliases_aegir="INFO echo '### Available Aegir Functions (.bash_aegir) ###'; NORMAL echo -n; cat ~/.bash_aegir | grep function; echo -n; INFO echo '### Aegir aliases (.bash_aegir) ###:'; NORMAL echo -n; cat ~/.bash_aegir | grep alias; echo -n; "
+
+#-----------------------------------------------------------
+#drush related functions
+#-----------------------------------------------------------
+
+#--------------------------------
+# Drush drushverify function
+#--------------------------------
+function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-h -v] drushSiteAlias. Ex: $ drushverify hr.uoregon.edu = "drush provision-verify @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify
+  #!/bin/sh
+  # Arguments = [-h (help) -v (verbose)]
+
+  # Credit: Bash HEREDOC usage() and getops while loop: http://rsalveti.wordpress.com/2007/04/03/bash-parsing-arguments-with-getopts/
+
+  usage()
+  {
+  cat << EOF
+  usage: $0 options
+
+  This script triggers a provision verify on the local file system and initates a remote site verification for a specified site. Useful for running Aegir verify from the terminal
+  Note: do not include @ symbol. 
+
+  Usage: drushverify [-v] drushSiteAlias
+
+  Example: drushverify hr.uoregon.edu
+    Cmd line result: 
+      $ drush provision-verify @hr.uoregon.edu
+      $ drush @hostmaster hosting-task @hr.uoregon.edu verify
+
+  OPTIONS:
+     -v               -   Verbose
+
+  ARGUMENTS:
+    drushSiteAlias    -   The drush site alias (with out '@') 
+  EOF
+  }
+
+  #### Args ####
+  #Credit; tip on combining options with args: Thanks to http://stackoverflow.com/questions/11742996/shell-script-is-mixing-getopts-with-positional-parameters-possible
+  ARG1=${@:$OPTIND:1}
+  #ARG2=${@:$OPTIND+1:1}
+
+  if [[ ! -n "$ARG1" ]] ; then 
+    usage
+    exit 1
+    #INFO echo 1>&2 "Verify the local file system and initate the remote site verification for a site. Note do not include @ symbol. Usage: drushverify hr.uoregon.edu => drush provision-verify -v @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify"; NORMAL
+  else
+    # check for options. (currently in a while loop and case statement for potential expansion)
+    while getopts “hv” OPTION
+    do
+      case $OPTION in
+         h) # Help
+          usage
+          exit 1
+          ;;
+        v) # Verbose
+          VERBOSE=" -v"
+          ;;
+        #?) #if no option is given, return usage()
+        #  usage
+        #  exit
+        #  ;;
+      esac
+    done
+
+    CMD1="drush -d provision-verify$VERBOSE @$1"
+    CMDINFO echo "$CMD1" > /dev/tty; NORMAL
+    `$CMD1`
+
+    CMD2="drush -d @hostmaster hosting-task @$1 verify"
+    CMDINFO echo "$CMD2" > /dev/tty; NORMAL
+    `$CMD2`
+  fi
+} #end function drushverify
