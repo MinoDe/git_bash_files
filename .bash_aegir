@@ -92,4 +92,41 @@ EOF
     ARG1=$1
     CMDINFO echo "No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
   fi
+
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    usage
+    return
+  fi
+
+  #If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then 
+    usage
+    return
+  else
+    # check for options. (currently in a while loop and case statement for potential expansion)
+    while getopts “hv” OPTION
+    do
+      case $OPTION in
+         h) # Help
+          usage
+          return
+          ;;
+        v) # Verbose
+          VERBOSE=" -v"
+          ;;
+        ?) #if no option is given continue on
+          ;;
+      esac
+    done
+
+    CMD1="drush @$ARG1 provision-verify$VERBOSE"
+    CMDINFO echo "$CMD1" > /dev/tty; NORMAL
+    {$CMD1}
+
+    CMD2="drush @hostmaster hosting-task$VERBOSE @$ARG1 verify"
+    CMDINFO echo "$CMD2" > /dev/tty; NORMAL
+    {$CMD2}
+  fi
+
 } #end function drushverify
