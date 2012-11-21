@@ -77,6 +77,29 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
 EOF
   }
 
+  #### Options ####
+  # Set empty VERBOSE
+  VERBOSE=
+  
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts “hv” OPTION
+  do
+    case $OPTION in
+       h) # Help
+        usage
+        #return
+        ;;
+      v) # Verbose
+        VERBOSE=" -v"
+        INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
+        ;;
+      ?) #if no option is given continue on
+        ;;
+    esac
+  done
+
+  INFO echo "Testing: Verbose: $VERBOSE" > /dev/tty; NORMAL
+  
   #### Args ####
   #Credit; tip on combining options with args: Thanks to http://stackoverflow.com/questions/11742996/shell-script-is-mixing-getopts-with-positional-parameters-possible
   # If there are options (-h v) then set arg 1 to the first var after those options
@@ -108,25 +131,6 @@ EOF
     usage
     #return
   else
-    # check for options. (currently in a while loop and case statement for potential expansion)
-    # Set empty VERBOSE
-    VERBOSE=
-    while getopts “hv” OPTION
-    do
-      case $OPTION in
-         h) # Help
-          usage
-          #return
-          ;;
-        v) # Verbose
-          VERBOSE=" -v"
-          INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
-          ;;
-        ?) #if no option is given continue on
-          ;;
-      esac
-    done
-
     CMD1="@$ARG1 provision-verify$VERBOSE"
     CMDINFO echo "drush $CMD1" > /dev/tty; NORMAL
     drush $CMD1
