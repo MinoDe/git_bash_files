@@ -138,14 +138,14 @@ EOF
       h) 
         # Help
         HELP=1
-        if [[ $DEBUG ]] ; then
+        if (($DEBUG)) ; then
           INFO echo "Testing: setting HELP: $HELP" > /dev/tty; NORMAL
         fi
         break
         ;;
       v) # Verbose
         VERBOSE=" -v"
-        if [[ $DEBUG ]] ; then
+        if (($DEBUG)) ; then
           INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
         fi
         ;;
@@ -155,7 +155,7 @@ EOF
     esac
   done
 
-  if [[ $DEBUG ]] ; then
+  if (($DEBUG)) ; then
     INFO echo "Testing: Verbose: $VERBOSE" > /dev/tty; NORMAL
     INFO echo "Testing: setting HELP: $HELP" > /dev/tty; NORMAL
   fi
@@ -165,7 +165,7 @@ EOF
   # If there are options (-h v) then set arg 1 to the first var after those options
   ARG1=${@:$OPTIND:1}
   #ARG2=${@:$OPTIND+1:1}
-  if [[ $DEBUG ]] ; then
+  if (($DEBUG)) ; then
     INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
     # testing show args
     INFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
@@ -176,7 +176,7 @@ EOF
   #if there are no options then arg1 = $1 if it doesn't start with '-'
   if [ ! -n "$ARG1" ] && [[ $1 != -* ]] && [[ $# -gt 0 ]] ; then
     ARG1=$1
-    if [[ $DEBUG ]] ; then
+    if (($DEBUG)) ; then
       CMDINFO echo "Testing: No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
     fi
   fi
@@ -186,14 +186,14 @@ EOF
     HELP=1
   fi
 
-  if [[ $DEBUG ]] ; then
+  if (($DEBUG)) ; then
     INFO echo "HELP: $HELP" > /dev/tty; NORMAL
   fi
 
   #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
   if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] || (($HELP)) ; then 
     usage
-    if [[ $DEBUG ]] ; then
+    if (($DEBUG)) ; then
       INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' OR HELP = 1 then show usage, else execute script" > /dev/tty; NORMAL
     fi
   else
