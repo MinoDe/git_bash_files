@@ -42,6 +42,106 @@ alias aliases_aegir="INFO echo '### Available Aegir Functions (.bash_aegir) ###'
 #drush related functions
 #-----------------------------------------------------------
 
+#Test bash options:
+function testBash(){
+#!/bin/bash
+OPTIND=1
+function print_help { echo "Usage" >&2 ; } 
+
+while getopts ":vtrsc" name; do
+    case $name in
+        v) VALIDATE=1;;
+        t) TEST=1;;
+        r) REPORT=1;;
+        s) SYNC=1;;
+        c) CLEAR=1;;
+        ?) print_help; 
+        ;;
+    esac
+done
+
+echo "OPTIND: $OPTIND"
+echo ${#@}
+
+shift $((OPTIND - 1))
+
+while (( "$#" )); do
+    if [[ $1 == -* ]] ; then
+        echo "All opts up front, please." >&2 ; print_help ; 
+    fi
+    echo $1
+    shift
+done
+}
+
+
+function testOpts(){
+#!/bin/bash
+OPTIND=1
+
+  while getopts ":a:b:cde:f:g:" opt; do
+
+    case $opt in
+      a)
+        echo "[getopts:$OPTIND]==> -$opt"
+        echo "help" >&2
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      b)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      c)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      d)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      e)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      f)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      g)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        ;;
+    esac
+
+  done 
+  echo "optind: $OPTIND" >&2
+  shift $((OPTIND-1))
+  echo "optind: $OPTIND" >&2
+  echo "[otheropts]==> $@"
+} 
+
+function testOpts2(){
+#!/bin/bash
+OPTIND=1
+
+  while getopts ":ab" opt; do
+    case $opt in
+      a)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      b)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+    esac
+  done
+  
+
+  echo "optind: $OPTIND" >&2
+  shift $((OPTIND-1))
+
+}
+
 #--------------------------------
 # Drush drushverify function
 #--------------------------------
@@ -78,22 +178,26 @@ EOF
   }
 
   #### Options ####
+  OPTIND=1
   # Set empty VERBOSE
   VERBOSE=
-  
+  HELP=0
   # Check for options. (currently in a while loop and case statement for potential expansion)
-  while getopts “hv” OPTION
+  while getopts ":hv" OPTION; 
   do
     case $OPTION in
-       h) # Help
-        usage
-        #return
+      h) 
+        # Help
+        HELP=1
+        INFO echo "Testing: setting HELP: $HELP" > /dev/tty; NORMAL
+        break
         ;;
       v) # Verbose
         VERBOSE=" -v"
         INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
         ;;
       ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
         ;;
     esac
   done
@@ -113,7 +217,6 @@ EOF
   INFO echo "Number of args: $#" > /dev/tty; NORMAL
 
   #if there are no options then arg1 = $1 if it doesn't start with '-'
-
   if [ ! -n "$ARG1" ] && [[ $1 != -* ]] && [[ $# -gt 0 ]] ; then
     ARG1=$1
     CMDINFO echo "Testing: No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
@@ -121,13 +224,13 @@ EOF
 
   #check for --help
   if [[ $1 == "--help" ]] ; then
-    usage
-    return
+    HELP=1
   fi
 
-  #If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
-  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then 
-    INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' then show usage, else execute script" > /dev/tty; NORMAL
+  INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+#If no ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] || (($HELP)) ; then 
+    INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' OR HELP = 1 then show usage, else execute script" > /dev/tty; NORMAL
     usage
     #return
   else
@@ -139,5 +242,8 @@ EOF
     CMDINFO echo "$CMD2" > /dev/tty; NORMAL
     #$CMD2
   fi
+
+  shift $((OPTIND-1))
+
 
 } #end function drushverify
