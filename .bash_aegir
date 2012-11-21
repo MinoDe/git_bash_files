@@ -128,7 +128,7 @@ EOF
   DEBUG=0
   VERBOSE=
   # Check for options. (currently in a while loop and case statement for potential expansion)
-  while getopts ":hv" OPTION; 
+  while getopts ":dhv" OPTION; 
   do
     case $OPTION in
       d) # DEBUG
