@@ -1,4 +1,6 @@
+#!/bin/sh
 # .bash_drush
+
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
 ### Drush specific
