@@ -201,9 +201,9 @@ EOF
     CMDINFO echo "drush $CMD1" > /dev/tty; NORMAL
     drush $CMD1
 
-    CMD2="drush @hostmaster hosting-task$VERBOSE @$ARG1 verify"
-    CMDINFO echo "$CMD2" > /dev/tty; NORMAL
-    #$CMD2
+    CMD2="@hostmaster hosting-task$VERBOSE @$ARG1 verify"
+    CMDINFO echo "drush $CMD2" > /dev/tty; NORMAL
+    drush $CMD2
   fi
 
   shift $((OPTIND-1)) #prepare OPTIND for the next option
