@@ -120,6 +120,7 @@ EOF
           ;;
         v) # Verbose
           VERBOSE=" -v"
+          INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
           ;;
         ?) #if no option is given continue on
           ;;
