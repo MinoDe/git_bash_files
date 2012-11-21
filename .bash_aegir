@@ -54,6 +54,8 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
   usage()
   {
   cat << EOF
+  usage: $0 options
+
   function: drushverify
 
   This script triggers a provision verify on the local file system and initates a remote site verification for a specified site. Useful for running Aegir verify from the terminal
@@ -80,6 +82,7 @@ EOF
   # If there are options (-h v) then set arg 1 to the first var after those options
   ARG1=${@:$OPTIND:1}
   #ARG2=${@:$OPTIND+1:1}
+  CMDINFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
 
   # testing show args
   INFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
@@ -103,7 +106,7 @@ EOF
   if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then 
     INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' then show usage, else execute script" > /dev/tty; NORMAL
     usage
-    return
+    #return
   else
     # check for options. (currently in a while loop and case statement for potential expansion)
     # Set empty VERBOSE
@@ -113,7 +116,7 @@ EOF
       case $OPTION in
          h) # Help
           usage
-          return
+          #return
           ;;
         v) # Verbose
           VERBOSE=" -v"
