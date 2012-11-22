@@ -106,6 +106,8 @@ function drupalSiteDirShort(){ #Look at a path [default: current dir] and return
 function drupalSiteDir(){ #Look at a path [default: current dir] and return the site dir name 
   #!/bin/sh
   #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+
+  #TODO check for missing $ARG1 
   
   usage()
   {
@@ -193,6 +195,7 @@ EOF
     siteDir=${siteDir//\/*/}
     echo $siteDir
   fi
+  shift $((OPTIND-1)) #prepare OPTIND for the next option
 } 
 
 #--------------------------------
@@ -226,6 +229,9 @@ function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-
 
   ARGUMENTS:
     drushSiteAlias    -   The drush site alias (with out '@') 
+
+  Notes: 
+    if used in conjunction with drupalSiteDir() and your drush site alias match your site directory name then you can call this from any directory in your site: $ drushverify `drupalSiteDir`
 EOF
   }
 
