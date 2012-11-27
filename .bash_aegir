@@ -318,7 +318,7 @@ EOF
     fi
     
     #### drupalSiteDirShort ####
-    SOURCE="$1" #Allow for a passed dir. but default to current dir
+    SOURCE= #Allow for a passed dir. but default to current dir
     while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
     DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
     if (($DEBUG)) ; then
