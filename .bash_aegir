@@ -132,19 +132,6 @@ function drupalSiteDir(){ #Look at a path [default: current dir] and return the 
 EOF
   }
 
-
-  #------------------------------------
-  # Helper Funct: drupalSiteDirShort()
-  #------------------------------------
-  function drupalSiteDirShort(){ #Look at a path [default: current dir] and return the site dir name 
-    #!/bin/sh
-    #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
-     $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
-      siteDir=${DIR//*sites\//}; 
-      siteDir=${siteDir//\/*/}
-      echo $siteDir
-  }
-
   #### Options ####
   OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
   # (p)reset vars
@@ -194,14 +181,6 @@ EOF
 
   if (($DEBUG)) ; then
     INFO echo "HELP: $HELP" > /dev/tty; NORMAL
-  fi
-
-  #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
-  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then 
-    if (($DEBUG)) ; then
-      INFO echo "ARG1 is missing or ARG1 starts with a '-'. Attempting to determine the site dir name to use as the drush alias." > /dev/tty; NORMAL
-    fi
-    $ARG1=drupalSiteDirShort
   fi
 
   #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
@@ -308,6 +287,15 @@ EOF
     INFO echo "Number of args: $#" > /dev/tty; NORMAL
   fi
 
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
   #if there are no options then arg1 = $1 if it doesn't start with '-'
   if [ ! -n "$ARG1" ] && [[ $1 != -* ]] && [[ $# -gt 0 ]] ; then
     ARG1=$1
@@ -316,13 +304,22 @@ EOF
     fi
   fi
 
-  #check for --help
-  if [[ $1 == "--help" ]] ; then
-    HELP=1
-  fi
-
-  if (($DEBUG)) ; then
-    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then 
+    if (($DEBUG)) ; then
+      WARNING echo "ARG1 is missing or ARG1 starts with a '-'. Attempting to determine the site dir name to use as the drush alias." > /dev/tty; NORMAL
+    fi
+    
+    # drupalSiteDirShort
+    #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+    $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
+    siteDir=${DIR//*sites\//}; 
+    siteDir=${siteDir//\/*/}
+    $ARG1=$siteDir
+    # $ARG1=drupalSiteDirShort
+    if (($DEBUG)) ; then
+      INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+    fi
   fi
 
   #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
