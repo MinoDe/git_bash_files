@@ -132,6 +132,19 @@ function drupalSiteDir(){ #Look at a path [default: current dir] and return the 
 EOF
   }
 
+
+  #------------------------------------
+  # Helper Funct: drupalSiteDirShort()
+  #------------------------------------
+  function drupalSiteDirShort(){ #Look at a path [default: current dir] and return the site dir name 
+    #!/bin/sh
+    #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+     $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
+      siteDir=${DIR//*sites\//}; 
+      siteDir=${siteDir//\/*/}
+      echo $siteDir
+  }
+
   #### Options ####
   OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
   # (p)reset vars
