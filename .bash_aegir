@@ -329,14 +329,14 @@ EOF
     $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
     siteDir=${DIR//*sites\//}; 
     siteDir=${siteDir//\/*/}
-    $ARG1=$siteDir
-    # $ARG1=$drupalSiteDir
+    ARG1=$siteDir
+    # ARG1=$drupalSiteDir
     if (($DEBUG)) ; then
       INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
     fi
     #### end drupalSiteDirShort ####
   fi
-
+  
   #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
   if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] || (($HELP)) ; then 
     usage
