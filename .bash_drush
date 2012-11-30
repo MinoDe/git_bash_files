@@ -86,8 +86,7 @@ function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.ali
     git add `drush dd @$drush_alias:%dump`; 
     git commit -am"$git_commit_msg"; 
     INFO 
-    echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
-#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";
+    echo "#BackupedDB. Use to restore: drush_restore_db $drush_alias; or \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`. #To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";
     #Should this include a drush -v @$drush_alias cc all?
     NORMAL
   fi # end if [[ ! -n "$1" ]] 
@@ -146,15 +145,19 @@ If there is no [db_backup.sql] specified then an attempt is made to use the %dum
     fi
 
     INFO
-    echo "#Restoring DB. cd $db_path_to_sql_dump; \`drush @$drush_alias sql-connect\` < $db_dump_file_name; cd -";
+    echo "#Restoring DB: ";
+    CMDINFO
+    echo "cd $db_path_to_sql_dump; \`drush @$drush_alias sql-connect\` < $db_dump_file_name; cd -";
     NORMAL
     #Should this include a drush -v @$drush_alias cc all?
-    #testing
-		#cd $db_path_to_sql_dump;
-    #`drush @$drush_alias sql-connect\` < $db_dump_file_name;
-    #cd -;
+
+    cd $db_path_to_sql_dump;
+    `drush @$drush_alias sql-connect\` < $db_dump_file_name;
+    cd -;
+
     INFO
-    echo "Process complete";
+    echo "Process complete. Consider running
+drush -v @$drush_alias cc all";
     NORMAL
 
   fi # end if [[ ! -n "$1" ]]
