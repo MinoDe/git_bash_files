@@ -59,14 +59,24 @@ function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
     INFO echo -e "\n#drush db backup. Usage: drushbackdb drush.alias"; NORMAL
   else
     local drush_alias="$1"
-    cd `drush dd @$drush_alias:%site`; 
+
+    commandsRun()
+    {
+    cat << EOF
+    cd `drush dd @$drush_alias:%site`;
     drush cc all;
     drush watchdog-delete; #alternative would be to skip the WD table.
     drush sql-query "DELETE FROM cache_form WHERE expire < UNIX_TIMESTAMP(NOW())" #Credit: http://nuvole.org/node/5
     drush sql-query "DELETE FROM cache_update WHERE expire < UNIX_TIMESTAMP(NOW())"
     drush @$drush_alias sql-dump --ordered-dump --structure-tables-key=common --result-file=`drush dd @$drush_alias:%dump`;
     #--no-cache #removed for drush 7.x-5.+
-  fi # end if [[ ! -n "$1" ]]     
+EOF
+    } #END commandsRun
+    CMDINFO
+    echo commandsRun;
+    NORMAL
+    commandsRun;
+  fi # end if [[ ! -n "$1" ]]
 }
 
 function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
