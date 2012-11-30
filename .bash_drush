@@ -61,6 +61,9 @@ function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
     local drush_alias="$1"
     cd `drush dd @$drush_alias:%site`; 
     drush cc all;
+    drush watchdog-delete; #alternative would be to skip the WD table.
+    drush sql-query "DELETE FROM cache_form WHERE expire < UNIX_TIMESTAMP(NOW())" #Credit: http://nuvole.org/node/5
+    drush sql-query "DELETE FROM cache_update WHERE expire < UNIX_TIMESTAMP(NOW())"
     drush @$drush_alias sql-dump --ordered-dump --structure-tables-key=common --result-file=`drush dd @$drush_alias:%dump`;
     #--no-cache #removed for drush 7.x-5.+
   fi # end if [[ ! -n "$1" ]]     
@@ -84,7 +87,8 @@ function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.ali
     git commit -am"$git_commit_msg"; 
     INFO 
     echo "#BackupedDB. Use to restore: \`drush @$drush_alias sql-connect\` < \`drush dd @$drush_alias:%dump\`.
-#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";  
+#To push your commit use: cd \`drush dd @$drush_alias:%dumpdir\`; git push origin master; cd -";
+    #Should this include a drush -v @$drush_alias cc all?
     NORMAL
   fi # end if [[ ! -n "$1" ]] 
 }
@@ -108,6 +112,52 @@ function dg_db_backup(){ #drush git db backup. Usage: dg_db_backup drush.alias "
     #cd `drush dd @$drush_alias:%site`;
     cd $currentDir;  
   fi # end if [[ ! -n "$1" ]] 
+}
+
+function drush_restore_db() { #drush restore db from backup. Usage: drush_restore_db drush.alias [path/to/dbbackup.sql] [db_backup.sql]
+  #if the first var is blank
+  if [[ ! -n "$1" ]] ; then
+    INFO echo -e "\n#drush restore db from backup. Usage: drush_restore_db drush.alias [path/to/db_backup] [db_backup.sql]
+Notes: do not use the '@' symbol in the alias name.
+If there is no [path/to/dbbackup] specified then an attempt is made to use the %dumpdir value specifed by an available drush alias; i.e. drush dd @$drush_alias:%dumpdir
+If there is no [db_backup.sql] specified then an attempt is made to use the %dump value specifed by an available drush alias; i.e. drush dd @$drush_alias:%dump"; NORMAL
+  else
+    local drush_alias="$1";
+    #if 2nd var is blank
+    if [[ ! -n "$2" ]] ; then
+      local db_path_to_sql_dump=`drush dd @$drush_alias:%dumpdir`;
+    else
+      local db_path_to_sql_dump="$2";
+    fi #end if [[ ! -n "$2" ]]
+
+    #if 3rd var is blank
+    if [[ ! -n "$3" ]] ; then
+      local db_dump_file_name=`drush dd @$drush_alias:%dump`;
+    else
+      local db_dump_file_name="$3";
+    fi #end if [[ ! -n "$3" ]]
+
+    if [[ ! -n "$db_path_to_sql_dump" ]] ; then
+      WARNING echo -e "Missing 2nd arg and no 'path/to/db_backup' was found."; NORMAL
+    fi
+
+    if [[ ! -n "$db_dump_file_name" ]] ; then
+      WARNING echo -e "Missing 3rd arg and no 'db_backup.sql' file was found."; NORMAL
+    fi
+
+    INFO
+    echo "#Restoring DB. cd $db_path_to_sql_dump; \`drush @$drush_alias sql-connect\` < $db_dump_file_name; cd -";
+    NORMAL
+    #Should this include a drush -v @$drush_alias cc all?
+    #testing
+		#cd $db_path_to_sql_dump;
+    #`drush @$drush_alias sql-connect\` < $db_dump_file_name;
+    #cd -;
+    INFO
+    echo "Process complete";
+    NORMAL
+
+  fi # end if [[ ! -n "$1" ]]
 }
 
 #-----------------------------------------------------------
