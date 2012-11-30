@@ -162,7 +162,7 @@ If there is no [db_backup.sql] specified then an attempt is made to use the %dum
     #Should this include a drush -v @$drush_alias cc all?
 
     cd $db_path_to_sql_dump;
-    `drush @$drush_alias sql-connect\` < $db_dump_file_name;
+    `drush @$drush_alias sql-connect` < $db_dump_file_name;
     cd -;
 
     INFO
