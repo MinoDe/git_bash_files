@@ -266,3 +266,51 @@ function ii()   # Get current host related info.
     echo
     NORMAL
 }
+
+#----------------------------------------
+# Example bash fctn with options and vars
+#----------------------------------------
+function testOpts(){
+#!/bin/bash
+#OPTIONS 
+OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+echo "OPTIND: $OPTIND" >&2
+
+  while getopts ":a:b:cde:f:g:" opt; do
+
+    case $opt in
+      a)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      b)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      c)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      d)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      e)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      f)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      g)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        ;;
+    esac
+
+  done 
+  shift $((OPTIND-1))
+  echo "optind: $OPTIND" >&2
+  echo "[otheropts]==> $@"
+} 
