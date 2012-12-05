@@ -4,13 +4,13 @@ git_bash_files is a collection of git and bash files providing a number of alias
 There are currently 3 branches; one for each platform / environment that I work in.
 
 * Master
-  * In use on most remote servers
+    * In use on most remote servers
 * Mac
-  * In use on my mac workstations
-    * This branch includes some Mac specific aliases and functions (as the name implies).
+    * In use on my mac workstations
+      * This branch includes some Mac specific aliases and functions (as the name implies).
 * Aegir
-  * In use on my aegir hostmaster remote server
-    * This branch includes some aegir specific aliases and functions. For exomple: git and drush commands are overridden by to be run by the aegir user; prepending them with <code>sudo -u aegir</code>. In addition, there are aliases to disable / enable the aegir user override (noAegir / useAegir).
+    * In use on my aegir hostmaster remote server
+      * This branch includes some aegir specific aliases and functions. For exomple: git and drush commands are overridden by to be run by the aegir user; prepending them with <code>sudo -u aegir</code>. In addition, there are aliases to disable / enable the aegir user override (noAegir / useAegir).
 
 -- NOTES --
 
