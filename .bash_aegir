@@ -1,3 +1,4 @@
+#!/bin/sh
 # .bash_aegir
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
@@ -7,21 +8,21 @@
 ##  . ~/.bash_aegir # --> Read ~/.bash_aegir if present
 ##fi
 
-#--------------------------------
-#Aegir user related 
-#--------------------------------
+#-----------------------------------------------------------
+#Aegir user related aliases
+#-----------------------------------------------------------
 #Note: for alias that will sudo -u add a space to the end of the alias to check for alias substitutions. i.e. using your aliases while using sudo
 alias suaegir="CMDINFO echo 'suaegir => sudo -u aegir ' > /dev/tty; NORMAL sudo -u aegir "
 
-#--------------------------------
+#-----------------------------------------------------------
 #drush related aliases
-#--------------------------------
+#-----------------------------------------------------------
 alias adrush="CMDINFO echo 'adrush => suaegir drush ' > /dev/tty; NORMAL suaegir drush "
 alias drush="CMDINFO echo 'drush => ' > /dev/tty; NORMAL adrush " #run all drush calls through aegir user
 
-#--------------------------------
+#-----------------------------------------------------------
 #git aegir aliases
-#--------------------------------
+#-----------------------------------------------------------
 alias agit="CMDINFO echo 'agit => suaegir git ' > /dev/tty; NORMAL suaegir git " #git as the aegir user
 alias git="CMDINFO echo -n 'git => ' > /dev/tty; NORMAL agit " #run all git calls through the aegir user
 
@@ -31,3 +32,163 @@ alias noAegir="INFO echo '#No sudo -u aegir: git => git, drush => drush;' > /dev
 alias useAegir="INFO echo 'useAegir => alias git=\'agit\'; alias drush=\'adrush\'; > /dev/tty; echo '#use alias noAegir to disable ' > /dev/tty; echo -n > /dev/tty; NORMAL alias git=\"agit\"; alias drush=\"adrush\""; #restore aegir git/drush usage during a session
 
 #noAegirSilent; #for noAegir branch
+
+#-----------------------------------------------------------
+#aegir aliases
+#-----------------------------------------------------------
+alias aliases_aegir="INFO echo '### Available Aegir Functions (.bash_aegir) ###'; NORMAL echo -n; cat ~/.bash_aegir | grep function; echo -n; INFO echo '### Aegir aliases (.bash_aegir) ###:'; NORMAL echo -n; cat ~/.bash_aegir | grep alias; echo -n; "
+
+#-----------------------------------------------------------
+#drush related functions
+#-----------------------------------------------------------
+
+#--------------------------------
+# Drush drushverify()
+#--------------------------------
+function drushverify(){ # Aegir via Drush - verify a site. Usage: drushverify [-h -v] drushSiteAlias. Ex: $ drushverify hr.uoregon.edu = "drush provision-verify @hr.uoregon.edu; drush @hostmaster hosting-task @hr.uoregon.edu verify
+  #!/bin/sh
+  # Arguments = [-h (help) -v (verbose)]
+
+  # Credit: Bash HEREDOC usage() and getops while loop: http://rsalveti.wordpress.com/2007/04/03/bash-parsing-arguments-with-getopts/
+
+  usage()
+  {
+  cat << EOF
+  drushverify usage:
+
+  This script triggers a provision verify on the local file system and initates a remote site verification for a specified site. Useful for running Aegir verify from the terminal
+  Note: do not include @ symbol.
+
+  Usage: drushverify [-v] drushSiteAlias
+
+  Example: drushverify hr.uoregon.edu
+    Cmd line result:
+      $ drush provision-verify @hr.uoregon.edu
+      $ drush @hostmaster hosting-task @hr.uoregon.edu verify
+
+  OPTIONS:
+     -v               -   Verbose
+     -h               -   Help
+     -d               -   Debug Mode
+
+  ARGUMENTS:
+    drushSiteAlias    -   The drush site alias (with out '@')
+
+  Notes:
+    if used in conjunction with drupalSiteDir() and your drush site alias match your site directory name then you can call this from any directory in your site: $ drushverify `drupalSiteDir`
+EOF
+  }
+
+  #### Options ####
+  OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+  # (p)reset vars
+  HELP=0
+  DEBUG=0
+  VERBOSE=
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts ":dhv" OPTION;
+  do
+    case $OPTION in
+      d) # DEBUG
+        DEBUG=1
+        INFO echo "Debuging mode" > /dev/tty; NORMAL
+        ;;
+      h)
+        # Help
+        HELP=1
+        if (($DEBUG)) ; then
+          INFO echo "Testing: setting HELP: $HELP" > /dev/tty; NORMAL
+        fi
+        break
+        ;;
+      v) # Verbose
+        VERBOSE=" -v"
+        if (($DEBUG)) ; then
+          INFO echo "Testing: setting Verbose: $VERBOSE" > /dev/tty; NORMAL
+        fi
+        ;;
+      ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
+        ;;
+    esac
+  done
+
+  if (($DEBUG)) ; then
+    INFO echo "Testing: Verbose: $VERBOSE" > /dev/tty; NORMAL
+    INFO echo "Testing: setting HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #### Args ####
+  #Credit; tip on combining options with args: Thanks to http://stackoverflow.com/questions/11742996/shell-script-is-mixing-getopts-with-positional-parameters-possible
+  # If there are options (-h v) then set arg 1 to the first var after those options
+  ARG1=${@:$OPTIND:1}
+  #ARG2=${@:$OPTIND+1:1}
+  if (($DEBUG)) ; then
+    INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+    # testing show args
+    INFO echo "args: all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
+    INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+    INFO echo "Number of args: $#" > /dev/tty; NORMAL
+  fi
+
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #if there are no options then arg1 = $1 if it doesn't start with '-'
+  if [ ! -n "$ARG1" ] && [[ $1 != -* ]] && [[ $# -gt 0 ]] ; then
+    ARG1=$1
+    if (($DEBUG)) ; then
+      CMDINFO echo "Testing: No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
+    fi
+  fi
+
+  #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] ; then
+    if (($DEBUG)) ; then
+      WARNING echo "ARG1 is missing or ARG1 starts with a '-'. Attempting to determine the site dir name to use as the drush alias." > /dev/tty; NORMAL
+    fi
+
+    #### drupalSiteDirShort ####
+    SOURCE= #Allow for a passed dir. but default to current dir
+    while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+    DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
+    if (($DEBUG)) ; then
+      echo $DIR #testing
+    fi
+
+    #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+    $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
+    siteDir=${DIR//*sites\//};
+    siteDir=${siteDir//\/*/}
+    ARG1=$siteDir
+    # ARG1=$drupalSiteDir
+    if (($DEBUG)) ; then
+      INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+    fi
+    #### end drupalSiteDirShort ####
+  fi
+
+  #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] || (($HELP)) ; then
+    usage
+    if (($DEBUG)) ; then
+      INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' OR HELP = 1 then show usage, else execute script" > /dev/tty; NORMAL
+    fi
+  else
+    CMD1="@$ARG1 provision-verify$VERBOSE"
+    CMDINFO echo "drush $CMD1" > /dev/tty; NORMAL
+    drush $CMD1
+
+    CMD2="@hostmaster hosting-task$VERBOSE @$ARG1 verify"
+    CMDINFO echo "drush $CMD2" > /dev/tty; NORMAL
+    drush $CMD2
+  fi
+
+  shift $((OPTIND-1)) #prepare OPTIND for the next option
+} #end function drushverify
