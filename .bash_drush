@@ -1,6 +1,5 @@
 #!/bin/sh
 # .bash_drush
-
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
 ### Drush specific
@@ -37,7 +36,7 @@ function currentDir(){
 }
 
 #-----------------------------------------------------------
-# Drush functions
+# Drush cddrush function
 #-----------------------------------------------------------
 function cddrush(){ #cd to a drush site alias. Don't include the @ symbol. Usage: cddrush hr.uoregon.edu. => cd `drush dd @hr.uoregon.edu:%site` 
   #!/bin/sh
@@ -60,8 +59,7 @@ function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
     INFO echo -e "\n#drush db backup. Usage: drushbackdb drush.alias"; NORMAL
   else
     local drush_alias="$1"
-
-		cmdArr=(); #Initiate command array to echo the cmd and run it.
+	cmdArr=(); #Initiate command array to echo the cmd and run it.
     cmdArr=("${cmdArr[@]}" "cd `drush dd @"$drush_alias":%site`") #Add cmd to array
     cmdArr=("${cmdArr[@]}" "drush -v @"$drush_alias" cc all") #Add cmd to array
     cmdArr=("${cmdArr[@]}" "drush -v @"$drush_alias" watchdog-delete all --yes") #alternative would be to skip the WD table. #Add cmd to array
@@ -81,6 +79,123 @@ function drushbackdb(){ #drush backup db. Usage: drushbackdb drush.alias
 		done
   fi # end if [[ ! -n "$1" ]]
 }
+
+#--------------------------------
+# Drush drupalSiteDirShort()
+#--------------------------------
+function drupalSiteDirShort(){ #Look at a path [default: current dir] and return the site dir name 
+  #!/bin/sh
+  SOURCE="$1" #Allow for a passed dir. but default to current dir
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
+  if (($DEBUG)) ; then
+    echo $DIR #testing
+  fi
+
+  #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+  $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
+  siteDir=${DIR//*sites\//}; 
+  siteDir=${siteDir//\/*/}
+  echo $siteDir
+}
+
+#--------------------------------
+# Drush drupalSiteDir()
+#--------------------------------
+function drupalSiteDir(){ #Look at a path [default: current dir] and return the site dir name 
+  #!/bin/sh
+  #Use the pwd and determine the site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+
+  #TODO check for missing $ARG1 
+  
+  usage()
+  {
+  cat << EOF
+  drupalSiteDir usage:
+
+  This script uses a path and determines the drupal site dir by eliminating everything before and including "/sites" and then everything after the dir name.
+  Note: It defaults to the current directory but will accept any relative or absolute path
+
+  Usage: drupalSiteDir [-dh]
+
+  Example: drupalSiteDir
+    Cmd line result: 
+      $ hr.uoregon.edu
+
+  OPTIONS:
+     -d               -   Debug Mode
+     -h               -   Help
+
+  ARGUMENTS:
+    path              -   (optional) The path of the drush site or a directory therin. Defaults to current directory.
+EOF
+  }
+
+  #### Options ####
+  OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+  # (p)reset vars
+  HELP=0
+  DEBUG=0
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts ":dh" OPTION; 
+  do
+    case $OPTION in
+      d) # DEBUG
+        DEBUG=1
+        INFO echo "Debuging mode" > /dev/tty; NORMAL
+        ;;
+      h) 
+        # Help
+        HELP=1
+        if (($DEBUG)) ; then
+          INFO echo "Setting HELP: $HELP" > /dev/tty; NORMAL
+        fi
+        break
+        ;;
+      ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
+        ;;
+    esac
+  done
+
+  SOURCE="$1" #Allow for a passed dir. but default to current dir
+  while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+  DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
+  if (($DEBUG)) ; then
+    echo $DIR #testing
+  fi
+
+  #if there are no options then arg1 = $1 if it doesn't start with '-'
+  if [ ! -n "$ARG1" ] && [[ $1 != -* ]] && [[ $# -gt 0 ]] ; then
+    ARG1=$1
+    if (($DEBUG)) ; then
+      CMDINFO echo "Testing: No Options past. ARG1 = \$1: $ARG1" > /dev/tty; NORMAL
+    fi
+  fi
+
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #If not ARG1 or ARG1 starts with a '-' then show usage, else execute script
+  if [ ! -n "$ARG1" ] || [[ $ARG1 == -* ]] || (($HELP)) ; then 
+    usage
+    if (($DEBUG)) ; then
+      INFO echo "Testing: If no ARG1 or ARG1 starts with a '-' OR HELP = 1 then show usage, else execute script" > /dev/tty; NORMAL
+    fi
+  else
+    $DIR 2> /dev/null | sed -e '/^[^\/sites]/d' -e 's/* \(.*\)/ \[\1\]/'
+    siteDir=${DIR//*sites\//}; 
+    siteDir=${siteDir//\/*/}
+    echo $siteDir
+  fi
+  shift $((OPTIND-1)) #prepare OPTIND for the next option
+} 
 
 function gitbackdb() { #git add and commit db backup. Usage: gitbackdb drush.alias "commit message"
   #if the first var is blank
