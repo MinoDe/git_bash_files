@@ -1,3 +1,4 @@
+#!/bin/sh
 # .bash_mac
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
@@ -6,6 +7,11 @@
 ##if [ -f ~/.bash_mac ]; then
 ##  . ~/.bash_mac # --> Read ~/.bash_mac if present
 ##fi
+
+#--------------------------------
+#mac aliases
+#--------------------------------
+alias aliases_mac="INFO echo '### Available Mac Functions (.bash_mac) ###'; CMDINFO echo -n; cat ~/.bash_mac | grep function; echo -n; INFO echo '### Mac aliases (.bash_mac) ###:'; CMDINFO echo -n; cat ~/.bash_mac | grep alias; echo -n; NORMAL"
 
 #alias drush='~/drush/drush'
 #### Mamp aliases ####
@@ -44,10 +50,10 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 function openMamp() {
   currentPath=$(currentDir $1)
-	#echo $currentPath
-	path=${currentPath//\/Applications\/MAMP\/htdocs\//http:\/\/localhost:8888\/}
-	#echo $path
-	open $path
+  #echo $currentPath
+  path=${currentPath//\/Applications\/MAMP\/htdocs\//http:\/\/localhost:8888\/}
+  #echo $path
+  open $path
 }
 
 #-------------------------------------------------------------
