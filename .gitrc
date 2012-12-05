@@ -1,3 +1,4 @@
+#!/bin/sh
 # .gitrc
 # To include this in your .bash environment add this to your .bashrc file (removing ##):
 ###-------------------------------------------------------------
@@ -12,8 +13,8 @@
 #-----------------------------------------------------------
 # Git Bash shell command completion simple:
 function parse_git_branch {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
-	#git describe --contains --all HEAD
+  \git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+  #git describe --contains --all HEAD
 }
 #PS1="\u@\h:\W \$(parse_git_branch)\$ "
 
@@ -36,6 +37,8 @@ if [ -f ~/.git-prompt.sh ]; then
 
   #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
   PS1='\u@\h \W$(__git_ps1 " ($(git_repo_name) [%s])")\$ '
+else
+  PS1="\u@\h:\W \$(parse_git_branch)\$ "
 fi
 
 #-------------------------------------------------------------

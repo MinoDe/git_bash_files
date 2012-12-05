@@ -13,15 +13,15 @@ aliasArr=(); #Initiate aliases array
 # List aliases and funcitons in bashrc file
 #-------------------------------------------------------------
 alias aliases_bashrc="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL"
-aliasArr=("${aliasArr[@]}" "aliases_bashrc") #Add aliases to array 
+aliasArr=("${aliasArr[@]}" "aliases_bashrc") #Add aliases to array
 
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
 if [ -f ~/.bash_colors ]; then
   . ~/.bash_colors # --> Read ~/.bash_colors if present
-	#alias aliases="aliases_colors"
-	aliasArr=("${aliasArr[@]}" "aliases_colors") #Add aliases to array 
+  #alias aliases="aliases_colors"
+  aliasArr=("${aliasArr[@]}" "aliases_colors") #Add aliases to array
 fi
 
 #-------------------------------------------------------------
@@ -29,8 +29,8 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases # --> Read ~/.bash_aliases if present
-	#alias aliases="aliases; aliases_bash "
-	aliasArr=("${aliasArr[@]}" "aliases_bash") #Add aliases to array 
+  #alias aliases="aliases; aliases_bash "
+  aliasArr=("${aliasArr[@]}" "aliases_bash") #Add aliases to array
 fi
 
 #--------------------------------
@@ -38,8 +38,8 @@ fi
 #--------------------------------
 if [ -f ~/.bash_mac ]; then
   . ~/.bash_mac # --> Read ~/.bash_mac if present
-	#alias aliases="aliases; aliases_mac "
-	aliasArr=("${aliasArr[@]}" "aliases_mac") #Add aliases to array 
+  #alias aliases="aliases; aliases_mac "
+  aliasArr=("${aliasArr[@]}" "aliases_mac") #Add aliases to array
 fi
 
 #--------------------------------
@@ -47,8 +47,8 @@ fi
 #--------------------------------
 if [ -f ~/.bash_aegir ]; then
   . ~/.bash_aegir # --> Read ~/.bash_aegir if present
-	#alias aliases="aliases; aliases_aegir "
-	aliasArr=("${aliasArr[@]}" "aliases_aegir")	#Add aliases to array 
+  #alias aliases="aliases; aliases_aegir "
+  aliasArr=("${aliasArr[@]}" "aliases_aegir")  #Add aliases to array
 fi
 
 #-------------------------------------------------------------
@@ -56,8 +56,8 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.bash_drush ]; then
   . ~/.bash_drush # --> Read ~/.bash_drush if present
-	#alias aliases="aliases; aliases_drush "
-	aliasArr=("${aliasArr[@]}" "aliases_drush") #Add aliases to array 
+  #alias aliases="aliases; aliases_drush "
+  aliasArr=("${aliasArr[@]}" "aliases_drush") #Add aliases to array
 fi
 
 #-------------------------------------------------------------
@@ -65,8 +65,8 @@ fi
 #-------------------------------------------------------------
 if [ -f ~/.gitrc ]; then
   . ~/.gitrc # --> Read ~/.gitrc if present
-	#alias aliases="aliases; aliases_git "
-	aliasArr=("${aliasArr[@]}" "aliases_git") #Add aliases to array 
+  #alias aliases="aliases; aliases_git "
+  aliasArr=("${aliasArr[@]}" "aliases_git") #Add aliases to array
 fi
 
 #----------------------------------------
@@ -89,7 +89,7 @@ function baseDir(){
   SOURCE="$1"
   while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
   DIR="$( cd -P "$( dirname "$SOURCE" )"/"$(basename "$SOURCE" )" && pwd )"
-	echo $(basename $DIR)
+  echo $(basename $DIR)
 }
 
 #-------------------------------------------------------------
@@ -135,86 +135,85 @@ function fe()
 # (needs a recent version of egrep)
 function fstr()
 {
-    OPTIND=1
-    local case=""
-    local usage="fstr: find string in files.
+  OPTIND=1
+  local case=""
+  local usage="fstr: find string in files.
 Usage: fstr [-i] \"pattern\" [\"filename pattern\"] "
-    while getopts :it opt
+  while getopts :it opt
     do
-        case "$opt" in
-        i) case="-i " ;;
-        *) INFO echo "$usage"; NORMAL return;;
-        esac
-    done
-    shift $(( $OPTIND - 1 ))
-    if [ "$#" -lt 1 ]; then
-        INFO echo "$usage" NORMAL
-        return;
-    fi
-    find . -type f -name "${2:-*}" -print0 | \
-    xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
-
+      case "$opt" in
+      i) case="-i " ;;
+      *) INFO echo "$usage"; NORMAL return;;
+      esac
+  done
+  shift $(( $OPTIND - 1 ))
+  if [ "$#" -lt 1 ]; then
+    INFO echo "$usage" NORMAL
+    return;
+  fi
+  find . -type f -name "${2:-*}" -print0 | \
+  xargs -0 egrep --color=always -sn ${case} "$1" 2>&- | more
 }
 
 function cuttail() # cut last n lines in file, 10 by default
 {
-    nlines=${2:-10}
-    sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
+  nlines=${2:-10}
+  sed -n -e :a -e "1,${nlines}!{P;N;D;};N;ba" $1
 }
 
 function lowercase()  # move filenames to lowercase
 {
-    for file ; do
-        filename=${file##*/}
-        case "$filename" in
-        */*) dirname==${file%/*} ;;
-        *) dirname=.;;
-        esac
-        nf=$(echo $filename | tr A-Z a-z)
-        newname="${dirname}/${nf}"
-        if [ "$nf" != "$filename" ]; then
-            mv "$file" "$newname"
-            INFO echo "lowercase: $file --> $newname" NORMAL
-        else
-            NORMAL echo "lowercase: $file not changed." NORMAL
-        fi
-    done
+  for file ; do
+    filename=${file##*/}
+    case "$filename" in
+      */*) dirname==${file%/*} ;;
+      *) dirname=.;;
+    esac
+    nf=$(echo $filename | tr A-Z a-z)
+    newname="${dirname}/${nf}"
+    if [ "$nf" != "$filename" ]; then
+      mv "$file" "$newname"
+      INFO echo "lowercase: $file --> $newname" NORMAL
+    else
+      NORMAL echo "lowercase: $file not changed." NORMAL
+    fi
+  done
 }
 
 
 function swap()  # Swap 2 filenames around, if they exist
 {                #(from Uzi's bashrc).
-    local TMPFILE=tmp.$$
+  local TMPFILE=tmp.$$
 
-    [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
-    [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
-    [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
+  [ $# -ne 2 ] && INFO echo "swap: 2 arguments needed" NORMAL && return 1
+  [ ! -e $1 ] && INFO echo "swap: $1 does not exist" NORMAL && return 1
+  [ ! -e $2 ] && INFO echo "swap: $2 does not exist" NORMAL && return 1
 
-    mv "$1" $TMPFILE
-    mv "$2" "$1"
-    mv $TMPFILE "$2"
+  mv "$1" $TMPFILE
+  mv "$2" "$1"
+  mv $TMPFILE "$2"
 }
 
 function extract()      # Handy Extract Program.
 {
-     if [ -f $1 ] ; then
-         case $1 in
-             *.tar.bz2)   tar xvjf $1     ;;
-             *.tar.gz)    tar xvzf $1     ;;
-             *.bz2)       bunzip2 $1      ;;
-             *.rar)       unrar x $1      ;;
-             *.gz)        gunzip $1       ;;
-             *.tar)       tar xvf $1      ;;
-             *.tbz2)      tar xvjf $1     ;;
-             *.tgz)       tar xvzf $1     ;;
-             *.zip)       unzip $1        ;;
-             *.Z)         uncompress $1   ;;
-             *.7z)        7z x $1         ;;
-             *)           WARNING echo "'$1' cannot be extracted via >extract<" NORMAL;;
-         esac
-     else
-        WARNING echo "'$1' is not a valid file" NORMAL
-     fi
+if [ -f $1 ] ; then
+  case $1 in
+    *.tar.bz2)   tar xvjf $1     ;;
+    *.tar.gz)    tar xvzf $1     ;;
+    *.bz2)       bunzip2 $1      ;;
+    *.rar)       unrar x $1      ;;
+    *.gz)        gunzip $1       ;;
+    *.tar)       tar xvf $1      ;;
+    *.tbz2)      tar xvjf $1     ;;
+    *.tgz)       tar xvzf $1     ;;
+    *.zip)       unzip $1        ;;
+    *.Z)         uncompress $1   ;;
+    *.7z)        7z x $1         ;;
+    *)           WARNING echo "'$1' cannot be extracted via >extract<" NORMAL;;
+  esac
+else
+  WARNING echo "'$1' is not a valid file" NORMAL
+fi
 }
 
 #-------------------------------------------------------------
@@ -228,41 +227,86 @@ function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
 function killps()                 # Kill by process name.
 {
-    local pid pname sig="-TERM"   # Default signal.
-    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-        INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL
-        return;
+  local pid pname sig="-TERM"   # Default signal.
+  if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+    INFO echo "Usage: killps [-SIGNAL] pattern" NORMAL
+    return;
+  fi
+  if [ $# = 2 ]; then sig=$1 ; fi
+  for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} ) ; do
+    pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
+    if ask "Kill process $pid <$pname> with signal $sig?"
+      then kill $sig $pid
     fi
-    if [ $# = 2 ]; then sig=$1 ; fi
-    for pid in $(my_ps| awk '!/awk/ && $0~pat { print $1 }' pat=${!#} ) ; do
-        pname=$(my_ps | awk '$1~var { print $5 }' var=$pid )
-        if ask "Kill process $pid <$pname> with signal $sig?"
-            then kill $sig $pid
-        fi
-    done
+  done
 }
 
 function my_ip() # Get IP adresses.
 {
-    MY_IP=$(/sbin/ifconfig ppp0 | awk '/inet/ { print $2 } ' | \
+  MY_IP=$(/sbin/ifconfig ppp0 | awk '/inet/ { print $2 } ' | \
 sed -e s/addr://)
-    MY_ISP=$(/sbin/ifconfig ppp0 | awk '/P-t-P/ { print $3 } ' | \
+  MY_ISP=$(/sbin/ifconfig ppp0 | awk '/P-t-P/ { print $3 } ' | \
 sed -e s/P-t-P://)
 }
 
 function ii()   # Get current host related info.
 {
-    INFO
-    echo -e "\nYou are logged on ${RED}$HOST"
-    echo -e "\nAdditionnal information:$NC " ; uname -a
-    echo -e "\n${RED}Users logged on:$NC " ; w -h
-    echo -e "\n${RED}Current date :$NC " ; date
-    echo -e "\n${RED}Machine stats :$NC " ; uptime
-    echo -e "\n${RED}Memory stats :$NC " ; free
-    my_ip 2>&- ;
-    echo -e "\n${RED}Local IP Address :$NC" ; echo ${MY_IP:-"Not connected"}
-    echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
-    echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
-    echo
-    NORMAL
+  INFO
+  echo -e "\nYou are logged on ${RED}$HOST"
+  echo -e "\nAdditionnal information:$NC " ; uname -a
+  echo -e "\n${RED}Users logged on:$NC " ; w -h
+  echo -e "\n${RED}Current date :$NC " ; date
+  echo -e "\n${RED}Machine stats :$NC " ; uptime
+  echo -e "\n${RED}Memory stats :$NC " ; free
+  my_ip 2>&- ;
+  echo -e "\n${RED}Local IP Address :$NC" ; echo ${MY_IP:-"Not connected"}
+  echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
+  echo -e "\n${RED}Open connections :$NC "; netstat -pan --inet;
+  echo
+  NORMAL
+}
+
+#----------------------------------------
+# Example bash fctn with options and vars
+#----------------------------------------
+function testOpts(){
+#!/bin/bash
+#OPTIONS
+OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+echo "OPTIND: $OPTIND" >&2
+  while getopts ":a:b:cde:f:g:" opt; do
+    case $opt in
+      a)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      b)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      c)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      d)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      e)
+        echo "Parsing option: '-${opt}'" >&2
+        ;;
+      f)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+      g)
+        echo "Parsing option: '-${opt}', Parameter: $OPTARG" >&2
+        ;;
+
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        ;;
+    esac
+  done
+  shift $((OPTIND-1))
+  echo "optind: $OPTIND" >&2
+  echo "[otheropts]==> $@"
 }
