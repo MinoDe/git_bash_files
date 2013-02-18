@@ -4,7 +4,7 @@ git_bash_files is a collection of git and bash files providing a number of alias
 There are currently 3 branches; one for each platform / environment that I work in.
 
 * Master
-    * In use on most remote servers
+    * In use on most of my remote servers
 * Mac
     * In use on my mac workstations
         * This branch includes some Mac specific aliases and functions (as the name implies).
