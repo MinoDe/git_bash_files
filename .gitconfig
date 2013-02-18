@@ -1,7 +1,7 @@
 [core]
   excludesfile = ~/.gitignore_global
-  # Don't trust file modes ## cmdline: $ git config core.filemode false
-  filemode = false
+  # Don't trust file modes ## cmdline: $ git config core.filemode false # Or # $ git config --global core.filemode false
+	filemode = false
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [branch]
   autosetupmerge = true
@@ -45,7 +45,7 @@
   ign = ls-files -o -i --exclude-standard
 [difftool "sourcetree"]    #Usage: git difftool -t sourcetree
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path = 
+  path =
 [difftool "diffmerge"]     #Usage: git difftool -t diffmerge
   cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
 [mergetool "sourcetree"]  #Usage: git mergetool -t sourcetree
