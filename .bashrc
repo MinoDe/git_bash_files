@@ -100,7 +100,8 @@ bind '"\e[A"':history-search-backward
 bind '"\e[B"':history-search-forward
 
 # Avoid duplicates in the bash command history.
-export HISTCONTROL=erasedups
+#export HISTCONTROL=erasedups #This was not sufficiently ignoring... and export may be unnessesary per http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
+export HISTCONTROL=ignoredups:erasedups
 
 # Increase history size
 export HISTSIZE=10000
@@ -109,7 +110,9 @@ export HISTSIZE=10000
 shopt -s histappend
 
 # Append commands to the history every time a prompt is shown, # instead of after closing the session. This way if you have multiple # terminals open they play nicely with the bash history.
-PROMPT_COMMAND='history -a'
+#PROMPT_COMMAND='history -a'
+#updated command to share hist. across terminals and take care of dups
+PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 
 #-------------------------------------------------------------
 # tailoring 'less'
