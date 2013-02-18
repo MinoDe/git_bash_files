@@ -1,6 +1,6 @@
 -- SUMMARY --
 
-git_bash_files is a collection of git and bash files providing a number of aliases and functions that I use regularly. 
+git_bash_files is a collection of git and bash files providing a number of aliases and functions that I use regularly.
 There are currently 3 branches; one for each platform / environment that I work in.
 
 * Master
@@ -14,12 +14,12 @@ There are currently 3 branches; one for each platform / environment that I work 
 
 -- NOTES --
 
-This fork removes the [user] declaration from my personal .gitconfig file, to avoid adding my name to your work. 
+This fork removes the [user] declaration from my personal .gitconfig file, to avoid adding my name to your work.
 
-You can add your user information with these commands: 
-$ git config --global user.name "YourName"; 
+You can add your user information with these commands:
+$ git config --global user.name "YourName";
 
-$ git config --global user.email YourName@email.address; 
+$ git config --global user.email YourName@email.address;
 
 -- Bug Reports --
 
