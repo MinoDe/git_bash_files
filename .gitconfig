@@ -5,6 +5,7 @@
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [branch]
   autosetupmerge = true
+  autosetuprebase = always #Ref: http://www.randyfay.com/node/103 #alternatively use: git config --global branch.autosetuprebase always
 [branch "master"]
   remote = origin
   merge = refs/heads/master
@@ -35,10 +36,11 @@
   co = checkout
   df = diff
   dc = diff --cached
+  # ref http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History
   lg = log -p
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  logv = log --graph --decorate --pretty=format:'%Cgreen%h%Creset %s %Cred%an%Creset %ar'
+  logv = log --graph --decorate --date=local --pretty=format:'%Cgreen%h%Creset %s %Cred%an%Creset %ad'
   ls = ls-files
 
   # Show files ignored by git:
@@ -47,10 +49,14 @@
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path =
 [difftool "diffmerge"]     #Usage: git difftool -t diffmerge
-  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  cmd = diffmerge --merge --result=$MERGED $REMOTE $BASE $LOCAL
 [mergetool "sourcetree"]  #Usage: git mergetool -t sourcetree
   cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
 [mergetool "diffmerge"]  #Usage: git mergetool -t diffmerge
-  cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+  cmd = diffmerge --merge --result=$MERGED $REMOTE $BASE $LOCAL
   trustExitCode = false
+[rerere]
+  enabled = true
+[push]
+  default = tracking

@@ -8,6 +8,10 @@
 ##  . ~/.gitrc # --> Read ~/.gitrc if present
 ##fi
 
+# adapting your PATH environment variable for use with Git
+export PATH=/usr/local/git/bin:$PATH
+# Finished adapting your PATH environment variable for use with Git.
+
 #-----------------------------------------------------------
 # Simple Git functions
 #-----------------------------------------------------------
@@ -54,6 +58,19 @@ function show-git-current-remotes-short(){ # This prints the matching remotes fo
   unset remoteMathesArr
 }
 
+#-----------------------------------------------------------
+# Git get current tag
+#-----------------------------------------------------------
+function git_tag {
+  \git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null | sed -n 's/^\([^^~]\{1,\}\)\(\^0\)\{0,1\}$/\1/p';
+  #Thanks http://stackoverflow.com/a/11489642/1368844
+}
+#ps1_git_tag - adding space in front of output of git_tag if applicable
+function ps1_git_tag {
+  \git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null | sed -n 's/^\([^^~]\{1,\}\)\(\^0\)\{0,1\}$/ \1/p';
+  #Thanks http://stackoverflow.com/a/11489642/1368844
+}
+
 #--------------------------------
 # Drush drupalSiteDirPS1()
 #--------------------------------
@@ -91,11 +108,11 @@ if [ -f ~/.git-prompt.sh ]; then
 
   #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
   #PS1='\u@\h \W$(__git_ps1 " ($(git_repo_name) [%s])")\$ '
-  PS1='\u@\h:$(drupalSiteDirPS1)\W$(__git_ps1 " ($(show-git-current-remotes-short) [%s])")\$ '
+  PS1='\u@\h:$(drupalSiteDirPS1)\W$(__git_ps1 " ($(show-git-current-remotes-short) [%s]$(ps1_git_tag))")\$ '
 else
   #PS1="\u@\h:\W \$(parse_git_branch)\$ "
   #PS1="\u@\h:\W (\$(show-git-current-remotes-short)\$(parse_git_branch))\$ "
-  PS1="\u@\h:\$(drupalSiteDirPS1)\W (\$(show-git-current-remotes-short)\$(parse_git_branch))\$ "
+  PS1="\u@\h:\$(drupalSiteDirPS1)\W (\$(show-git-current-remotes-short)\$(parse_git_branch)$(ps1_git_tag))\$ "
 fi
 
 #-------------------------------------------------------------
@@ -115,15 +132,38 @@ alias gpullo="CMDINFO echo 'gpullo => git pull origin ' > /dev/tty; NORMAL git p
 alias gps="CMDINFO echo -n 'gps => ' > /dev/tty; NORMAL gpusho "
 alias gpl="CMDINFO echo -n 'gpl => ' > /dev/tty; NORMAL gpullo "
 alias gst="CMDINFO echo 'gst => git status ' > /dev/tty; NORMAL git status "
+#alias gstpipe -> see functions
 alias gci="CMDINFO echo 'gci => git commit ' > /dev/tty; NORMAL git commit "
 alias gco="CMDINFO echo 'gco => git checkout ' > /dev/tty; NORMAL git checkout "
 alias gdf="CMDINFO echo 'gdf => git diff ' > /dev/tty; NORMAL git diff "
+#alias gdfpipe -> see functions
 alias gbr="CMDINFO echo 'gbr => git br ' > /dev/tty; NORMAL git br "
 alias aliases_git="INFO echo '### Available Git Functions (.gitrc) ###'; CMDINFO echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; CMDINFO echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; CMDINFO git config --list | grep alias; echo -n; NORMAL"
 
 #-----------------------------------------------------------
 # Git functions
 #-----------------------------------------------------------
+#function gcia(){ #gcia => git commit --author...
+#if [[ ! -n "$1" ]] ; then
+#    INFO echo "Usage: gcia; ex: gcia -am'initial commit'; This added the --author=<vid vid@uoregon.edu> info to the commit message " > /dev/tty; NORMAL
+#  else
+#    #$1 => commit message etc...
+#    #vars:
+#    INFO echo "git checkout --author=\"<vid vid@uoregon.edu>\" $1;" > /dev/tty; NORMAL
+#    git checkout --author="<vid vid@uoregon.edu>" $1;
+#  fi
+#}#end function gcia
+
+function gdfpipe() {
+  CMDINFO echo 'function gdfpipe => git diff --name-only $1 | awk "{print $1}"' > /dev/tty; NORMAL
+  git diff --name-only $1 | awk '{print $1}';
+}
+
+function gstpipe() {
+  CMDINFO echo 'function gstpipe => git status --porcelain $1 | awk "{print $2}"' > /dev/tty; NORMAL
+  git status --porcelain $1 | awk '{print $2}';
+}
+
 function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includeRemoteBranch:bool - default false;] [loopRemoteBranches:bool - default false;] - Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch ${branch}; Ex 2: git-each status 1 1; This checkes out a local version of each remote branch and runs status on it: $ git checkout $remoteName ${branch}; git status ${branch};
   #!/bin/sh
   #Thanks to:
@@ -259,6 +299,7 @@ function git-create-branch(){ # git-create-branch <branch_name>
     INFO echo "### Remote branches ($GBRR) ### "; NORMAL $GBRR; INFO echo "#Use 'git branch -a' to list all"; NORMAL
   fi
 }
+alias git-branch-create="git-create-branch "
 
 function git-delete-branch(){ # git-delete-branch <branch_name>
   #!/bin/sh
@@ -287,6 +328,7 @@ function git-delete-branch(){ # git-delete-branch <branch_name>
     INFO echo "### Remote branches ($GBRR) ### "; NORMAL $GBRR; INFO echo "#Use 'git branch -a' to list all"; NORMAL
   fi
 }
+alias git-branch-delete="git-delete-branch "
 
 function git-patch(){ # Apply a patch with git. Typical steps: stat, check, apply and if no errors occur use $ git am --signoff < ...patch.  Usage: git-patch stat|check|signoff URL.patch Ex: git-patch stat http://drupal.org/files/features-date-1279928-15.patch
   #!/bin/sh
@@ -318,7 +360,8 @@ function git-patch(){ # Apply a patch with git. Typical steps: stat, check, appl
       INFO echo "# To check the patch use: "; > /dev/tty; CMDINFO echo "git-patch check $patchFilename" > /dev/tty; NORMAL
     fi
     if [[ $1 == "check" ]] ; then
-      INFO echo "# To apply the patch use: "; > /dev/tty; CMDINFO echo "git-patch apply $patchFilename" > /dev/tty; NORMAL
+      INFO echo "# To apply the patch (and then add your own commit message) use: "; > /dev/tty; CMDINFO echo "git-patch apply $patchFilename" > /dev/tty; NORMAL
+      INFO echo "# Alternatively, if the patch is formated email style you can apply the patch and it's commit msg. with: "; > /dev/tty; CMDINFO echo "git am --signoff < $patchFilename" > /dev/tty; NORMAL
     fi
   fi
 }
@@ -447,3 +490,221 @@ EOF
     fi #end if git dir
   fi # end execute script if not help
 }
+
+function git-edit-modified-files(){ # git-edit-modified-files (cmd line editor) #Usage: git-edit-modified-files vim - This opens each modified file in Vim for editing.
+  #!/bin/sh
+   usage()
+  {
+  cat << EOF
+  git-edit-modified-files usage:
+
+  Usage: git-edit-modified-files (cmd line editor) #Usage: git-edit-modified-files vim - This opens each modified file in Vim for editing.
+
+  Ex: git-edit-modified-files ($editor) [-dh]
+
+  Example: git-edit-modified-files vim
+    Cmd line result:
+      $ vim [filename]
+
+  OPTIONS:
+     -d               -   Debug Mode
+     -h               -   Help
+
+  ARGUMENTS:
+    editor            -   Defaults to vim
+EOF
+  }
+
+  #### Options ####
+  OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+  # (p)reset vars
+  HELP=0
+  DEBUG=0
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts ":dh" OPTION;
+  do
+    case $OPTION in
+      d) # DEBUG
+        DEBUG=1
+        INFO echo "Debuging mode" > /dev/tty; NORMAL
+        ;;
+      h)
+        # Help
+        HELP=1
+        if (($DEBUG)) ; then
+          INFO echo "Setting HELP: $HELP" > /dev/tty; NORMAL
+        fi
+        break
+        ;;
+      ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
+        ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  #set default editor
+  editor="vim"
+
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "Setting editor: $1" > /dev/tty; NORMAL
+    INFO echo "optind: $OPTIND" > /dev/tty; NORMAL
+    INFO echo "[otheropts]==> $@" > /dev/tty; NORMAL
+  fi
+
+  #check for editor var
+  if [[ -n $1 ]] ; then
+    editor="$1"
+    if (($DEBUG)) ; then
+      INFO echo "Setting editor: $1" > /dev/tty; NORMAL
+    fi
+  fi #end check for editor var
+
+  #display help status
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #If help then show usage, else execute script
+  if (($HELP)) ; then
+    usage
+  else
+    if  [[ -n "`git status --porcelain | awk '{print $2}'`" ]] ; then
+      #echo
+      CMDINFO echo "git-edit-modified-files $editor" > /dev/tty; NORMAL
+      INFO echo 'Editing files (git status --porcelain): ' > /dev/tty; NORMAL git status --porcelain;
+
+      #Alternative:
+      #$editor `git status --porcelain | grep " M" | cut -c 4-`;
+      CMDINFO echo "$editor git status --porcelain | awk \"{print \$2}\"" > /dev/tty; NORMAL
+      $editor `git status --porcelain | awk '{print $2}'`;
+    fi
+  fi
+} #end function git-edit-modified-files
+alias gmod="CMDINFO echo 'gmod => git-edit-modified-files ' > /dev/tty; NORMAL git-edit-modified-files ";
+
+function git-edit-modified-files2(){ # git-edit-modified-files (cmd line editor) #Usage: git-edit-modified-files vim - This opens each modified file in Vim for editing.
+  #!/bin/sh
+   usage()
+  {
+  cat << EOF
+  git-edit-modified-files usage:
+
+  Usage: git-edit-modified-files (cmd line editor) #Usage: git-edit-modified-files vim - This opens each modified file in Vim for editing.
+
+  Ex: git-edit-modified-files ($editor) [-dh]
+
+  Example: git-edit-modified-files vim
+    Cmd line result:
+      $ vim [filename]
+
+  OPTIONS:
+     -d               -   Debug Mode
+     -h               -   Help
+
+  ARGUMENTS:
+    editor            -   Defaults to vim
+
+  NOTES:
+    This function is unable to handle file with spaces in the name.
+EOF
+  }
+
+  #### Options ####
+  OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+  # (p)reset vars
+  HELP=0
+  DEBUG=0
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts ":dh" OPTION;
+  do
+    case $OPTION in
+      d) # DEBUG
+        DEBUG=1
+        INFO echo "Debuging mode" > /dev/tty; NORMAL
+        ;;
+      h)
+        # Help
+        HELP=1
+        if (($DEBUG)) ; then
+          INFO echo "Setting HELP: $HELP" > /dev/tty; NORMAL
+        fi
+        break
+        ;;
+      ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
+        ;;
+    esac
+  done
+  shift $((OPTIND-1))
+
+  #set default editor
+  editor="vim"
+
+  #check for --help
+  if [[ $1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "Setting editor: $1" > /dev/tty; NORMAL
+    INFO echo "optind: $OPTIND" > /dev/tty; NORMAL
+    INFO echo "[otheropts]==> $@" > /dev/tty; NORMAL
+  fi
+
+  #check for editor var
+  if [[ -n $1 ]] ; then
+    editor="$1"
+    if (($DEBUG)) ; then
+      INFO echo "Setting editor: $1" > /dev/tty; NORMAL
+    fi
+  fi #end check for editor var
+
+  #display help status
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #If help then show usage, else execute script
+  if (($HELP)) ; then
+    usage
+  else
+    if  [[ -n "`git status --porcelain | awk '{print $2}'`" ]] ; then
+      #check that the file exists... if not then try a relative path './'
+
+      CMDINFO echo "git-edit-modified-files $editor" > /dev/tty; NORMAL
+      #INFO echo 'Editing files (git status --porcelain): ' > /dev/tty; NORMAL git status --porcelain;
+      INFO echo 'Editing files (git diff --name-only): ' > /dev/tty; NORMAL git diff --name-only
+
+      #CMDINFO echo "$editor git status --porcelain | awk \"{print \$2}\"" > /dev/tty; NORMAL
+      #$editor `git status --porcelain | awk '{print $2}'`;
+      #Alternative:
+      #$editor `git status --porcelain | grep " M" | cut -c 4-`;
+
+      #loop through files
+      for thisFile in $(git status --porcelain | awk '{print $2}');
+      #for thisFile in "$(git diff --name-only | awk '{gsub(/ /,"\\ ");print}')"; #escape spaces
+      do
+        INFO echo "Looping through files. Checking path for $thisFile..." > /dev/tty; NORMAL
+        if [ -f "$thisFile" ]; then
+          CMDINFO echo "$editor $thisFile" > /dev/tty; NORMAL
+          $editor "$thisFile";
+        else
+          INFO echo "Path not valid for $thisFile. Checking relative path: ./$thisFile" > /dev/tty; NORMAL
+          if [ -f ."/$thisFile" ]; then
+            CMDINFO echo "$editor ./$thisFile" > /dev/tty; NORMAL
+            $editor ./"$thisFile";
+          else
+            INFO echo "Relative path not valid for $thisFile. Inoring." > /dev/tty; NORMAL
+          fi
+        fi
+      done
+    fi
+  fi
+} #end function git-edit-modified-files2
+alias gmod2="CMDINFO echo 'gmod => git-edit-modified-files2 ' > /dev/tty; NORMAL git-edit-modified-files2 ";

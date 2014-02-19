@@ -61,7 +61,7 @@ function openMamp() {
 #-------------------------------------------------------------
 alias openFW='open -a "Adobe Fireworks CS4.app" '
 alias openDW='open -a "Adobe Dreamweaver CS4.app" '
-
+alias openFF='open -a "Firefox.app" '
 
 #----------------------------------------
 #Mac Functions

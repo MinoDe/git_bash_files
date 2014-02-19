@@ -41,6 +41,12 @@ function! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfunction
 
+" Set F2 to toggle paste mode (disabling auto indent). Thanks:
+" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
+
 " This allows us to use the same function to strip out whitespace anywhere,
 " using the f5 key. Thanks Vim Scripts!
 nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
@@ -59,8 +65,8 @@ function! <SID>StripTrailingWhitespacesFixTabs()
   let @/=_s
   call cursor(l, c)
 endfunction
-
 " This allows us to use the same function to strip out whitespace anywhere,
+
 " using the f4 key. Thanks Vim Scripts!
 nnoremap <silent> <F4> :call <SID>StripTrailingWhitespacesFixTabs()<CR>
 
