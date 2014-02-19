@@ -192,3 +192,139 @@ EOF
 
   shift $((OPTIND-1)) #prepare OPTIND for the next option
 } #end function drushverify
+
+function aegir-backup-delete(){ # aegir-backup-delete '/full/path/to/backup.tar.gz' #Notes: This deletes the backup file, alias and database entry in aegir @hostmaster
+  #!/bin/sh
+   usage()
+  {
+  cat << EOF
+  aegir-backup-delete info:
+
+  Usage: aegir-backup-delete '/full/path/to/backup.tar.gz' #Notes: This deletes the backup file, alias and database entry in aegir @hostmaster
+
+  Ex: aegir-backup-delete '/full/path/to/backup.tar.gz' [-dh]
+
+  Example: aegir-backup-delete '/full/path/to/backup.tar.gz'
+    Cmd line equivalent:
+      $ drush @hostmaster provision-backup_delete '/var/aegir/backups/filename.tar.gz' -v;
+      $ drush @hostmaster sqlq "DELETE FROM {hosting_site_backups} WHERE filename = '/var/aegir/backups/filename.tar.gz'"
+
+  OPTIONS:
+     -d               -   Debug Mode
+     -h               -   Help
+     -B               -   Prepend default backup location: /var/aegir/backups/
+
+  ARGUMENTS:
+    filepath          -   Required
+EOF
+  }
+
+  #### Options ####
+  OPTIND=1 #set the OPTIND to 1 before each use. Ref: http://ss64.com/bash/getopts.html   "OPTIND is initialized to 1 each time the shell or a shell script is invoked." In this case (in a bash function) it's initialized once for each shell session so we need to reset it inside each function.
+  # (p)reset vars
+  HELP=0
+  DEBUG=0
+  ADDBACKUPLOC=0
+  knownAegirBackupDir=''
+  # Check for options. (currently in a while loop and case statement for potential expansion)
+  while getopts ":dhB" OPTION;
+  do
+    #INFO echo "optarg being processed: $OPTION" > /dev/tty; NORMAL
+    #INFO echo "optind: $OPTIND" > /dev/tty; NORMAL
+    #INFO echo "Options: ${OPTION[@]}" > /dev/tty; NORMAL
+    case $OPTION in
+      d) # DEBUG
+        DEBUG=1
+        INFO echo "Debuging mode" > /dev/tty; NORMAL
+        ;;
+      h)
+        # Help
+        HELP=1
+        if (($DEBUG)) ; then
+          INFO echo "Setting HELP: $HELP" > /dev/tty; NORMAL
+        fi
+        ;;
+      B)
+        #Prepend Default Backup
+        ADDBACKUPLOC=1
+        knownAegirBackupDir='/var/aegir/backups/'
+        if (($DEBUG)) ; then
+          INFO echo "Setting known Aegir Backup Dir: $knownAegirBackupDir" > /dev/tty; NORMAL
+        fi
+        ;;
+      ?) #if no option is given continue on
+        INFO echo "Unknown option: -$OPTARG" > /dev/tty; NORMAL
+        ;;
+    esac
+  done
+  
+  #check for --helprgs ####
+  #Credit; tip on combining options with args: Thanks to http://stackoverflow.com/questions/11742996/shell-script-is-mixing-getopts-with-positional-parameters-possible
+  # If there are options (-h v) then set arg 1 to the first var after those options
+  ARG1=${@:$OPTIND:1}
+  #ARG2=${@:$OPTIND+1:1}
+  shift $((OPTIND-1)) #prepare OPTIND for the next option
+
+  if (($DEBUG)) ; then
+    INFO echo "ARG1: $ARG1" > /dev/tty; NORMAL
+    # testing show args
+    INFO echo "all options: ${OPTION[@]}"
+    INFO echo "getopts: ${getopts[@]}"
+    INFO echo "all args (\$*) passed to me -\"$*\"" > /dev/tty; NORMAL
+    #INFO echo "ARG2: $ARG2" > /dev/tty; NORMAL
+    INFO echo "Number of args: $#" > /dev/tty; NORMAL
+    INFO echo "other args \$@: $@" > /dev/tty; NORMAL
+  fi
+
+  if [[ $ARG1 == "--help" ]] ; then
+    HELP=1
+  fi
+
+  if (($DEBUG)) ; then
+    INFO echo "optind: $OPTIND" > /dev/tty; NORMAL
+    INFO echo "[otheropts]==> $@" > /dev/tty; NORMAL
+  fi
+  backupFilePath='';
+
+  #display help status
+  if (($DEBUG)) ; then
+    INFO echo "HELP: $HELP" > /dev/tty; NORMAL
+  fi
+
+  #If help then show usage, else execute script
+  if (($HELP)) ; then
+    usage
+  else
+    #check for backupFilePath var
+    if [[ -n $ARG1 ]] && [[ ! "$ARG1"=="-*" ]] ; then
+      backupFilePath=$ARG1
+      if (($DEBUG)) ; then
+        INFO echo "Setting backupFilePath: $ARG1" > /dev/tty; NORMAL
+      fi
+      #check that the file exists... if not then try a with a know backup path: '/var/aegir/backups/'
+      #if [ ! -f $backupFilePath ]; then   #if  [[ -f $backupFilePath ]] ; then
+      #  knownAegirBackupDir='/var/aegir/backups/'
+      #  if (($DEBUG)) ; then
+      #    INFO echo "Backup File Path does not exist: $backupFilePath." > /dev/tty; NORMAL
+      #    INFO echo "Setting known Aegir Backup Dir: $knownAegirBackupDir" > /dev/tty; NORMAL
+      #  fi
+      #  backupFilePath=$knownAegirBackupDir$backupFilePath;
+      #  if (($DEBUG)) ; then
+      #    INFO echo "Looking in $backupFilePath" > /dev/tty; NORMAL
+      #  fi
+      #fi
+      #if [ -f $backupFilePath ]; then     #if  [[ -f $backupFilePath ]] ; then
+      if (( $ADDBACKUPLOC )) ; then
+        backupFilePath=$knownAegirBackupDir$backupFilePath;
+        if (($DEBUG)) ; then
+          INFO echo "Looking in $backupFilePath" > /dev/tty; NORMAL
+        fi
+      fi
+      CMDINFO echo "aegir-backup-delete '$backupFilePath'" > /dev/tty; NORMAL
+      INFO echo 'Trigger drush @hostmaster provision-backup_delete: ' > /dev/tty; NORMAL drush @hostmaster provision-backup_delete $backupFilePath -v;
+      INFO echo 'Trigger drush @drush @hostmaster sqlq: ' > /dev/tty; NORMAL drush @hostmaster sqlq "DELETE FROM {hosting_site_backups} WHERE filename = '$backupFilePath'";
+      INFO echo 'Complete' > /dev/tty; NORMAL
+      #fi
+    fi
+  fi #end check for backupFilePath var
+} #end function aegir-backup-delete
