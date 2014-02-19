@@ -35,10 +35,11 @@
   co = checkout
   df = diff
   dc = diff --cached
+  # ref http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History
   lg = log -p
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  logv = log --graph --decorate --pretty=format:'%Cgreen%h%Creset %s %Cred%an%Creset %ar'
+  logv = log --graph --decorate --date=local --pretty=format:'%Cgreen%h%Creset %s %Cred%an%Creset %ad'
   ls = ls-files
 
   # Show files ignored by git:
