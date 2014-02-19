@@ -14,6 +14,10 @@ PATH=$PATH:~/drush
 #drush aliases
 #--------------------------------
 alias aliases_drush="INFO echo '### Available Drush Functions (.bash_drush) ###'; CMDINFO echo -n; cat ~/.bash_drush | grep function; echo -n; INFO echo '### Drush aliases (.bash_drush) ###:'; CMDINFO echo -n; cat ~/.bash_drush | grep alias; echo -n; NORMAL"
+#switch between drush4 and 5. Ref: http://ergonlogic.com/blog/easy-switching-between-drush-4x-and-5x
+alias drush4="INFO echo 'Switching to drush 4 branch ' > /dev/tty; CMDINFO echo 'cd ~/drush && git checkout --quiet 7.x-4.6 && cd -;' > /dev/tty; NORMAL cd ~/drush && git checkout --quiet 7.x-4.6 && cd -;"
+alias drush5="INFO echo 'Switching to drush 5 branch ' > /dev/tty; CMDINFO echo 'cd ~/drush && git checkout --quiet 7.x-5.9 && cd -;' > /dev/tty; NORMAL cd ~/drush && git checkout --quiet 7.x-5.9 && cd -;"
+alias drush6="INFO echo 'Switching to drush 6 branch ' > /dev/tty; CMDINFO echo 'cd ~/drush && git checkout --quiet 8.x-6.x && cd -;' > /dev/tty; NORMAL cd ~/drush && git checkout --quiet 8.x-6.x && cd -;"
 
 #-----------------------------------------------------------
 # Drush prompt
