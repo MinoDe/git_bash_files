@@ -10,7 +10,7 @@
 #--------------------------------
 #colors aliases
 #--------------------------------
-alias aliases_colors="INFO echo '### Available Colors Functions (.bash_colors) ###'; CMDINFO echo -n; cat ~/.bash_colors | grep function; echo -n; INFO echo '### Colors aliases (.bash_colors) ###:'; CMDINFO echo -n; cat ~/.bash_colors | grep alias; echo -n; NORMAL"
+alias aliases_colors="INFO echo '### Available Colors Functions (.bash_colors) ###'; CMDINFO echo -n; cat ~/bash/.bash_colors | grep function; echo -n; INFO echo '### Colors aliases (.bash_colors) ###:'; CMDINFO echo -n; cat ~/bash/.bash_colors | grep alias; echo -n; NORMAL"
 
 #-------------------------------------------------------------
 # Set Colors

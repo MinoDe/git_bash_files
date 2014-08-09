@@ -35,7 +35,7 @@ alias mkOAplatform="CMDINFO echo '~/.bashrc >> mkOAplatform()' -n > /dev/tty; NO
 # -> Prevents accidentally clobbering files.
 #alias mkdir="CMDINFO echo '#mkdir => mkdir -i ' > /dev/tty; mkdir -i
 
-alias aliases_bash="INFO echo '### Available Functions (.bash_aliases) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bash_aliases | grep function; echo -n > /dev/tty; INFO echo '### Alias (.bash_alias) ###' > /dev/tty; CMDINFO echo -n; cat ~/.bash_aliases | grep alias; echo -n; NORMAL" 
+alias aliases_bash="INFO echo '### Available Functions (.bash_aliases) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/bash/.bash_aliases | grep function; echo -n > /dev/tty; INFO echo '### Alias (.bash_alias) ###' > /dev/tty; CMDINFO echo -n; cat ~/bash/.bash_aliases | grep alias; echo -n; NORMAL" 
 alias h="CMDINFO echo 'history ' > /dev/tty; NORMAL history"
 alias j='jobs -l'
 alias which='type -a'
