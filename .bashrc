@@ -12,14 +12,14 @@ aliasArr=(); #Initiate aliases array
 #-------------------------------------------------------------
 # List aliases and funcitons in bashrc file
 #-------------------------------------------------------------
-alias aliases_bashrc="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL"
+alias aliases_bashrc="INFO echo '### Available Functions (.bashrc) ###' > /dev/tty; CMDINFO echo -n > /dev/tty; cat ~/bash/.bashrc | grep function; echo -n > /dev/tty; INFO echo '### Aliases (.bashrc) ###' > /dev/tty; CMDINFO alias; NORMAL"
 aliasArr=("${aliasArr[@]}" "aliases_bashrc") #Add aliases to array
 
 #-------------------------------------------------------------
 # User specific colors
 #-------------------------------------------------------------
-if [ -f ~/.bash_colors ]; then
-  . ~/.bash_colors # --> Read ~/.bash_colors if present
+if [ -f ~/bash/.bash_colors ]; then
+  . ~/bash/.bash_colors # --> Read ~/.bash_colors if present
   #alias aliases="aliases_colors"
   aliasArr=("${aliasArr[@]}" "aliases_colors") #Add aliases to array
 fi
@@ -27,8 +27,8 @@ fi
 #-------------------------------------------------------------
 # User specific aliases and functions
 #-------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases # --> Read ~/.bash_aliases if present
+if [ -f ~/bash/.bash_aliases ]; then
+  . ~/bash/.bash_aliases # --> Read ~/.bash_aliases if present
   #alias aliases="aliases; aliases_bash "
   aliasArr=("${aliasArr[@]}" "aliases_bash") #Add aliases to array
 fi
@@ -104,7 +104,7 @@ bind '"\e[B"':history-search-forward
 export HISTCONTROL=ignoredups:erasedups
 
 # Increase history size
-export HISTSIZE=10000
+export HISTSIZE=1000000
 
 # Append commands to the bash command history file (~/.bash_history) # instead of overwriting it. This way if you have multiple terminals open # they play nicely with the bash command history.
 shopt -s histappend
