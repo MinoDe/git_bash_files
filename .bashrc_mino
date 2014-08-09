@@ -97,9 +97,17 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/bash/.bash_aliases ]; then
+    . ~/bash/.bash_aliases
 fi
+
+#if [ -f ~/bash/.bash_profile ]; then
+#    . ~/bash/.bash_profile
+#fi
+if [ -f ~/bash/.bashrc ]; then
+    . ~/bash/.bashrc
+fi
+
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -113,9 +121,14 @@ if ! shopt -oq posix; then
 fi
 #Adding shortcut for folder uo - customized my stickypens
 alias uo='cd /media/stickypens/Sombrero/My\ Stuffs/UO/'
+alias ix='ssh minodera@ix.cs.uoregon.edu'
+alias trusty='ssh minodera@ix-trusty.cs.uoregon.edu'
+alias ixa='ssh -A minodera@ix.cs.uoregon.edu'
 
 #Adding GUROBI optimizer
 export GUROBI_HOME="/opt/gurobi562/linux64"
 export PATH="${PATH}:${GUROBI_HOME}/bin"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"
 
+#Expanding Aliases
+shopt -s expand_aliases
