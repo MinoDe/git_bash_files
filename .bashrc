@@ -63,8 +63,8 @@ fi
 #-------------------------------------------------------------
 # User specific git aliases and functions
 #-------------------------------------------------------------
-if [ -f ~/.gitrc ]; then
-  . ~/.gitrc # --> Read ~/.gitrc if present
+if [ -f ~/bash/.gitrc ]; then
+  . ~/bash/.gitrc # --> Read ~/.gitrc if present
   #alias aliases="aliases; aliases_git "
   aliasArr=("${aliasArr[@]}" "aliases_git") #Add aliases to array
 fi

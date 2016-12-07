@@ -91,11 +91,11 @@ if [ -f ~/.git-prompt.sh ]; then
 
   #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
   #PS1='\u@\h \W$(__git_ps1 " ($(git_repo_name) [%s])")\$ '
-  PS1='\u@\h:$(drupalSiteDirPS1)\W$(__git_ps1 " ($(show-git-current-remotes-short) [%s])")\$ '
-else
+  #PS1='\u@\h:$(drupalSiteDirPS1)\W$(__git_ps1 " ($(show-git-current-remotes-short) [%s])")\$ '
+#else
   #PS1="\u@\h:\W \$(parse_git_branch)\$ "
   #PS1="\u@\h:\W (\$(show-git-current-remotes-short)\$(parse_git_branch))\$ "
-  PS1="\u@\h:\$(drupalSiteDirPS1)\W (\$(show-git-current-remotes-short)\$(parse_git_branch))\$ "
+  #PS1="\u@\h:\$(drupalSiteDirPS1)\W (\$(show-git-current-remotes-short)\$(parse_git_branch))\$ "
 fi
 
 #-------------------------------------------------------------
@@ -119,11 +119,18 @@ alias gci="CMDINFO echo 'gci => git commit ' > /dev/tty; NORMAL git commit "
 alias gco="CMDINFO echo 'gco => git checkout ' > /dev/tty; NORMAL git checkout "
 alias gdf="CMDINFO echo 'gdf => git diff ' > /dev/tty; NORMAL git diff "
 alias gbr="CMDINFO echo 'gbr => git br ' > /dev/tty; NORMAL git br "
-alias aliases_git="INFO echo '### Available Git Functions (.gitrc) ###'; CMDINFO echo -n; cat ~/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; CMDINFO echo -n; cat ~/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; CMDINFO git config --list | grep alias; echo -n; NORMAL"
+#Added by Mino De to commit with changes to a branch
+alias gcm="CMDINFO echo 'gcm => git commit -am message' > /dev/tty; NORMAL git-commit-with-message "
+alias aliases_git="INFO echo '### Available Git Functions (.gitrc) ###'; CMDINFO echo -n; cat ~/bash/.gitrc | grep function; echo -n; INFO echo '### Git aliases (.gitrc) ###:'; CMDINFO echo -n; cat ~/bash/.gitrc | grep alias; echo -n; INFO echo '### Git config aliases (.gitconfig) ###:'; CMDINFO git config --list | grep alias; echo -n; NORMAL"
 
 #-----------------------------------------------------------
 # Git functions
 #-----------------------------------------------------------
+function git-commit-with-message(){
+#Used to commit the current branch changes with a message
+    git commit -am $1
+}
+
 function git-each(){ # git-each gitCommand #Usage: git-each <gitCommand> [includeRemoteBranch:bool - default false;] [loopRemoteBranches:bool - default false;] - Ex: git-each fetch; This triggers a loop through each branch and $ git checkout ${branch}; git fetch ${branch}; Ex 2: git-each status 1 1; This checkes out a local version of each remote branch and runs status on it: $ git checkout $remoteName ${branch}; git status ${branch};
   #!/bin/sh
   #Thanks to:
