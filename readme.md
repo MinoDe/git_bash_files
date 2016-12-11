@@ -29,3 +29,10 @@ https://bitbucket.org/_vid/git_bash_files/issues?status=new&status=open
 
 Current maintainer:
 * Vid Rowan (_vid) - https://drupal.org/user/631512
+
+Update Dec 2016:
+on ~/.bashrc add the file ~/bash/.bashrc_mino.
+Use the following lines:
+
+if [ -f ~/bash/.bashrc_mino ]; then
+   . ~/bash/.bashrc_mino
