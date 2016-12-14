@@ -126,9 +126,9 @@ alias trusty='ssh minodera@ix-trusty.cs.uoregon.edu'
 alias ixa='ssh -A minodera@ix.cs.uoregon.edu'
 
 #Adding GUROBI optimizer
-export GUROBI_HOME="/opt/gurobi562/linux64"
-export PATH="${PATH}:${GUROBI_HOME}/bin"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"
+#export GUROBI_HOME="/opt/gurobi562/linux64"
+#export PATH="${PATH}:${GUROBI_HOME}/bin"
+#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"
 
 #Expanding Aliases
 shopt -s expand_aliases

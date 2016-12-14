@@ -79,3 +79,9 @@ alias lll='ll'
 # tailoring 'less'
 #-------------------------------------------------------------
 alias more='less'
+
+#-------------------------------------------------------------
+#Bash personalized for eleos
+#-------------------------------------------------------------
+alias sdc='cd ~/My\ Stuff/SDC/'
+alias python-change="CMDINFO echo ' python-change => sudo update-alternatives --config python ' > /dev/tty; NORMAL sudo update-alternatives --config python"
